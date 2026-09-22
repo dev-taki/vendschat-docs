@@ -1,0 +1,139 @@
+---
+title: 'Use case: Clinics & appointment-based services'
+description: 'Scenario: Metro Clinics runs three locations on one shared WhatsApp number. Patients message for appointments, results, and insurance questions — peak…'
+---
+
+**Scenario:** **Metro Clinics** runs three locations on one shared WhatsApp number. Patients message for appointments, results, and insurance questions — peak volume Monday mornings.
+
+**Plan:** **Starter** initially (unlimited contacts); **Growth** when they add reminder **broadcasts** and a custom **AI Agent**.
+
+---
+
+## The challenge
+
+- Receptionists overwhelmed with *“Is my appointment today?”* and *“Are my labs ready?”*
+- No-shows cost money — reminders must go out reliably
+- After-hours messages pile up until Tuesday
+- Must not give medical advice in automated replies
+
+---
+
+## How Metro Clinics uses Vendschat
+
+### One WhatsApp number, whole team
+
+**Settings → Workspace → Channels** → WhatsApp **Support only** use case (no paid ads).
+
+All three locations share one inbox in **Chat** — agents use **labels** for location and visit type, not separate numbers.
+
+| Label | Use |
+|-------|-----|
+| `Booking` | New appointment requests |
+| `Results` | Lab/imaging questions |
+| `Insurance` | Coverage / referral |
+| `Location-North` | Routed to north desk |
+
+Keywords: `appointment`, `book` → `Booking`; `lab`, `results` → `Results`.
+
+### AI Agent — receptionist, not doctor
+
+| Setting | Value |
+|---------|--------|
+| **Agent** | Metro Reception |
+| **Template** | Receptionist |
+| **Knowledge** | Hours PDF, parking, accepted insurance list (no clinical content) |
+| **Instructions** | Never diagnose; never interpret results; offer to connect to staff |
+| **Hours** | **Active** after 6 PM and weekends; **Paused** when front desk is staffed |
+
+Assign agent to **unassigned** threads only — staff assign themselves when they take over.
+
+**Compliance:** Bot handles logistics only. Clinical questions get: *“A team member will follow up during business hours.”*
+
+### Templates for reminders
+
+Approved WhatsApp templates in **Templates**:
+
+| Template | Purpose |
+|----------|---------|
+| `appointment_reminder` | Date + time variables + **Confirm** button |
+| `results_ready` | Pickup instructions (no result values in message) |
+
+Send single reminders from **Chat** composer when within session window; use templates when 24h window expired.
+
+### Broadcast reminders (Growth)
+
+Sunday evening batch for Monday appointments:
+
+1. During booking chats, staff label threads `Appt-Mon`
+2. **Broadcast → New broadcast** → Existing contacts → label `Appt-Mon` → template `appointment_reminder`
+3. Schedule Sunday 5 PM UTC
+4. Monday AM: filter **Chat** for **Confirm** replies and `Booking` overflow
+
+### Team setup
+
+| Role | Vendschat access |
+|------|------------------|
+| Front desk (3) | **Member (Chat-only)** |
+| Office manager | **Admin** — Labels, Templates, Channels |
+| Practice owner | **Owner** — billing |
+
+**Groups:** `Front Desk`, `Billing` — assign threads in **Assigned to**.
+
+### Messenger & Instagram (optional)
+
+Metro adds **Instagram** for marketing but keeps **WhatsApp** as the primary service line. Instagram DMs get label `Social-lead` — converted to WhatsApp for booking when possible.
+
+### Analytics
+
+Office manager checks **Analytics** → WhatsApp channel weekly:
+
+- **Failed** on reminder template? Fix variable mapping or patient numbers
+- **Read rate** on reminders — adjust send time (Sunday vs Monday early)
+
+### Co-Admin
+
+Reception lead: *“How many contacts have we used this month?”* → billing usage (organization level). *“Delivery rate last week?”* → channel analytics.
+
+---
+
+## Week-one timeline
+
+| Day | Task |
+|-----|--------|
+| 1 | Connect WhatsApp, confirm **active** status |
+| 2 | Labels + keywords |
+| 3 | Templates submitted to Meta (wait for Approved) |
+| 4 | Train **AI Agent** + test in sandbox |
+| 5 | Invite front desk — **Chat-only** |
+| 6 | Dry-run reminder to internal test number |
+| 7 | Go live with after-hours bot **Active** |
+
+---
+
+## Results clinics care about
+
+- Fewer phone hold times for routine logistics
+- Lower no-show rate from labeled reminder broadcasts
+- After-hours coverage without hiring night shift
+
+---
+
+## Copy-paste playbook
+
+1. WhatsApp **Support only** — **Settings → Channels**  
+2. Labels: `Booking`, `Results`, `Insurance` + location tags  
+3. **Receptionist** AI Agent — logistics knowledge only, **Paused** during desk hours  
+4. Reminder templates → wait for **Approved**  
+5. **Growth** for Sunday **Broadcast** to `Appt-*` labels  
+6. **Member (Chat-only)** for reception; manager **Admin**  
+7. **Analytics** Monday review  
+
+---
+
+## Related docs
+
+- [Use cases overview](/use-cases/use-cases-overview)
+- [WhatsApp setup](/channels/whatsapp)
+- [E-commerce support](/use-cases/ecommerce-support) — similar WISMO/returns patterns
+- [Templates](/templates/creating-whatsapp-templates)
+- [Broadcasts](/broadcasts/campaigns)

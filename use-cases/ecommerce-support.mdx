@@ -1,0 +1,136 @@
+---
+title: 'Use case: E-commerce support team'
+description: 'Scenario: UrbanGear sells sneakers on WhatsApp and Instagram Direct. Peak season brings 200+ messages a day about sizing, delivery, and returns.'
+---
+
+**Scenario:** **UrbanGear** sells sneakers on **WhatsApp** and **Instagram Direct**. Peak season brings 200+ messages a day about sizing, delivery, and returns.
+
+**Plan:** Started **Starter** (unlimited contacts); upgraded to **Growth** before their first label broadcast.
+
+---
+
+## The challenge
+
+- Customers message on two channels — agents missed DMs on personal phones
+- Same questions repeat: *“Where is my order?”*, *“Can I exchange size 42?”*
+- Managers can’t see backlog or who owns VIP buyers
+- Outbound shipping updates need **approved templates** outside the 24-hour reply window
+
+---
+
+## Week one — UrbanGear’s setup
+
+| Day | Action |
+|-----|--------|
+| Mon | Connect **WhatsApp** + **Instagram** — **Settings → Workspace → Channels** |
+| Tue | Labels: `WISMO`, `Return`, `VIP`, `Sizing` — **Settings → Workspace → Labels** |
+| Wed | Keywords on labels: `refund` → `Return`, `track` → `WISMO` (auto-tags inbound messages) |
+| Thu | **Support** AI Agent + FAQ PDF knowledge — **AI Agents** |
+| Fri | Templates `order_shipped`, `delivery_tomorrow` — **Templates** |
+| Sat | Invite 4 agents as **Member (Chat-only)** — **Team Members** |
+
+---
+
+## How UrbanGear uses Vendschat
+
+### One inbox, two channels
+
+All WhatsApp and Instagram DMs land in **Chat** (`/chat`). Agents filter by channel type or label instead of switching apps.
+
+**Tip:** Instagram card titles may show `@username` from connection metadata; WhatsApp shows **phone number ID** on the channel card — open **Manage** for full status.
+
+### Labels + keyword routing
+
+| Label | Routed to | Keyword hints (optional) |
+|-------|-----------|---------------------------|
+| `Sizing` | Product specialists | `size`, `fit` |
+| `WISMO` | Logistics queue | `where`, `tracking`, `order` |
+| `VIP` | Senior agents | (manual or CRM-driven) |
+| `Return` | Returns desk | `refund`, `exchange` |
+
+Configure keywords on each label in **Settings → Workspace → Labels**. When a **customer** sends matching text, the thread can be **auto-tagged** (inbound only — images without captions won’t match).
+
+**Assignment:** In **Chat**, open the **recipient panel** → **Assigned to** → pick a **teammate**, **team** (from **Settings → Groups**), or an **AI Agent**.
+
+### AI Agent for tier-1 (nights & weekends)
+
+| Setting | UrbanGear choice |
+|---------|----------------|
+| **Name** | UrbanGear Helper |
+| **Template** | Support (from **AI Agents → Templates**) |
+| **Knowledge** | Return policy PDF + FAQ page |
+| **Status** | **Active** nights; **Paused** Mon–Fri 9–5 when humans cover |
+| **Assignment** | Unassigned threads only — humans assign VIP manually |
+
+**Handover:** In agent instructions, UrbanGear writes: *“If the customer asks for a manager, lawyer, or chargeback, say a human will follow up and do not promise refunds.”* The bot’s **handover** system also watches the **bot’s own reply** for escalation keywords — train instructions for customer phrases like “manager” rather than relying on a hidden keyword list alone.
+
+**Day shift:** Humans handle complex fits and angry threads.  
+**Night shift:** **AI Agent** assigned to unassigned threads answers tracking FAQs from knowledge.
+
+### Templates for outbound updates
+
+Approved WhatsApp templates in **Templates** (`/template`):
+
+- `order_shipped` — tracking link button
+- `delivery_tomorrow` — address confirm
+
+Used when the **24-hour session window** closed or for proactive carrier updates from **Chat** → **Templates** in the composer.
+
+### Broadcast after a drop (Growth plan)
+
+New Jordan colorway launch:
+
+1. During chats, tag interested buyers with `Drop-Mar`
+2. Open **Chat** → open any thread on the **WhatsApp** channel → **Templates** in composer
+3. Switch to **Broadcast** tab → select label `Drop-Mar` → pick `drop_announcement` template
+4. Optional: **Schedule at (UTC)** for Sunday 10:00
+5. Send — replies land in **Chat**; filter `Drop-Mar` + unread
+
+**Note:** Broadcasts target **labels** (threads that already have those labels on the selected channel). There is no CSV upload of cold numbers — compliance-friendly, but you must label during normal conversations first.
+
+**Smart delivery** (pause on low read rate) is described in marketing materials but **not** in the dashboard send flow yet — UrbanGear schedules off-peak and watches **Analytics** instead.
+
+### Analytics weekly review
+
+Ops lead opens **Analytics** → WhatsApp channel card:
+
+- **Failed** spike? Check template quality or bad numbers in **Message logs**
+- **Read rate** drop? Test shorter template copy; wait 24h after sends before judging
+- Export CSV for leadership — Messenger/Instagram cards exist but **full charts are WhatsApp-only** today
+
+### Co-Admin for the ops lead
+
+Before standup: *“What’s our WhatsApp delivery rate this week?”* or *“How many open threads?”* — Co-Admin uses live workspace data (not a dashboard page).
+
+---
+
+## Results teams like this care about
+
+- First response time drops when AI covers nights and weekends
+- Fewer missed Instagram DMs — everything in **Chat**
+- Managers filter `VIP` + unassigned instead of asking *“how backed up are we?”* in Slack
+- Repeat WISMO answers deflected to AI + templates
+
+---
+
+## Copy-paste playbook
+
+1. **Settings → Workspace → Channels** — connect WhatsApp + Instagram  
+2. **Labels:** `WISMO`, `Return`, `VIP`, `Sizing` + keywords  
+3. **Groups:** `Logistics`, `Returns` — assign queues in **Chat**  
+4. **AI Agent** (Support template) + FAQ knowledge — pause during business hours  
+5. **Templates:** 2–3 shipping/return templates — wait for **Approved**  
+6. **Team Members:** agents as **Member (Chat-only)**  
+7. **Growth** plan before first label broadcast  
+8. **Analytics** every Monday — WhatsApp channel  
+
+---
+
+## Related docs
+
+- [Use cases overview](/use-cases/use-cases-overview)
+- [Shared inbox & labels](/inbox/shared-inbox-and-labels)
+- [Creating WhatsApp templates](/templates/creating-whatsapp-templates)
+- [Broadcasts](/broadcasts/campaigns)
+- [AI Agents overview](/ai-agents/ai-agents-overview)
+- [Analytics](/analytics/channel-performance)

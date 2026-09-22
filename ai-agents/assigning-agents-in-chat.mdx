@@ -1,0 +1,221 @@
+---
+title: 'Assigning AI Agents in Chat'
+description: 'AI Agents only reply on Chat threads explicitly assigned to them (or auto-assigned via workspace default). This doc covers assignment, handoff, and human…'
+---
+
+AI Agents only reply on **Chat** threads explicitly **assigned** to them (or auto-assigned via workspace default). This doc covers assignment, handoff, and human takeover.
+
+**Primary path:** **Chat** (`/chat`) → open thread → **Recipient panel** → **Assigned to**
+
+---
+
+## Quick reference
+
+| Task | Steps |
+|------|--------|
+| Assign AI Agent | Recipient panel → **Assigned to** → pick agent (brain icon) |
+| Unassign | **Assigned to** → **Unassigned** |
+| Human takes over | Assign **yourself** or a **teammate** |
+| Assign to queue | Pick a **team** (group) — clears AI assignment |
+| Search assignees | *“Search users, teams, AI agents”* in dropdown |
+| Pause bot globally | **AI Agents** → switch off (Paused) |
+| Stop bot on one thread | Assign human or unassign |
+
+---
+
+## Assignee types in Chat
+
+| Type | Icon / label | Bot behavior |
+|------|--------------|--------------|
+| **Unassigned** | — | No AI replies |
+| **AI Agent** | Brain icon + agent name | Bot active (`bot_active`) |
+| **User** | Teammate name | Human takeover if thread had AI |
+| **Team** | Group name | Human queue; AI cleared |
+
+**Dropdown order:** AI Agents → Teams → Users (with divider) → **Unassigned** button.
+
+Same selector appears in:
+
+- **Recipient panel** (desktop right column)
+- **Conversation header** (compact mobile assignee control)
+
+Deep dive: [Assignments & teams](/inbox/assignments-and-teams)
+
+---
+
+## Step-by-step: assign an AI Agent
+
+1. Open **Chat** → `/chat`
+2. Click the customer **thread**
+3. Open **Recipient panel** (right side on desktop)
+4. Find **Assigned to**
+5. Open dropdown → search or scroll to AI Agent (brain icon)
+6. Select agent — e.g. `Night Support Bot`
+
+Customer’s next inbound message triggers the bot (after **response delay**).
+
+---
+
+## When the bot replies
+
+All must be true:
+
+| Condition | If false |
+|-----------|----------|
+| Thread `assigned_to` = AI Agent | No automation |
+| Agent status = **Active** | Paused/archived agents skip queue |
+| Thread not in **human takeover** | Human already took control |
+| Inbound message on connected channel | Same as human Chat rules |
+
+**Flow:**
+
+```text
+Inbound message saved
+    → wait response_delay_seconds (0–30)
+    → retrieve knowledge chunks
+    → load recent conversation context
+    → generate reply
+    → send on WhatsApp / Messenger / Instagram
+```
+
+---
+
+## Human takeover
+
+### Manual takeover (most common)
+
+Assign thread to a **user** (yourself or teammate):
+
+- Bot stops sending to customer
+- Thread marked **human takeover** when an AI agent was assigned
+- Customer sees seamless human reply next
+
+### Unassign
+
+**Assigned to** → **Unassigned**:
+
+- Clears user, team, and AI agent
+- Clears handover state
+
+### Assign to team
+
+Picking a **team** clears AI assignment — queue handles it as human workflow.
+
+---
+
+## Handover & escalation
+
+### Via instructions & actions
+
+Train the agent to:
+
+- Use **Add comments** for internal escalation notes
+- Use **Assign to agent or team** action instructions for routing
+- Say in instructions: *“If you cannot help, tell the customer a human will follow up.”*
+
+### Keyword handover (backend)
+
+Workspace can configure `handover_triggers` with a **keywords** list. When the **bot’s generated reply** contains a keyword, the system:
+
+1. Does **not** send that reply to the customer
+2. Sets thread to **human takeover**
+3. Adds an **internal note** with the would-be reply text
+
+**Dashboard form** for handover keywords may not be exposed yet — escalation via instructions + manual assignment works today.
+
+### Customer phrases (“speak to human”)
+
+Include in **Instructions**: *“If customer asks for a human, acknowledge and stop answering product questions.”* Pair with **Assign to team** action rules.
+
+---
+
+## Default AI Agent (workspace)
+
+Workspaces can set **`default_ai_agent_id`** so **new threads** auto-assign an active agent when:
+
+- No user, team, or AI assignee yet
+- Agent is **Active**
+- Not already in human takeover
+
+**Silent assignment** — no welcome message until customer messages.
+
+**Override:** Always assign manually per thread in **Chat**.
+
+**UI note:** Default agent may be configured via workspace admin/API before a dedicated Settings screen ships. Co-Admin can reference the behavior; direct customers to **Chat** assignment for day-to-day control.
+
+---
+
+## AI Agent vs Generate Reply in the inbox
+
+| | **AI Agent assigned** | **Generate Reply** |
+|---|----------------------|-------------------|
+| Who sends? | Bot automatically | Human reviews + **Send** |
+| Where configured | **AI Agents** | **Settings → Generate Reply** |
+| Customer sees | Bot as your business | Always a human sender |
+| Best for | 24/7 FAQ, qualification | Agent speed, sensitive replies |
+
+Use both: bot handles nights; humans use **Generate Reply** by day.
+
+---
+
+## Handoff patterns
+
+### 1. AI → Human (night → day)
+
+| Time | Assignment |
+|------|------------|
+| 8 PM | **Night Bot** |
+| 8 AM | Manager assigns **Jess**; bot stops |
+
+### 2. AI → Team (billing)
+
+Bot adds label + internal comment → **Assign to team** `Billing`.
+
+### 3. AI qualifies → human closes
+
+**Sales** agent collects size/color → assigns **Sales team** for payment.
+
+### 4. Emergency keyword
+
+Instructions: *“If emergency, tell them to call 911 and assign Urgent team.”*
+
+---
+
+## Conversation states
+
+| `ai_handover_status` | Meaning |
+|----------------------|---------|
+| `bot_active` | AI may reply |
+| `human_takeover` | AI queue skipped |
+| `null` | No AI in loop |
+
+Deleting an AI Agent unassigns all its threads and clears default workspace agent.
+
+---
+
+## Mobile Chat
+
+Same assignment dropdown in conversation header — search *users, teams, AI agents*.
+
+---
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| Bot never replies | Thread assigned to agent? Agent **Active**? Channel connected? |
+| Bot replied after I took over | Refresh; ensure you assigned **user** not just typed |
+| Agent not in dropdown | Create in **AI Agents**; must be in workspace |
+| Bot too fast / double replies | Increase **Response delay** |
+| Starter plan | Upgrade to **Growth** for custom AI Agents |
+| Wrong agent on new threads | Check workspace default agent setting |
+
+---
+
+## Related docs
+
+- [AI Agents overview](/ai-agents/ai-agents-overview)
+- [Creating & training agents](/ai-agents/creating-and-training-agents)
+- [Chat inbox overview](/inbox/chat-inbox-overview)
+- [Shared inbox & labels](/inbox/shared-inbox-and-labels)
+- [Inbox FAQ](/inbox/inbox-faq)

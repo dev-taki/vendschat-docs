@@ -1,0 +1,346 @@
+---
+title: 'Co-Admin tools reference'
+description: 'Complete reference for the six read-only tools Co-Admin can call. All tools require an authenticated workspace member; data is scoped to the current…'
+---
+
+Complete reference for the **six read-only tools** Co-Admin can call. All tools require an authenticated workspace member; data is scoped to the **current workspace**.
+
+Execution path: frontend `createCoAdminTools` → `POST /workspaces/:workspace_id/co-admin/tools/execute` → `executeCoAdminTool`.
+
+---
+
+## Tool index
+
+| Tool | Purpose | Default time range |
+|------|---------|-------------------|
+| `get_workspace_overview` | Snapshot: channels, webhooks, inbox, agents, labels, team | N/A (point in time) |
+| `list_channels` | Connected WhatsApp / Messenger / Instagram channels | N/A |
+| `list_webhooks` | Outbound webhook destinations | N/A |
+| `get_channel_analytics` | WhatsApp message metrics & rates | **7d** |
+| `get_contact_analytics` | Customer lookup by email or phone | **30d** |
+| `search_product_docs` | RAG search over `co-admin-docs/` | N/A |
+
+---
+
+## `get_workspace_overview`
+
+### When to use
+
+- “Give me a workspace overview”  
+- “How many open threads?” / “How many unread messages?”  
+- “How many AI agents do we have?”  
+- “How big is our team?”  
+- Morning standup status checks  
+- Any question needing **multiple counts in one call** (prefer this over guessing)
+
+### Parameters
+
+None.
+
+### Response shape (key fields)
+
+```json
+{
+  "workspace": {
+    "id": 1,
+    "name": "VoltRide",
+    "slug": "voltride",
+    "is_active": true
+  },
+  "channels": {
+    "total": 3,
+    "by_type": {
+      "whatsapp": { "total": 2, "connected": 2 },
+      "messenger": { "total": 1, "connected": 1 }
+    }
+  },
+  "webhooks": {
+    "total": 4,
+    "active": 3,
+    "inactive": 1
+  },
+  "inbox": {
+    "threads_total": 842,
+    "unread_messages_total": 37,
+    "by_status": {
+      "open": { "total": 120, "unread_messages": 37 },
+      "resolved": { "total": 700, "unread_messages": 0 }
+    }
+  },
+  "ai_agents": {
+    "total": 2,
+    "by_status": { "active": 1, "draft": 1 }
+  },
+  "labels": { "total": 15 },
+  "team_members": { "active": 8 },
+  "generated_at": "2026-06-29T12:00:00.000Z"
+}
+```
+
+### Notes
+
+- **Connected** channels = `status === "active"` per type.  
+- Thread statuses depend on workspace data (typically `open`, `resolved`, etc.).  
+- Does **not** list individual channel names — use `list_channels` for that.  
+- Output may be Headroom-compressed when payload exceeds ~2KB and compression is enabled.
+
+---
+
+## `list_channels`
+
+### When to use
+
+- “Which channels are connected?”  
+- “List our WhatsApp numbers”  
+- “Show Instagram channels”  
+- After overview shows counts but user wants **names and identifiers**
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `channel_type` | `whatsapp` \| `messenger` \| `instagram` \| `all` | `all` | Filter by platform |
+
+### Response shape
+
+```json
+{
+  "filter": "all",
+  "channels": [
+    {
+      "id": 12,
+      "channel_type": "whatsapp",
+      "display_name": "VoltRide Support",
+      "identifier": "+1…",
+      "status": "active"
+    }
+  ]
+}
+```
+
+(Field names match settings list APIs per channel type.)
+
+### Notes
+
+- Multiple WhatsApp channels per workspace are supported.  
+- Use returned `id` as `channel_id` for `get_channel_analytics` (WhatsApp only).
+
+---
+
+## `list_webhooks`
+
+### When to use
+
+- “List our webhooks”  
+- “Which webhooks are active?”  
+- “What events are we sending to Zapier?”
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `active_only` | boolean | `false` | If true, only active destinations |
+
+### Response
+
+Returns webhook destinations with URL, platform/source, subscribed events, and active flag (from `webhookDestination` table).
+
+### Notes
+
+- Co-Admin **cannot** create or edit webhooks — point users to **Settings → Integrations** and `integrations/webhooks` docs.  
+- For setup steps, also call `search_product_docs`.
+
+---
+
+## `get_channel_analytics`
+
+### When to use
+
+- “WhatsApp delivery rate last 30 days”  
+- “How many messages failed this week?”  
+- “Campaign performance” / “read rate trend”  
+- Delivery troubleshooting (high failed count)
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `channel_id` | integer | omitted = all WhatsApp | Specific WhatsApp channel |
+| `range` | `7d` \| `14d` \| `30d` \| `60d` \| `90d` | `7d` | Analytics window |
+
+### WhatsApp-only detail
+
+Uses `getWhatsappDbAnalyticsSummary` — database-backed message stats for WhatsApp.
+
+Typical metrics include: sent, delivered, read, failed, and derived delivery/read rates, often with daily series suitable for **line** or **combo** charts.
+
+### Non-WhatsApp channels
+
+If `channel_id` points to Messenger or Instagram, the tool returns:
+
+```json
+{
+  "note": "Detailed message analytics in Vendschat are available for WhatsApp channels. Open Analytics in the dashboard for Messenger and Instagram views.",
+  "analytics": null
+}
+```
+
+**Co-Admin should direct users to the Analytics page** for Meta API-backed Messenger/Instagram views.
+
+### Comparison with Analytics dashboard
+
+| Feature | Co-Admin tool | Analytics UI |
+|---------|---------------|--------------|
+| WhatsApp DB metrics | Yes | Yes |
+| 14d Meta API-only views | Limited via tool | Full UI |
+| CSV export | No | Yes (with plan limits) |
+| Top countries export | No | Yes |
+
+See `analytics/` docs for export row limits and cache behavior.
+
+---
+
+## `get_contact_analytics`
+
+### When to use
+
+- “Look up customer jane@brand.com”  
+- “How many messages did +88017… send last month?”  
+- “Which labels does this contact have?”  
+- “Who handled this customer?”  
+- “Estimated cost for outbound to this contact”
+
+### Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `phone_number` | string | One of phone **or** email | — | Customer phone |
+| `email` | string | One of phone **or** email | — | Customer email |
+| `name` | string | No | — | Context only; **not** used for lookup |
+| `range` | `7d`–`90d` | No | `30d` | Message stat window |
+| `label` | string | No | — | Restrict to threads with this label |
+
+### Critical rule
+
+**Name alone is insufficient.** If the user only provides a name, Co-Admin must ask for **email or phone** — never guess a contact.
+
+### Response sections
+
+| Section | Contents |
+|---------|----------|
+| `contact` | id, name, phone, email, country, language, note, first/last contacted |
+| `summary` | thread totals, open/resolved, unread, channels used |
+| `time_based` | inbound/outbound counts, human vs AI outbound, template sends, delivered/read/failed, daily series |
+| `cost_based` | `estimated_outbound_cost_usd`, template count, disclaimer note |
+| `labels` | Label names on contact threads |
+| `support_team` | Human responders with outbound counts; primary assignments |
+| `conversations` | Per-thread: channel, status, unread, assignee (user/team/ai_agent), labels, handover status |
+
+### Assignee types in `conversations`
+
+| `assignee.type` | Meaning |
+|-----------------|---------|
+| `user` | Assigned workspace member |
+| `team` | Assigned group/team |
+| `ai_agent` | Assigned customer AI Agent |
+
+### Privacy
+
+Returns **aggregates and metadata** — not full message transcripts. For message content, users must open **Chat**.
+
+### Label filter
+
+When `label` is set, stats and threads filter to conversations carrying that label — useful for “how is this VIP tag performing for this customer?”
+
+---
+
+## `search_product_docs`
+
+### When to use
+
+- “How do I connect WhatsApp?”  
+- “What’s on the Pro plan?”  
+- “How does AI handover work?”  
+- “How do agencies use multiple workspaces?”  
+- Any **how-to / what-is / setup** question about Vendschat features
+
+### When **not** to use
+
+- “How many channels do **I** have?” → `get_workspace_overview` or `list_channels`  
+- “Our delivery rate?” → `get_channel_analytics`  
+- “Lookup john@…” → `get_contact_analytics`
+
+### Parameters
+
+| Parameter | Type | Required | Default |
+|-----------|------|----------|---------|
+| `query` | string | **Yes** | — |
+| `limit` | 1–8 | No | 5 |
+
+### Search behavior
+
+1. If Voyage embeddings configured: **hybrid** vector + full-text search + rerank (`CO_ADMIN_RAG_HYBRID` not `0`).  
+2. On failure or no Voyage: **FTS-only** fallback.  
+3. Only documents with ingest status **`ready`** are searchable.
+
+### Response
+
+```json
+{
+  "query": "how to connect whatsapp",
+  "hits": [
+    {
+      "slug": "channels/whatsapp",
+      "title": "WhatsApp",
+      "category": "channels",
+      "snippet": "…",
+      "score": 0.92
+    }
+  ],
+  "total": 3
+}
+```
+
+### Answering from hits
+
+Co-Admin should synthesize answers from snippets and cite dashboard paths (**Settings → Channels**, **Chat**, etc.). If hits are empty, say so and suggest the closest Settings page or rephrase.
+
+---
+
+## Tool selection decision tree
+
+```
+User message
+    │
+    ├─ Contains "how to" / "what is" / setup / feature explanation?
+    │       └─ search_product_docs (unless they also need live counts)
+    │
+    ├─ Workspace status / counts / lists?
+    │       ├─ Multiple metrics → get_workspace_overview
+    │       ├─ Channel details → list_channels
+    │       └─ Webhooks → list_webhooks
+    │
+    ├─ WhatsApp metrics / delivery / rates?
+    │       └─ get_channel_analytics
+    │
+    └─ Specific customer email or phone?
+            └─ get_contact_analytics
+```
+
+Full routing patterns: [Question routing](/co-admin/co-admin-question-routing).
+
+---
+
+## Capabilities API
+
+`GET /workspaces/:workspace_id/co-admin/capabilities` returns the manifest: `can`, `cannot`, `tools` schemas, and routing groups (`live_data` vs `product_docs`).
+
+Useful for debugging; end users do not see this endpoint in the UI.
+
+---
+
+## Related documents
+
+- [Overview](/co-admin/co-admin-overview)  
+- [Question routing](/co-admin/co-admin-question-routing)  
+- [Limitations & FAQ](/co-admin/co-admin-limitations-and-faq)

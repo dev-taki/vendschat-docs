@@ -1,0 +1,203 @@
+---
+title: 'Co-Admin — navigation, UI, and chat experience'
+description: 'How workspace admins find, use, and manage AI Workspace Co-Admin in the Vendschat dashboard.'
+---
+
+How workspace admins **find**, **use**, and **manage** AI Workspace Co-Admin in the Vendschat dashboard.
+
+---
+
+## How to open Co-Admin
+
+### Primary navigation
+
+1. Sign in to Vendschat.  
+2. Ensure the correct **workspace** is active (workspace switcher is in **Settings**, not the main header).  
+3. In the **left sidebar**, click **AI Workspace Co-Admin**.  
+4. URL: `/co-admin`.
+
+The nav item uses the workspace agent icon and shows the label **AI Workspace Co-Admin**. It is selected when the path starts with `/co-admin`.
+
+### Access control
+
+- `/co-admin` is an **always accessible** route — available even when a member’s role limits them to **Chat** only.  
+- `/agent` is also listed as always accessible (legacy or alternate path; primary product surface is `/co-admin`).  
+- Co-Admin still only returns **data for the workspace** tied to the current session.
+
+### When Co-Admin is unavailable
+
+If the server returns **503** with “Co-Admin is not configured”, the deployment is missing `OPENROUTER_API_KEY`. This is an environment configuration issue — not something end users fix in Settings.
+
+---
+
+## Page layout
+
+The Co-Admin page is a full-height split view:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [Sidebar - hidden on mobile]  │  Main chat area           │
+│  ┌──────────────────────────┐  │  ┌─────────────────────┐ │
+│  │ [+ New chat]             │  │  │ Greeting or messages│ │
+│  │ [Search chats________]   │  │  │                     │ │
+│  ├──────────────────────────┤  │  │                     │ │
+│  │ Pinned                   │  │  │                     │ │
+│  │   • Thread title         │  │  │                     │ │
+│  │ Today                    │  │  │                     │ │
+│  │   • How many channels?   │  │  ├─────────────────────┤ │
+│  │ Yesterday                │  │  │ [Message composer]  │ │
+│  │ Previous 7 days          │  │  └─────────────────────┘ │
+│  └──────────────────────────┘  │                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Left sidebar (desktop only)
+
+Hidden on small screens (`mobile:hidden`). Contains:
+
+| Control | Action |
+|---------|--------|
+| **New chat** | Starts a fresh conversation (new server-side chat id) |
+| **Search chats** | Filters history by title text |
+| **Chat rows** | Click to switch conversation; hover **⋯** for Rename, Pin/Unpin, Delete |
+| **Pinned section** | Pinned chats appear first with a pin icon |
+
+Date groups for unpinned chats: **Today**, **Yesterday**, **Previous 7 days**, then **Mon DD** style dates.
+
+### Main chat area
+
+| State | What user sees |
+|-------|----------------|
+| Empty new chat | Centered greeting: **“Just ask”** — *Ask a question about your workspace, inbox, campaigns, or channels.* |
+| Loading | “Loading chats…” or “Loading conversation…” |
+| Active chat | Scrollable messages, composer docked at bottom |
+| Streaming | Stop button available while model is responding |
+| Error | Regenerate option when the stream fails |
+
+### Composer behavior
+
+- Multi-line textarea; **Enter** sends, **Shift+Enter** new line.  
+- Send disabled while status is `streaming` or `submitted`.  
+- Auto-focus returns to composer after a reply finishes.  
+- Variant `centered` on empty state; `docked` when messages exist.
+
+---
+
+## Chat history (server-backed)
+
+Co-Admin conversations are **not** ephemeral browser-only storage.
+
+| Property | Detail |
+|----------|--------|
+| Scope | Per **user** + per **workspace** |
+| Storage | Backend `co_admin_chat` and `co_admin_chat_message` tables |
+| Title | Auto-derived from first user message (max 120 characters) |
+| Preview | Last message preview (max 200 characters) |
+| Pin | `is_pinned` + `pinned_at`; pinned chats sort to top |
+| List limit | Default 50 chats per list request (max 100) |
+| Message page size | **30 messages** per page (`CO_ADMIN_MESSAGES_PAGE_SIZE`) |
+| Older messages | Scroll near top → **Load older** fetches previous page |
+
+### Sidebar actions
+
+| Action | How |
+|--------|-----|
+| **Rename** | ⋯ → Rename → Save (Escape cancels) |
+| **Pin** | ⋯ → Pin / Unpin |
+| **Delete** | ⋯ → Delete (removes chat and messages) |
+
+Prefetch: hovering a chat row may prefetch messages for faster switching.
+
+---
+
+## Workspace scoping
+
+Every API call includes the active **`workspaceId`** from the user session.
+
+- Switching workspace in **Settings** changes which live data Co-Admin tools return.  
+- Chat history is **separate per workspace** — switching workspace shows a different sidebar history.  
+- If `workspaceId` is missing from the chat request, the agent API returns **400** (“workspaceId is required for Co-Admin tools”).
+
+**Training note for Co-Admin:** When users ask “my channels” or “our inbox”, always interpret as **current workspace** unless they name another workspace (which Co-Admin cannot access).
+
+---
+
+## How replies render
+
+### Markdown
+
+Standard markdown for headings, lists, bold, links.
+
+### Charts (required format)
+
+When the assistant presents a **chart** (trends, comparisons, distributions), it must use a fenced **`chart`** block with JSON — **not** Mermaid `xychart-beta`, **not** a markdown table labeled as a chart.
+
+Supported `type` values: `line`, `bar`, `area`, `combo`, `scatter`, `pie`.
+
+Example bar chart:
+
+```chart
+{
+  "title": "Messages Sent (Last 7 Days)",
+  "type": "bar",
+  "labels": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+  "yAxisLabel": "Sent",
+  "series": [{ "name": "Sent", "type": "bar", "data": [120, 98, 145, 132, 110] }]
+}
+```
+
+The frontend parses these blocks and renders interactive charts in the message stream.
+
+### Tables
+
+Markdown tables are for **tabular data only when the user asks for a table** — not as a substitute for charts.
+
+---
+
+## Agent turn limits
+
+- Maximum **6 tool-call steps** per user message (`stopWhen: stepCountIs(6)`).  
+- Complex questions may combine overview + doc search + analytics within that budget.  
+- If a question needs more, Co-Admin should answer in parts or ask the user to narrow the scope.
+
+---
+
+## Mobile experience
+
+The history sidebar is **hidden on mobile**. Users on phones still get the main chat and composer but manage history with reduced visibility — they may need desktop for pin/rename/delete unless a mobile history pattern is added later.
+
+---
+
+## Co-Admin vs navigating the dashboard yourself
+
+| Task | Dashboard path | Co-Admin shortcut |
+|------|----------------|-------------------|
+| See channel list | Settings → Channels | “List our channels” |
+| Webhook list | Settings → Integrations → Webhooks | “List webhooks” |
+| Inbox totals | Chat (filters) | “Workspace overview” / open thread counts |
+| WhatsApp analytics | Analytics | “WhatsApp delivery last 30 days” + chart |
+| Product how-to | Help docs / explore Settings | Natural language question |
+
+Co-Admin **does not replace** deep configuration UIs — it orients users and surfaces summaries faster.
+
+---
+
+## Common UI troubleshooting
+
+| Symptom | Likely cause | What to tell the user |
+|---------|--------------|------------------------|
+| Empty sidebar | New workspace or no prior chats | Click **New chat** and ask a question |
+| “Loading conversation…” stuck | Network or auth | Refresh; re-login |
+| Generic error on send | OpenRouter or backend | Try again; contact admin if 503 persists |
+| Wrong workspace data | Wrong workspace selected | Switch workspace in **Settings** |
+| No chart visible | Model used table instead of `chart` JSON | Ask “show that as a chart” |
+
+More Q&A: [Limitations & FAQ](/co-admin/co-admin-limitations-and-faq).
+
+---
+
+## Related documents
+
+- [Overview](/co-admin/co-admin-overview)  
+- [Tools reference](/co-admin/co-admin-tools-reference)  
+- [Question routing](/co-admin/co-admin-question-routing)

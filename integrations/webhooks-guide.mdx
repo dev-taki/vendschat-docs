@@ -1,0 +1,288 @@
+---
+title: 'Webhooks — event destinations guide'
+description: 'Send real-time notifications from Vendschat to your HTTPS endpoints when messages arrive, get sent, or delivery status changes.'
+---
+
+Send **real-time notifications** from Vendschat to your HTTPS endpoints when messages arrive, get sent, or delivery status changes.
+
+**Who this is for:** Developers and ops leads setting up Make, Zapier, n8n, or custom backends.
+
+**Path:** **Settings → Workspace → Webhooks** (`/settings/workspace/webhooks`)
+
+**Plan:** **Growth** or **Advanced** (not on Starter). See [billing — pricing](/billing/pricing-plans-reference).
+
+---
+
+## Quick reference
+
+| Task | Where |
+|------|--------|
+| List destinations | **Webhooks** → **Event destinations** table |
+| Add webhook | **Add destination** → `/settings/workspace/webhooks/create` |
+| Edit webhook | Row **⋯** → **Edit** → `/settings/workspace/webhooks/{id}/edit` |
+| Pause without deleting | Row **⋯** → **Disable** (badge shows **Disabled**) |
+| Re-enable | Row **⋯** → **Enable** |
+| Delete | Row **⋯** → **Delete** |
+| Copy URL | Copy icon next to destination URL |
+| Filter | **Search** · **Filter by Channel** |
+| Bulk import | **Import** |
+| Co-Admin list | Ask *“List our webhooks”* — uses live workspace data |
+
+---
+
+## What webhooks do
+
+When an event happens in your workspace (e.g. customer sends WhatsApp text), Vendschat **POSTs JSON** to every **active** destination subscribed to that event type.
+
+```text
+Customer message → Vendschat persists → matching destinations → your URL (Make / n8n / custom)
+```
+
+Webhooks are **outbound only** — they notify *your* systems. They do not replace **Chat** or **AI Agents**.
+
+---
+
+## Example: Pulse Digital agency
+
+**Pulse** routes VIP WhatsApp messages to Slack:
+
+1. **Settings → Webhooks → Add destination**
+2. Name: `VIP Slack alert`
+3. URL: Make webhook URL (`https://hook.eu1.make.com/...`)
+4. Events: `incoming.whatsapp.messages.text` only (start narrow)
+5. Save signing secret when shown
+6. Make scenario → filter by label later → post to `#vip-sales`
+
+They add `outgoing.whatsapp.status.delivered` when they need delivery receipts.
+
+---
+
+## Webhooks page layout
+
+**Section header:** *Webhooks* — *“Create and manage webhooks for receiving real-time notifications across all your channels.”*
+
+### Event destinations
+
+| Column | Meaning |
+|--------|---------|
+| **Destination** | Full HTTPS endpoint URL |
+| Copy icon | Copy URL to clipboard |
+| **Name** | Friendly label (e.g. `Make Webhook 1`) |
+| **Status** | **Active** (green) or **Disabled** (neutral) |
+| **Listening to** | Count of subscribed events (e.g. `1 event`, `220 events`) |
+| **⋯ menu** | **Edit** · **Enable** / **Disable** · **Delete** |
+
+**Toolbar:**
+
+- **Add destination** — create new webhook  
+- **Import** — import destinations (bulk)  
+- **Search** — filter table by text  
+- **Filter by Channel** — narrow by channel scope  
+
+**Pagination:** e.g. `1 of 3` at bottom when many destinations exist.
+
+---
+
+## Creating a destination (step by step)
+
+**Path:** **Add destination** → `/settings/workspace/webhooks/create`
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| **Name** | Yes | Internal label — e.g. `Production n8n` |
+| **Endpoint URL** | Yes | `https://` or `http://` (use HTTPS in production) |
+| **Description** | No | Optional notes for your team |
+| **Events** | Yes | At least one event type from catalog below |
+| **Source** | Auto / optional | `dashboard`, `zapier`, `make`, `n8n`, `pipedrive`, `monday`, `custom` |
+| **Payload style** | Default `thin` | `thin` or `snapshot` |
+| **API version** | Default `unversioned` | Version label for payload envelope |
+
+After save:
+
+- Destination appears in table as **Active**
+- A **signing secret** is generated (`whsec_…`) — store it securely; use it to verify requests on your server
+
+---
+
+## Payload envelope
+
+Each delivery is a JSON POST with headers:
+
+| Header | Purpose |
+|--------|---------|
+| `Content-Type` | `application/json` |
+| `User-Agent` | `VendsChat-Webhooks/1.0` |
+| `X-VendsChat-Event` | Event type string |
+| `X-VendsChat-Timestamp` | Unix timestamp (when secret configured) |
+| `X-VendsChat-Signature` | HMAC-SHA256 of `{timestamp}.{body}` (when secret configured) |
+
+**Body shape:**
+
+```json
+{
+  "id": "evt_…",
+  "type": "incoming.whatsapp.messages.text",
+  "created_at": "2024-01-15T10:30:00.000Z",
+  "workspace_id": 123,
+  "api_version": "unversioned",
+  "data": { }
+}
+```
+
+**Payload styles:**
+
+| Style | Use when |
+|-------|----------|
+| **thin** | You only need IDs and metadata — fetch details via API |
+| **snapshot** | You want richer embedded data in the webhook body |
+
+---
+
+## Complete event catalog
+
+Events use the pattern `{direction}.{channel}.{detail}`.
+
+### Cross-channel (Vendschat)
+
+| Event type | When it fires |
+|------------|---------------|
+| `incoming.vendschat.messages` | Any inbound message persisted, **all channels** |
+| `outgoing.vendschat.messages` | Any outbound message sent from Vendschat, **all channels** |
+
+Subscribe to these for “catch everything” logging.
+
+### WhatsApp — incoming
+
+| Event type | When it fires |
+|------------|---------------|
+| `incoming.whatsapp.messages.text` | Contact sends text |
+| `incoming.whatsapp.messages.document` | Contact sends document |
+| `incoming.whatsapp.messages.image` | Contact sends image |
+| `incoming.whatsapp.messages.video` | Contact sends video |
+| `incoming.whatsapp.messages.audio` | Voice note or audio |
+| `incoming.whatsapp.messages.react` | Contact reacts to a message |
+
+### WhatsApp — outgoing & status
+
+| Event type | When it fires |
+|------------|---------------|
+| `outgoing.whatsapp.response` | Workspace sends WhatsApp message |
+| `outgoing.whatsapp.status.send` | WhatsApp confirms message reached their servers |
+| `outgoing.whatsapp.status.delivered` | Delivered to recipient device |
+| `outgoing.whatsapp.status.read` | Recipient read the message |
+| `outgoing.whatsapp.status.failed` | Delivery failed |
+
+### Instagram — incoming
+
+| Event type | When it fires |
+|------------|---------------|
+| `incoming.instagram.messages.text` | Text in Instagram Direct |
+| `incoming.instagram.messages.image` | Image |
+| `incoming.instagram.messages.video` | Video |
+| `incoming.instagram.messages.audio` | Audio |
+| `incoming.instagram.messages.story_reply` | Reply to your story |
+
+### Instagram — outgoing & status
+
+| Event type | When it fires |
+|------------|---------------|
+| `outgoing.instagram.response` | Workspace sends Instagram message |
+| `outgoing.instagram.status.delivered` | Delivered |
+| `outgoing.instagram.status.read` | Read |
+
+### Messenger — incoming
+
+| Event type | When it fires |
+|------------|---------------|
+| `incoming.messenger.messages.text` | Text |
+| `incoming.messenger.messages.image` | Image |
+| `incoming.messenger.messages.video` | Video |
+| `incoming.messenger.messages.audio` | Audio |
+| `incoming.messenger.messages.postback` | Postback button tap |
+
+### Messenger — outgoing & status
+
+| Event type | When it fires |
+|------------|---------------|
+| `outgoing.messenger.response` | Workspace sends Messenger message |
+| `outgoing.messenger.status.delivered` | Delivered |
+| `outgoing.messenger.status.read` | Read |
+
+**Public docs:** Each event also has a page at `https://docs.vendschat.com/webhooks/events/…` (linked from the product event picker when available).
+
+---
+
+## Common recipes
+
+| Goal | Events to subscribe |
+|------|---------------------|
+| Log all customer messages | `incoming.vendschat.messages` |
+| WhatsApp-only inbox mirror | `incoming.whatsapp.messages.text` + media types you care about |
+| Slack alert on new message | `incoming.vendschat.messages` → filter in Make/Zapier |
+| CRM task on new thread | `incoming.*.messages.text` per channel |
+| Delivery analytics | `outgoing.whatsapp.status.delivered`, `outgoing.whatsapp.status.read` |
+| Failed message alerts | `outgoing.whatsapp.status.failed` |
+| Story engagement | `incoming.instagram.messages.story_reply` |
+| Messenger bot buttons | `incoming.messenger.messages.postback` |
+
+**Tip:** Start with **one** event. Add more after your endpoint handles volume.
+
+---
+
+## Connecting automation platforms
+
+| Platform | Typical setup |
+|----------|---------------|
+| **Make** | Create **Custom webhook** module → copy URL → **Webhooks → Add destination** |
+| **Zapier** | **Webhooks by Zapier** → Catch Hook → paste URL in Vendschat |
+| **n8n** | **Webhook** trigger node → production URL → Vendschat destination |
+| **Custom server** | Your API route → verify signature → process `data` |
+
+Set **source** to `make`, `zapier`, or `n8n` when creating via that platform (helps filtering in support).
+
+---
+
+## Managing destinations
+
+| Action | Effect |
+|--------|--------|
+| **Disable** | Stops deliveries; configuration kept |
+| **Enable** | Resumes deliveries |
+| **Edit** | Change URL, events, name, payload style |
+| **Delete** | Permanent — recreate if needed |
+
+**Active vs Disabled:** Disabled rows show neutral badge; enabled rows show green **Active**.
+
+---
+
+## Security
+
+- Use **HTTPS** endpoints in production  
+- Verify **X-VendsChat-Signature** with your `whsec_…` secret  
+- Reject requests with stale timestamps (replay protection)  
+- Rotate secrets when team members with access leave  
+- Do not paste signing secrets in **Chat** with customers  
+- Subscribe only to events you process — reduces noise and attack surface  
+
+---
+
+## Troubleshooting
+
+| Symptom | Check |
+|---------|--------|
+| No events received | Destination **Active**? Correct events selected? URL reachable? |
+| Works in Make test, not production | Production vs test URL mismatch |
+| 220 events subscribed — too noisy | Narrow event list; avoid subscribing to all types unless needed |
+| Signature verification fails | Use raw body + timestamp; secret must match destination |
+| Starter plan | Upgrade to **Growth** for webhooks |
+| Co-Admin shows webhooks but UI empty | UI may show sample data during rollout — trust Co-Admin live list |
+
+---
+
+## Related docs
+
+- [Integrations overview](/integrations/integrations-and-automation-overview)
+- [n8n, Zapier & Make](/integrations/n8n-zapier-make)
+- [API keys & REST API](/integrations/api-keys-and-rest-api)
+- [Integrations FAQ](/integrations/integrations-faq)
+- [Billing — plan gates](/billing/pricing-plans-reference)

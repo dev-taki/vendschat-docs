@@ -1,0 +1,65 @@
+---
+title: 'Billing overview'
+description: 'Subscriptions, contact usage, seats, and Stripe billing for your organization (not per workspace).'
+---
+
+Subscriptions, contact usage, seats, and Stripe billing for your **organization** (not per workspace).
+
+**Who this is for:** Organization owners, admins monitoring usage, and Co-Admin answering plan questions.
+
+**Primary path:** **Settings → Organization → Billing & Usages** → `/settings/organization/billing&usages`
+
+(Page title reads **Billing & Usage**; sidebar label is **Billing & Usages**.)
+
+---
+
+## Doc map
+
+| Doc | Use when… |
+|-----|-----------|
+| [Plans, billing & usage](/billing/plans-and-usage) | Concepts, UI walkthrough, upgrades, overage, monitoring |
+| [Pricing & plan reference](/billing/pricing-plans-reference) | Tier names, price table, feature matrix |
+| [Billing FAQ](/billing/billing-faq) | Short Q&A for Co-Admin |
+
+---
+
+## Product snapshot
+
+| Topic | Behavior |
+|-------|----------|
+| **Billing scope** | **Organization** — contacts and seats shared across all workspaces |
+| **Payment** | **Stripe** Checkout (subscribe) + **Stripe Billing Portal** (invoices, card, cancel) |
+| **Who can pay** | **Organization owner** only (`user.role === "owner"`) |
+| **Plans** | **Starter** (unlimited contacts), **Growth** / **Advanced** (200–1500 contact tiers), **1500+** → Contact Sales |
+| **Pre-subscribe** | Internal **`free`** tier — **100 contacts** until a paid plan |
+| **Usage meter** | Unique contacts messaged per billing cycle (Growth/Advanced); **$0.125** overage per extra contact |
+| **Seats** | **10 free**; Starter extras **$10/seat**; Growth/Advanced extras **$20/seat** |
+
+---
+
+## Routes
+
+| URL | Purpose |
+|-----|---------|
+| `/settings/organization/billing&usages` | Current plan, usage, Stripe portal |
+| `/settings/organization/billing&usages/plans` | Plan cards, contact slider, checkout |
+
+---
+
+## What the dashboard can and cannot do
+
+| Action | In UI today |
+|--------|-------------|
+| View plan, usage, seats, overage | ✅ Billing & Usage |
+| Upgrade / subscribe | ✅ Plans page → Stripe Checkout (owner) |
+| Open Stripe portal | ✅ Billing & Usage (owner) |
+| Downgrade plan tier | ❌ No button — **Stripe portal**, **support**, or backend `downgrade-request` API |
+| Change seat count after subscribe | **Plans** checkout (new subs) or **Stripe portal** — `seats/change` API exists but is not wired to the billing page UI |
+
+---
+
+## Related
+
+- [Analytics](/analytics/analytics-overview) — usage metrics separate from billing contacts
+- [Integrations](/integrations/integrations-and-automation-overview) — Growth+ webhooks and automation
+- [Broadcasts](/broadcasts/campaigns) — Growth+; counts toward contacts

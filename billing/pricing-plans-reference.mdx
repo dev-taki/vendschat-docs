@@ -1,0 +1,294 @@
+---
+title: 'Pricing & plan reference'
+description: 'Authoritative reference for Vendschat plan tiers, published prices, contact limits, seat economics, and feature comparison. Use this when customers ask…'
+---
+
+Authoritative reference for Vendschat plan tiers, published prices, contact limits, seat economics, and feature comparison. Use this when customers ask *“How much is Growth 500?”* or *“What’s the difference between Growth and Advanced?”*
+
+**Live checkout prices** come from **Stripe** via the plan catalog (`GET /settings/plan/catalog`). **Plan card totals** on the Plans page use in-app `PLAN_DISPLAY_PRICES` plus selected seats — they should match Stripe but **checkout total wins** if they differ.
+
+**Currency:** USD. **Tax:** Excluded unless stated at checkout.
+
+---
+
+## Plan tier naming (internal ↔ customer-facing)
+
+Customers see marketing names; the system stores granular tier keys.
+
+| Customer sees | Internal tier key | Contact limit |
+|---------------|-------------------|---------------|
+| Starter | `starter_40` | Unlimited (`null` in catalog) |
+| Growth 200 | `growth_200` | 200 |
+| Growth 350 | `growth_350` | 350 |
+| Growth 500 | `growth_500` | 500 |
+| Growth 1000 | `growth_1000` | 1,000 |
+| Growth 1500 | `growth_1500` | 1,500 |
+| Growth 1500+ | `growth_1500_plus` | Contact Sales |
+| Advanced 200 | `advanced_200` | 200 |
+| Advanced 350 | `advanced_350` | 350 |
+| Advanced 500 | `advanced_500` | 500 |
+| Advanced 1000 | `advanced_1000` | 1,000 |
+| Advanced 1500 | `advanced_1500` | 1,500 |
+| Advanced 1500+ | `advanced_1500_plus` | Contact Sales |
+| Free (pre-subscribe) | `free` | 100 (default until paid plan) |
+
+Display names in dashboard: **Settings → Billing & Usage** uses labels like “Growth 500”, “Advanced 200”.
+
+---
+
+## Base plan prices (monthly)
+
+Prices below are **base plan only** — before extra seats and before contact overage.
+
+### Starter
+
+| Billing | Price |
+|---------|-------|
+| Monthly | **$40/mo** |
+| Annual (20% off) | **$384/yr** (~$32/mo effective) |
+| Contacts | **Unlimited** |
+| Extra seats | **$10/seat/mo** after 10 free |
+
+### Growth — by contact tier
+
+| Contacts/mo | Monthly base | Annual (20% off) |
+|-------------|--------------|------------------|
+| 200 | $20 | $192/yr |
+| 350 | $30 | $288/yr |
+| 500 | $40 | $384/yr |
+| 1,000 | $60 | $576/yr |
+| 1,500 | $80 | $768/yr |
+| 1,500+ | Contact Sales | Custom |
+
+Extra seats on all Growth tiers: **$20/seat/mo** after 10 free.
+
+### Advanced — by contact tier
+
+| Contacts/mo | Monthly base | Annual (20% off) |
+|-------------|--------------|------------------|
+| 200 | $30 | $288/yr |
+| 350 | $40 | $384/yr |
+| 500 | $50 | $480/yr |
+| 1,000 | $70 | $672/yr |
+| 1,500 | $90 | $864/yr |
+| 1,500+ | Contact Sales | Custom |
+
+Extra seats on all Advanced tiers: **$20/seat/mo** after 10 free.
+
+**Advanced premium over Growth** at same contact tier pays for API, multi-workspace, managed n8n, and enterprise support — not for more contacts.
+
+---
+
+## Seat pricing summary
+
+| Plan family | Seats included free | Price per additional seat |
+|-------------|---------------------|---------------------------|
+| Starter | 10 | $10/mo |
+| Growth | 10 | $20/mo |
+| Advanced | 10 | $20/mo |
+
+- UI allows selecting **10 up to 110** total seats on Plans page (10 free + up to 100 paid).
+- At checkout, extra seats are added as a Stripe line item.
+- **Seat upgrades** bill immediately with proration.
+- **Seat downgrades** reduce active seats now; billed quantity may drop at **period end**.
+
+### Seat total formula
+
+```
+monthly_total = base_plan_price + max(0, total_seats - 10) × seat_unit_price
+```
+
+**Example:** Advanced 1000, 25 seats, monthly → $70 + (15 × $20) = **$370/mo**.
+
+---
+
+## Contact overage
+
+| Item | Value |
+|------|-------|
+| Applies to | **Growth** and **Advanced** only |
+| Starter | **No overage** — unlimited contacts |
+| Unit price | **$0.125 per contact** beyond included bucket |
+| Billing | Automatic via Stripe metered usage on subscription |
+| When counted | First time you message a unique contact in the billing cycle who pushes you **over** the included limit |
+
+**Example:** Growth 200 plan (200 included), 250 unique contacts messaged in cycle → 50 overage × $0.125 = **$6.25** overage charge (plus base plan).
+
+---
+
+## Annual billing discount
+
+| Rule | Detail |
+|------|--------|
+| Discount | **20%** off compared to paying monthly × 12 |
+| UI copy | “Annual (Save up to 20%)” |
+| Effective monthly | Shown as “≈ $X/mo avg · billed yearly” on pricing page |
+| Formula | `annual_price = round(monthly_base × 12 × 0.8)` |
+
+---
+
+## Complete feature comparison matrix
+
+### Core features
+
+| Feature | Starter | Growth | Advanced |
+|---------|:-------:|:------:|:--------:|
+| Monthly contacts | **Unlimited** | 200 – 1,500 (tier) | 200 – 1,500 (tier) |
+| Chat application suite | ✅ | ✅ | ✅ |
+| Team collaboration | ✅ | ✅ | ✅ |
+| Team internal chat | ❌ | ✅ | ✅ |
+| Broadcasts | ❌ | ✅ | ✅ |
+| Label management | Basic | Advanced | Advanced |
+| Message history | ✅ | ✅ | ✅ |
+| Reports & analytics | ✅ | ✅ | ✅ |
+| Mobile app | ✅ | ✅ | ✅ |
+
+### Messaging channels (all plans)
+
+| Channel | Starter | Growth | Advanced |
+|---------|:-------:|:------:|:--------:|
+| WhatsApp Business | ✅ | ✅ | ✅ |
+| Facebook Messenger | ✅ | ✅ | ✅ |
+| Instagram Direct | ✅ | ✅ | ✅ |
+
+### AI & automation
+
+| Feature | Starter | Growth | Advanced |
+|---------|:-------:|:------:|:--------:|
+| AI Reply Generator | ✅ | ✅ | ✅ |
+| Chat summarization | ✅ | ✅ | ✅ |
+| AI prompts (composer assist) | ✅ | ✅ | ✅ |
+| Custom AI Agents | ❌ | ✅ | ✅ |
+| Managed n8n instance | ❌ | ❌ | ✅ |
+
+**Managed n8n specs (Advanced):** 4 vCPU · 8 GB RAM · 75 GB NVMe · Auto backup · Upgradable on demand from dashboard.
+
+### Integrations & API
+
+| Feature | Starter | Growth | Advanced |
+|---------|:-------:|:------:|:--------:|
+| n8n, Make & Zapier | ❌ | ✅ | ✅ |
+| Incoming & outgoing webhooks | ❌ | ✅ | ✅ |
+| Developer API access | ❌ | ❌ | ✅ |
+| Multiple workspaces | ❌ | ❌ | ✅ |
+| HubSpot integration | ✅* | ✅* | ✅* |
+
+\*Integration availability follows product rollout; connect under **Integrations** in dashboard.
+
+### Support
+
+| Feature | Starter | Growth | Advanced |
+|---------|:-------:|:------:|:--------:|
+| Community support | ✅ | ✅ | ✅ |
+| Priority support | ❌ | ✅ | ✅ |
+| Dedicated account manager | ❌ | ❌ | ✅ |
+| SLA guarantee | ❌ | ❌ | ✅ |
+
+---
+
+## Starter plan — included feature list (in-app)
+
+As shown on the Plans page:
+
+- Advanced Chat Application Suite
+- AI Prompts, AI Reply generate, AI Chat Summary
+- Advanced Label Management
+- Team Collaboration
+- Reports
+
+Tagline: *“Perfect for getting started”* — **Unlimited contacts · 10 seats included (free)**.
+
+---
+
+## Growth plan — included feature list (in-app)
+
+- All Starter features included
+- Custom AI Agent Development
+- Team Internal Chat
+- n8n, Make & Zapier Integration
+- Broadcasts
+- Incoming & Outgoing Webhooks
+
+Tagline: *“Best for growing teams”* — contact tier sets included monthly contacts.
+
+---
+
+## Advanced plan — included feature list (in-app)
+
+- All Growth features included
+- Developer API
+- Multiple Workspaces
+- Managed n8n instance (specs above)
+
+Tagline: *“Best for scale and API access”*.
+
+---
+
+## Deprecated: Advanced add-on
+
+Older flows referenced an “Advanced add-on” on top of Growth. This is **deprecated**. Customers should select a native **Advanced** base plan (`advanced_200`, `advanced_350`, etc.) instead.
+
+---
+
+## Free trial (Growth)
+
+| Attribute | Value |
+|-----------|-------|
+| Duration | **14 days** |
+| Credit card | Not required at signup |
+| Plan after trial | Must actively subscribe — no auto-conversion |
+| Marketing entry | Pricing page / “Start Growing” CTAs |
+
+---
+
+## Stripe Billing Portal capabilities
+
+Owners open from **Billing & Usage → Open Stripe Portal**:
+
+- Update **payment method**
+- View **invoice history** and download PDFs
+- **Manage subscription** (cancel, update payment)
+
+---
+
+## Third-party fees reminder
+
+| Fee type | Billed by |
+|----------|-----------|
+| Vendschat subscription | Stripe (Vendschat) |
+| WhatsApp / Meta conversation fees | Meta or your BSP — **not** included in plan base price |
+| SMS (if enabled in future) | Carrier / provider |
+
+---
+
+## Price change & grandfathering
+
+Per Terms of Service:
+
+- Material plan price or feature changes come with **reasonable prior notice**
+- Fee increases effective next billing period after **30 days’ written notice**
+- Continued use after effective date = acceptance
+
+---
+
+## Quick lookup: “Which plan do I need for X?”
+
+| Customer need | Minimum plan |
+|---------------|--------------|
+| Unlimited contacts, basic inbox | Starter |
+| WhatsApp broadcast campaign | Growth |
+| Webhook to Zapier/Make | Growth |
+| Custom AI Agent for customers | Growth |
+| REST API integration | Advanced |
+| Separate workspace per client (agency) | Advanced |
+| Hosted n8n without self-hosting | Advanced |
+| >1,500 contacts/mo | Contact Sales |
+| SSO / data residency (enterprise) | Contact Sales / enterprise |
+
+---
+
+## Related
+
+- [Billing overview](/billing/billing-overview)
+- [Plans, billing & usage](/billing/plans-and-usage) — concepts, UI paths, workflows
+- [Billing FAQ](/billing/billing-faq) — customer question patterns

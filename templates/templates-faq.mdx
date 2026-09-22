@@ -1,0 +1,177 @@
+---
+title: 'Templates FAQ'
+description: 'Answers Co-Admin should give for WhatsApp template message questions.'
+---
+
+Answers Co-Admin should give for WhatsApp **template message** questions.
+
+---
+
+## Basics
+
+### Where are templates?
+
+Sidebar **Templates** → `/template`
+
+### Is this the same as AI Agent templates?
+
+**No.** **Template Messages** = Meta-approved **WhatsApp** outbound messages (`/template`). **AI Agent templates** = bot starters (`/ai-agents/templates`).
+
+### Which channels use templates?
+
+**WhatsApp** is fully supported (create, list, sync, send). **Messenger/Instagram** cards exist on the hub; WhatsApp is the live template workflow today.
+
+### Why do I need templates?
+
+WhatsApp requires **approved templates** when messaging outside the **24-hour customer service window**, for many **Broadcasts**, and for proactive **New Chat** outreach.
+
+---
+
+## Navigation
+
+### How do I create a template?
+
+**Templates** → WhatsApp channel → **Create New Template** → fill form → **Submit for Approval**.
+
+### How do I see all templates for a number?
+
+**Manage Templates** on the channel card → `/template/whatsapp/list?channelId=`
+
+### How do I add a WhatsApp channel first?
+
+**Templates** → **Add Channel** → **Settings → Workspace → Channels** → connect WhatsApp.
+
+---
+
+## Approval & status
+
+### What do APPROVED, PENDING, REJECTED mean?
+
+| Status | Can send? |
+|--------|-----------|
+| **APPROVED** | Yes |
+| **PENDING** | No — Meta reviewing |
+| **REJECTED** | No — fix and resubmit |
+
+### How long does Meta approval take?
+
+Often minutes to 48 hours — varies by category and volume. Use **Sync** to refresh status.
+
+### How do I sync templates from Meta?
+
+**My Templates** list → **Sync** button.
+
+### Can I save a draft?
+
+**Save as Draft** shows *“Drafts are not available yet”* — use **Submit for Approval**.
+
+---
+
+## Creating templates
+
+### What categories exist?
+
+**Marketing**, **Utility**, **Authentication**
+
+### What languages are in the create form?
+
+English (`en_US`), Spanish, French, German, Portuguese — one language per template.
+
+### How do variables work?
+
+Use `{{1}}`, `{{2}}` in body — **Add Variable** button or type manually. Provide sample values for Meta review.
+
+### What are button limits?
+
+Up to **10** total: 10 quick replies, 2 URLs, 1 phone, 1 WhatsApp call, 1 copy code (see create form help text).
+
+### Can I create image-header templates?
+
+UI supports attachment types, but submit may block media until sample upload is supported — use **None** + text header for reliable creation today.
+
+---
+
+## Editing & deleting
+
+### Can I rename a template?
+
+**Name** is locked on edit — create a new template for a new name.
+
+### What can I edit?
+
+**Body**, **header** (text), **footer** — may trigger Meta re-review.
+
+### How do I delete?
+
+List row → **Delete** → confirm. Removes from workspace and Meta.
+
+---
+
+## Chat & sending
+
+### Why can’t I type a normal reply?
+
+**24-hour messaging window expired** — only **Templates** until customer replies.
+
+### Where is the Templates button?
+
+**Chat** composer toolbar (visible when window expired or for template sends).
+
+### Can I send a pending template?
+
+**No** — backend requires **approved** status.
+
+### How do I schedule a template?
+
+**Chat** → **Templates** modal → set schedule time.
+
+### How do I broadcast with a template?
+
+Template modal → **broadcast** mode → select **labels**. Or use **Broadcast** page with same approved library.
+
+---
+
+## Broadcasts & analytics
+
+### Do broadcasts need templates?
+
+**Yes** for WhatsApp campaigns — build in **Templates** first.
+
+### Which plan includes broadcasts?
+
+**Growth** and **Advanced** — see [billing](/billing/pricing-plans-reference).
+
+### Where do I see template performance?
+
+**Analytics** → WhatsApp → **Template performance**.
+
+---
+
+## Troubleshooting
+
+### Sync failed
+
+Check WhatsApp channel is **active**, credentials valid, WABA linked.
+
+### Template rejected by Meta
+
+Read rejection reason — usually wrong category, promotional utility content, or policy violation.
+
+### Customer didn’t receive template
+
+Check **Failed** in message logs; verify template **APPROVED**; valid WhatsApp number.
+
+### Export button does nothing useful
+
+Export not implemented — use Sync + Analytics CSV.
+
+---
+
+## Related docs
+
+- [Templates overview](/templates/templates-overview)
+- [Creating WhatsApp templates](/templates/creating-whatsapp-templates)
+- [Managing templates & sync](/templates/managing-templates-and-sync)
+- [Templates in Chat & broadcasts](/templates/templates-in-chat-and-broadcasts)
+- [Channels FAQ](/channels/channels-faq)
+- [Broadcasts](/broadcasts/campaigns)

@@ -1,0 +1,205 @@
+---
+title: 'AI Agents FAQ'
+description: 'Answers Co-Admin should give for customer AI Agent questions.'
+---
+
+Answers Co-Admin should give for customer AI Agent questions.
+
+---
+
+## Basics
+
+### What are AI Agents?
+
+Customer-facing bots that automatically reply on **Chat** threads assigned to them, using your instructions and knowledge sources.
+
+### Where do I find AI Agents?
+
+Sidebar **AI Agents** → `/ai-agents`
+
+### Which plan includes AI Agents?
+
+**Growth** and **Advanced**. Not **Starter**. See **Billing & Usage**.
+
+### How is this different from Co-Admin?
+
+**Co-Admin** helps *your team* use Vendschat. **AI Agents** talk to *your customers* on WhatsApp, Messenger, and Instagram.
+
+### How is this different from Generate Reply?
+
+| Generate Reply | AI Agents |
+|----------------|-----------|
+| Drafts for humans in composer | Sends to customers automatically |
+| Human clicks **Send** | Active on assigned threads |
+| **Settings → Generate Reply** | **AI Agents** page |
+
+---
+
+## Creating & editing
+
+### How do I create an AI Agent?
+
+**AI Agents** → **Create AI Agent**, or **Browse templates** first.
+
+### What templates exist?
+
+**Receptionist**, **Sales agent**, **Support agent**, **Custom** — at `/ai-agents/templates`.
+
+### How long can instructions be?
+
+Up to **8,000 characters**.
+
+### How long can the agent name be?
+
+**1–60 characters**.
+
+### What is response delay?
+
+Seconds (0–30) the bot waits after inbound messages before replying — batches rapid texts into one reply.
+
+### How do I pause an agent?
+
+**AI Agents** list → turn **switch** off → status **Paused**.
+
+### How do I delete an agent?
+
+Card **⋯** → **Delete** → confirm. Unassigns threads and clears workspace default if applicable.
+
+---
+
+## Knowledge
+
+### What files can I upload?
+
+PDF, TXT, MD, CSV, DOCX, PPTX, PPSX, and images (JPEG, PNG, BMP, WEBP, TIFF).
+
+### What are the file size limits?
+
+**1 MB** per file, **1 MB** combined per upload batch, up to **5** files at once.
+
+### Can I add a website?
+
+Yes — **Add knowledge source** → **Add website**. Set resync: Never, Daily, Weekly, or Monthly.
+
+### What is max crawl depth?
+
+Default **3** link levels from the start URL. Adjustable in advanced crawl settings.
+
+### Why is my source “syncing”?
+
+Crawl/index in progress. Wait or use **Resync** after save (edit mode).
+
+### I hit a rate limit on knowledge changes
+
+Default **50** source changes and **50** resyncs per source per 24 hours. Wait and retry.
+
+---
+
+## Testing
+
+### How do I test before going live?
+
+Use **Test AI Agent** on the create/edit form or agent detail page. Not sent to real customers.
+
+### Does test use my knowledge?
+
+Yes — same retrieval as live replies for that agent.
+
+---
+
+## Chat & assignment
+
+### How do I assign an AI Agent to a conversation?
+
+**Chat** → open thread → **Recipient panel** → **Assigned to** → select agent (brain icon).
+
+### Will the bot reply to every thread?
+
+Only threads **assigned** to that agent (or new threads with workspace **default agent** if configured).
+
+### How do I take over from the bot?
+
+Assign the thread to **yourself** or another **teammate**.
+
+### What happens if I assign a team?
+
+AI assignment is cleared — team queue handles it.
+
+### Can I unassign completely?
+
+**Assigned to** → **Unassigned**.
+
+### Why isn’t the bot replying?
+
+Check: thread assigned to agent, agent **Active** (not Paused), channel connected, not in human takeover.
+
+### Does pausing the agent stop all threads?
+
+Yes — paused agents don’t process the reply queue. Assignments may remain but no auto-replies.
+
+---
+
+## Actions & handover
+
+### What actions can the bot take?
+
+Close conversation, assign to team/agent, update contact fields, update labels, add internal comments, HTTP requests — each toggled separately with instructions.
+
+### Are HTTP actions live?
+
+Configured in the form; model receives action rules as context. Test carefully before production.
+
+### How does handover work?
+
+Train instructions for escalation; use **Assign to team** / **Add comments**. Backend also supports keyword handover on bot reply text (API field; dashboard control may be coming).
+
+### Does the bot post internal notes?
+
+When **Add comments** action is enabled with appropriate instructions — internal only, not sent to customer.
+
+---
+
+## Default agent & welcome message
+
+### Can new threads auto-get a bot?
+
+Yes if workspace **default AI Agent** is set (admin/API). Overrides per thread in **Chat**.
+
+### Is there a welcome message?
+
+API supports `welcome_message`; shown in test panel. Dashboard editor may be limited — check current agent detail.
+
+---
+
+## Billing & limits
+
+### Starter user can’t create agents?
+
+Upgrade to **Growth** for custom AI Agents.
+
+### Do AI Agents count toward contacts?
+
+Customer messages handled by bots still flow through your channels and contact billing like human-handled threads.
+
+---
+
+## Co-Admin tools
+
+### Can Co-Admin count our agents?
+
+Yes — workspace overview includes `ai_agents.total` and counts by status.
+
+### Can Co-Admin assign agents in Chat?
+
+Co-Admin guides navigation; assignment is done by the user in **Chat**.
+
+---
+
+## Related docs
+
+- [AI Agents overview](/ai-agents/ai-agents-overview)
+- [Creating & training agents](/ai-agents/creating-and-training-agents)
+- [Assigning agents in Chat](/ai-agents/assigning-agents-in-chat)
+- [Knowledge sources & testing](/ai-agents/knowledge-sources-and-testing)
+- [Inbox FAQ](/inbox/inbox-faq)
+- [Billing FAQ](/billing/billing-faq)

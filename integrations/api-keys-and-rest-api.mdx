@@ -1,0 +1,182 @@
+---
+title: 'API keys & REST API'
+description: 'Programmatic access to Vendschat for custom backends, internal tools, and scripted workflows.'
+---
+
+Programmatic access to Vendschat for custom backends, internal tools, and scripted workflows.
+
+**Who this is for:** Developers on **Advanced** plan (Developer API).
+
+**Paths:**
+
+- **API Keys:** **Settings → Workspace → API Keys** (`/settings/workspace/api-keys`)
+- **REST API reference:** **Settings → Workspace → REST API** (`/settings/workspace/rest-api`)
+
+---
+
+## Quick reference
+
+| Task | Where |
+|------|--------|
+| Create API key | **API Keys** → **Create API key** |
+| Copy new key | Shown **once** on success step after create |
+| Revoke key | Row action → **Revoke** (confirm modal) |
+| Delete key | Row action → **Delete** (confirm modal) |
+| Read endpoint docs | **REST API** page in Settings |
+| Get key from REST API page | **Get API Key** button (links to API Keys flow) |
+
+**Plan:** **Developer API** is **Advanced** only. See [billing](/billing/pricing-plans-reference).
+
+---
+
+## API Keys page
+
+**Title:** *API Keys* — *“Create and manage API keys for accessing your account programmatically.”*
+
+### Create API key flow
+
+1. Click **Create API key** (+)  
+2. **Name** (required) — e.g. `Nightly reporting job`  
+3. **Expires at** (optional) — leave blank for no expiry  
+4. Submit → **success step** shows full key **once**  
+5. Copy and store in secrets manager — list view shows **masked** keys only  
+
+**After create:** You cannot copy the full key again from the table. Create a new key if lost.
+
+### Manage keys
+
+| Action | Effect |
+|--------|--------|
+| **Revoke** | Key stops working; row may show revoked state |
+| **Delete** | Removes key record |
+| **Copy from table** | Toast explains full key only shown at creation |
+
+---
+
+## REST API reference page
+
+**Title:** *REST API* — *“Complete reference for Vendschat REST API endpoints and authentication.”*
+
+### Getting started block
+
+| Item | Value |
+|------|--------|
+| **Base URL** | `https://api.vendschat.com/v1` |
+| **Auth header** | `Authorization: Bearer YOUR_API_KEY` |
+| **Get API Key** | Button → API Keys |
+
+**Rate limit (shown in UI):** 1000 requests per hour per API key.
+
+---
+
+## Endpoint sections (in-app reference)
+
+The REST API page documents these resource groups:
+
+### Authentication
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/auth/login` | Email + password → API token (example in UI) |
+
+*Note: Production integrations typically use **API keys** from **API Keys** settings rather than login, unless your use case requires user-scoped tokens.*
+
+### Messages
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/messages` | List messages — query: `channel_id`, pagination |
+| POST | `/messages` | Send a message — body: `channel_id`, `content` |
+
+### Users
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/users/:user_id` | Get user profile |
+| PATCH | `/users/:user_id` | Update user |
+| DELETE | `/users/:user_id` | Delete user |
+
+### Channels
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/channels` | List channels |
+| POST | `/channels` | Create channel |
+
+### Webhooks (API-managed)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/webhooks` | List webhook destinations |
+| POST | `/webhooks` | Create destination |
+| GET/PATCH/DELETE | `/webhooks/:webhook_id` | Manage single destination |
+
+*You can also manage webhooks in **Settings → Webhooks** UI on Growth+ without using the REST API.*
+
+---
+
+## Example: FlowMetrics nightly job
+
+**FlowMetrics** (B2B SaaS on **Advanced**) runs a cron job:
+
+1. **API Keys** → create `Executive dashboard sync`  
+2. Copy key to server env `VENDSCHAT_API_KEY`  
+3. `GET https://api.vendschat.com/v1/messages?channel_id=…` with Bearer header  
+4. Aggregate open thread metrics → internal BI tool  
+
+They never embed the key in frontend JavaScript.
+
+---
+
+## API vs webhooks vs integrations catalog
+
+| Mechanism | Direction | Plan | Use case |
+|-----------|-----------|------|----------|
+| **REST API** | You call Vendschat | Advanced | Pull data, send messages, automate from your server |
+| **Webhooks** | Vendschat calls you | Growth+ | Real-time events to Make/Zapier/n8n |
+| **HubSpot** | Bi-directional CRM sync | All paid* | Contacts & properties |
+| **Integrations catalog** | UI entry points | Varies | Discover and connect tools |
+
+\*Confirm HubSpot on your tier in billing docs.
+
+---
+
+## Security practices
+
+- **Advanced plan only** — do not share API keys with Starter/Growth-only workspaces expecting API access  
+- One key per service — revoke when decommissioning  
+- Set **expiry** for contractors or short projects  
+- Never commit keys to git or paste in **Chat**  
+- Respect **1000 req/hr** — backoff on 429 responses  
+- Prefer API keys over storing user passwords for `/auth/login`  
+
+---
+
+## Troubleshooting
+
+| Issue | Resolution |
+|-------|------------|
+| 401 Unauthorized | Key revoked, wrong header format, or expired key |
+| No API Keys menu / create fails | Upgrade to **Advanced** |
+| Can't copy key from table | Expected — only shown at create time |
+| REST API vs dashboard webhooks | Same destinations possible via UI or API |
+| Rate limited | Reduce poll frequency; cache responses |
+
+---
+
+## Custom API card (Integrations catalog)
+
+**Settings → Integrations → Custom API**
+
+- Status: **Setup needed** (warning)  
+- **View Docs** → REST API page  
+- **Configure** → API Keys / setup flow  
+
+---
+
+## Related docs
+
+- [Integrations overview](/integrations/integrations-and-automation-overview)
+- [Webhooks guide](/integrations/webhooks-guide)
+- [Integrations FAQ](/integrations/integrations-faq)
+- [Billing — Advanced plan](/billing/plans-and-usage)

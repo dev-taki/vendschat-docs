@@ -1,0 +1,204 @@
+---
+title: 'n8n, Zapier & Make'
+description: 'Connect Vendschat to visual automation platforms — trigger workflows when customers message, update spreadsheets, notify Slack, or chain multi-step logic.'
+---
+
+Connect Vendschat to visual automation platforms — trigger workflows when customers message, update spreadsheets, notify Slack, or chain multi-step logic.
+
+**Who this is for:** Ops teams on **Growth** or **Advanced** who want no-code or low-code automation.
+
+---
+
+## Quick reference
+
+| Platform | Catalog path | Typical connection | Plan |
+|----------|--------------|-------------------|------|
+| **Make** | **Integrations** card | Webhook URL in **Webhooks** | Growth+ |
+| **Zapier** | **Integrations** card | Zapier Catch Hook → **Webhooks** | Growth+ |
+| **n8n (external)** | **Integrations** or own host | Webhook trigger → **Webhooks** | Growth+ |
+| **n8n (hosted)** | Sidebar **n8n** (`/n8n`) | **Generate Free Instance** | **Advanced** (managed) |
+
+---
+
+## Integrations catalog
+
+**Path:** Sidebar **Integrations** (`/integrations`)
+
+| Card | Status example | Count | Button |
+|------|----------------|-------|--------|
+| **n8n** | Active · 8 workflows | workflows | **Manage** |
+| **Zapier** | Not connected · 0 zaps | zaps | **Connect** |
+| **Make** | Active · 12 scenarios | scenarios | **Manage** |
+
+Descriptions in app:
+
+- **n8n:** *Self-hosted workflow automation with full customization*  
+- **Zapier:** *Automate workflows with 5,000+ app integrations*  
+- **Make:** *Visual automation platform with drag-and-drop workflows*  
+
+**Connect / Manage** buttons open platform-specific setup. Even when catalog UI is illustrative, the **supported integration path** is: create automation in the external tool → add Vendschat **webhook destination** pointing to that tool’s URL.
+
+---
+
+## Common architecture
+
+```text
+Customer → Vendschat Chat
+              ↓
+         Webhook event
+              ↓
+    ┌─────────┼─────────┐
+    ↓         ↓         ↓
+  Make     Zapier      n8n
+    ↓         ↓         ↓
+ Slack    Google Sheet  CRM API
+```
+
+1. Subscribe to events in **Settings → Webhooks**  
+2. Paste **Make** / **Zapier** / **n8n** webhook URL as destination  
+3. Build scenario/zap/workflow on the other side  
+4. Set destination **source** to `make`, `zapier`, or `n8n` when creating (optional, for support clarity)  
+
+See [Webhooks guide](/integrations/webhooks-guide) for full event list.
+
+---
+
+## Make
+
+**Best for:** Complex branching, data stores, EU webhook URLs (`hook.eu1.make.com`).
+
+**Setup:**
+
+1. Make → new scenario → **Webhooks** → **Custom webhook**  
+2. Copy URL  
+3. Vendschat → **Webhooks** → **Add destination** → paste URL  
+4. Select events (start with `incoming.vendschat.messages`)  
+5. Run scenario once to register structure; send test message from **Chat**  
+
+**Catalog:** Shows scenario count when connected; **Manage** opens Make-related settings.
+
+---
+
+## Zapier
+
+**Best for:** Quick zaps to popular SaaS (Slack, Gmail, Airtable).
+
+**Setup:**
+
+1. Zapier → **Webhooks by Zapier** → **Catch Hook**  
+2. Copy webhook URL  
+3. Vendschat → **Webhooks** → **Add destination**  
+4. Pick events → test with real inbound message  
+
+**Catalog:** **Connect** when not linked; shows zap count when active.
+
+---
+
+## n8n — two modes
+
+### Mode A: External / self-hosted n8n (Growth+)
+
+Use your own n8n cloud or self-hosted instance:
+
+1. n8n workflow → **Webhook** node (POST)  
+2. Copy production URL  
+3. Vendschat **Webhooks** → add destination  
+4. Build nodes: HTTP Request back to Vendschat API if needed (**Advanced** for API)  
+
+**Integrations card:** **Manage** when instance linked.
+
+### Mode B: Hosted n8n on Vendschat (Advanced)
+
+**Path:** Sidebar → **n8n** (`/n8n`)
+
+**Hero:** *“Start automating with n8n”* — deploy a dedicated instance.
+
+**Instance Details form:**
+
+| Field | Help text |
+|-------|-----------|
+| **Instance Name** | Unique URL e.g. `my-company.n8n.cloud` |
+| **Region** | United States (East) · Europe (Frankfurt) · Asia (Singapore) |
+| **Admin Email** | Instance administrator |
+| **Generate Free Instance** | Provisions instance |
+
+**Free tier (sidebar on page):**
+
+| Feature | Limit |
+|---------|-------|
+| Active workflows | 20 |
+| Executions | 1,000 / month |
+| Nodes | 200+ apps |
+| Support | Community |
+
+**Advanced managed specs (billing):** 4 vCPU · 8 GB RAM · 75 GB NVMe · auto backup · upgradable from dashboard.
+
+**Terms:** Creating instance agrees to n8n Terms of Service (shown below button).
+
+---
+
+## Example workflows
+
+### UrbanGear — order status (e-commerce)
+
+```text
+incoming.whatsapp.messages.text
+  → n8n → Shopify lookup by phone
+  → if shipped → template auto-reply
+  → else → add label "Warehouse" in Vendschat (manual step or API on Advanced)
+```
+
+### Pulse Digital — VIP routing (agency)
+
+```text
+incoming.vendschat.messages
+  → Make → filter workspace/channel
+  → Slack #account-{client}
+```
+
+### FlowMetrics — lead scoring (SaaS, Advanced)
+
+```text
+incoming.messenger.messages.text
+  → hosted n8n → HubSpot API + internal scoring
+  → webhook back to logging only
+```
+
+---
+
+## Growth vs Advanced for automation
+
+| Need | Plan |
+|------|------|
+| Webhooks + external Make/Zapier/n8n | **Growth** |
+| Hosted n8n without ops overhead | **Advanced** |
+| Call Vendschat REST API from workflows | **Advanced** |
+| HubSpot native sync | All paid tiers* |
+
+---
+
+## Request Integration
+
+Don't see your tool? **Integrations** catalog → dashed **Request Integration** card → submit tool name. Vendschat team evaluates native connectors; meanwhile use **Webhooks** + **Custom API** (**Advanced**).
+
+---
+
+## Troubleshooting
+
+| Issue | Check |
+|-------|--------|
+| Zap/Make not firing | Webhook **Active**? Correct events? Scenario published ON? |
+| n8n test works, prod fails | Production vs test webhook URL in Vendschat |
+| Starter plan | Upgrade to **Growth** for webhooks |
+| Want hosted n8n on Growth | Hosted instance is **Advanced** — use external n8n on Growth |
+| Catalog shows connected but 0 zaps | Connect flow may be in progress — verify **Webhooks** table |
+
+---
+
+## Related docs
+
+- [Integrations overview](/integrations/integrations-and-automation-overview)
+- [Webhooks guide](/integrations/webhooks-guide)
+- [API keys & REST API](/integrations/api-keys-and-rest-api)
+- [Integrations FAQ](/integrations/integrations-faq)
+- [Billing](/billing/pricing-plans-reference)

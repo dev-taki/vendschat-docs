@@ -1,0 +1,401 @@
+---
+title: 'Chat & shared inbox — overview'
+description: 'Chat is Vendschat’s shared inbox — every customer message from WhatsApp, Messenger, and Instagram becomes a thread your team can filter, assign, label,…'
+---
+
+**Chat** is Vendschat’s shared inbox — every customer message from WhatsApp, Messenger, and Instagram becomes a **thread** your team can filter, assign, label, and resolve together.
+
+**Who this is for:** Support agents, team leads, and anyone asking Co-Admin *“Where is the inbox?”*, *“How do I reply?”*, or *“Why can’t I type a message?”*
+
+**Where to go:** Sidebar **Chat** → `/chat`
+
+---
+
+## Quick reference
+
+| Topic | Answer |
+|-------|--------|
+| Main inbox | **Chat** (`/chat`) |
+| Layout (desktop) | **Thread list** (left) · **Conversation** (center) · **Recipient panel** (right, optional) |
+| Layout (mobile) | Three screens: **Threads** → **Conversation** → **Recipient** |
+| Open a thread | Click a row in the thread list |
+| Reply | Type in composer → **Send** (or Enter) |
+| 24h window expired | Composer shows banner — use **Templates** (WhatsApp) |
+| Filter unread | Toggle **Unread** above thread list |
+| Filter channel | Header dropdown — **All channels** or one channel |
+| Search threads | *“Search by Phone or Name…”* |
+| New outbound chat | **New Chat** (+) → template / channel picker |
+| Deep link thread | `/chat?thread={id}` |
+| Deep link message | `/chat?dl={token}` (scrolls + highlights message) |
+| Mark read | Opening a thread marks it read automatically |
+| End conversation | Recipient panel → **End Chat** + optional note |
+
+---
+
+## What Chat is (and isn’t)
+
+| Chat **is** | Chat **is not** |
+|-------------|-----------------|
+| Shared team inbox for **customer** conversations | Your internal Slack — (team chat UI exists as placeholder) |
+| Real-time updates when customers message | A personal phone WhatsApp app |
+| One place for WhatsApp, Messenger, Instagram threads | Cross-workspace — threads belong to **current workspace** |
+| Where humans reply, assign, label, resolve | Where **Co-Admin** lives (that’s the internal assistant) |
+
+Customer-facing automation uses **AI Agents** on assigned threads — see [AI Agents overview](/ai-agents/ai-agents-overview).
+
+---
+
+## Example: Harbor Legal Services
+
+**Jess** and **Omar** share one WhatsApp number for intake.
+
+| Time | Action in Chat |
+|------|----------------|
+| 9:00 | Jess opens **Chat**, filter **Unread**, label filter `New intake` |
+| 9:05 | Clicks thread — recipient panel shows phone, notes, **Assigned to** |
+| 9:10 | Replies in composer; customer sees WhatsApp message |
+| 9:30 | Tags `Urgent`, assigns **Omar** from recipient panel |
+| 10:00 | Omar resolves — **End Chat**, note: *“Engagement letter sent”* |
+| Next week | Same customer messages — history visible, thread reopens |
+
+---
+
+## How to open Chat
+
+| Platform | Navigation |
+|----------|------------|
+| **Desktop** | Left sidebar → **Chat** (messages icon) |
+| **Mobile** | Bottom nav → **Chat** |
+| **Direct URL** | `/chat` |
+| **Default after login** | Most users land on **Chat** after sign-in |
+
+**Access:** Role **Member** with Chat page access sees **Chat**. Owners/admins see **Chat** plus **Settings**, **Onboarding**, etc. See [assignments doc](/inbox/assignments-and-teams#roles--page-access).
+
+---
+
+## Screen layout (desktop)
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│  [Channel ▼]  [New Chat] [Labels]     ← Chat thread header      │
+├──────────────┬──────────────────────────────┬───────────────────┤
+│ Thread list  │  Conversation header         │ Recipient panel     │
+│              │  (name, labels, assignee)    │ (contact, assign,   │
+│ Search       ├──────────────────────────────│  labels, end chat)  │
+│ Filters      │  Message timeline            │                     │
+│              │  (bubbles, dates, ticks)     │  [hide ◀]           │
+│ Rows…        ├──────────────────────────────┤                     │
+│              │  Message composer            │                     │
+│              │  (channel, templates, AI)    │                     │
+└──────────────┴──────────────────────────────┴───────────────────┘
+```
+
+### Three columns explained
+
+| Column | Purpose |
+|--------|---------|
+| **Thread list** (~320px) | All conversations — search, filters, unread badges |
+| **Conversation** (flex) | Message history + composer for selected thread |
+| **Recipient panel** (~320px, collapsible) | Contact profile, assignment, labels, **End Chat** |
+
+**No thread selected (desktop):** Center shows Vendschat logo empty state.
+
+**Hide recipient panel:** Click the small **chevron** on the panel edge (desktop).
+
+---
+
+## Screen layout (mobile)
+
+Mobile uses **one pane at a time** with slide transitions:
+
+| View | How to get there |
+|------|------------------|
+| **Threads** | Default when opening Chat |
+| **Conversation** | Tap a thread row |
+| **Recipient** | Tap contact info in conversation header |
+
+**Back:** Use back control to return Threads ← Conversation ← Recipient.
+
+---
+
+## Thread list — controls
+
+### Channel filter (top)
+
+**Account selector** in thread list header:
+
+- **All channels** — every connected channel in this workspace  
+- Or pick one **WhatsApp** / **Messenger** / **Instagram** account  
+
+Filters which threads appear in the list.
+
+### Search
+
+Placeholder: **“Search by Phone or Name…”**
+
+Searches contact phone and name. Results refresh after a short debounce.
+
+### Read state toggle
+
+| Value | Shows |
+|-------|--------|
+| **All** | Every thread (default) |
+| **Unread** | Threads with unread messages |
+| **Read** | Threads already read |
+
+Unread rows show bold preview text, inbound arrow (red when unread), and a **count badge** (e.g. `3`, caps at `99+`).
+
+### Label filter
+
+**Filter icon** (funnel) → dropdown:
+
+- **All labels** — clear filter  
+- Check individual labels (multi-select)  
+
+If your role has **label-scoped access**, only permitted labels appear.
+
+Create labels: **Settings → Workspace → Labels** or header **Labels** shortcut.
+
+### Assigned messages (inbox icon)
+
+Badge on inbox-style button — indicates threads assigned to you (team routing). Use with assignment workflow in [assignments doc](/inbox/assignments-and-teams).
+
+### Infinite scroll
+
+Scroll near the bottom of the thread list to load more (20 per page).
+
+### Thread row details
+
+Each row shows:
+
+| Element | Meaning |
+|---------|---------|
+| Avatar + channel badge | Contact + channel type (WhatsApp, etc.) |
+| Name | Contact display name or phone |
+| Preview | Last message snippet |
+| Arrow ↘ / ↖ | Inbound vs outbound last message |
+| Timestamp | Relative time of last message |
+| Label chips | Tags on this thread |
+| Unread badge | Count of unread messages |
+
+**Hover menu** (⋯ on row): Mark as read, Mark as unread, Mute, Delete — quick actions on the thread.
+
+---
+
+## Opening & reading threads
+
+### Select a thread
+
+Click a row → conversation loads in the center (mobile: switches to **Conversation** view).
+
+**Automatic read:** Selecting a thread marks it **read** and clears unread count for that conversation (including related channel threads for the same contact).
+
+**URL sync:** Browser address updates to `/chat?thread={id}` so refresh or share link reopens the same thread.
+
+### Deep links
+
+| URL param | Behavior |
+|-----------|----------|
+| `?thread=123` | Opens thread `123` on load (server prefetches timeline + recipient panel) |
+| `?dl={token}` | Resolves token → opens thread and scrolls to / highlights a specific message |
+
+After landing via `?dl=`, the token is stripped from the URL on next navigation.
+
+### Real-time updates
+
+While **Chat** is open, new inbound/outbound messages on Meta channels (WhatsApp, Messenger, Instagram) appear in the thread list and open conversation **without refresh**.
+
+Delivery status ticks (sent → delivered → read) update live on open threads.
+
+---
+
+## Conversation column
+
+### Header
+
+| Control | Action |
+|---------|--------|
+| **Back** (mobile) | Return to thread list |
+| **Contact name** | Inline edit display name |
+| **Search** | Search within conversation (toggle panel) |
+| **Contact info** | Open recipient panel (mobile: full screen) |
+| **Labels** | Add/remove labels on this thread |
+| **Assignee** | Assign teammate, group, or AI Agent (compact) |
+
+### Message timeline
+
+- Chronological bubbles — inbound (customer) vs outbound (your team)  
+- Date separators between days  
+- **Delivery ticks** on outbound WhatsApp-style messages: pending → sent → delivered → read (blue double-check)  
+- System events (assignments, status) shown as timeline lines  
+
+Scroll up for older messages (paginated load).
+
+### Message composer (bottom)
+
+| Control | Purpose |
+|---------|---------|
+| Text area | *“Type your message…”* — Shift+Enter for new line, Enter to send |
+| **Channel selector** | When contact has multiple channels, pick which to send from |
+| **Templates** | WhatsApp approved templates (when window expired or proactive send) |
+| **Generate Reply** (sparkle) | AI draft for agents — see [composer doc](/inbox/composer-generate-reply) |
+| **Emoji** | Insert emoji into text |
+| **Send** | Dispatch message |
+
+**24-hour messaging window:** If Meta’s session window is closed, composer shows:
+
+> *“The 24-hour messaging window has expired. You can only send template messages until the recipient replies to reopen the conversation window.”*
+
+Use **Templates** button to pick an approved WhatsApp template.
+
+---
+
+## Recipient panel (right column)
+
+Open by default on desktop when a thread is selected. Shows:
+
+| Section | Content |
+|---------|---------|
+| **Profile** | Avatar, name, phone, country, language, email |
+| **Notes** | Internal contact note (editable) |
+| **Assigned to** | Dropdown — user, **group**, or **AI Agent** |
+| **Labels** | Manage labels on this thread |
+| **Channels** | Which channels this contact can be reached on |
+| **Status** | **Open** (live indicator) · **End Chat** |
+
+### End Chat (resolve)
+
+1. Click **End Chat** in status area  
+2. Optional **ending note**  
+3. Confirm  
+
+Thread moves to **resolved** state. Customer messages later typically **reopen** the conversation.
+
+Details: [Shared inbox & labels](/inbox/shared-inbox-and-labels#threads-open-resolved-and-end-chat).
+
+### Edit contact
+
+Update name, phone, email, country, language, note — saves to contact record and updates thread list/header.
+
+---
+
+## New Chat (outbound)
+
+**Thread list header** → **New Chat** icon (+ message bubble).
+
+Opens **template composer modal**:
+
+1. Choose **channel** (if multiple WhatsApp numbers, etc.)  
+2. Enter recipient phone (for new WhatsApp outbound)  
+3. Pick **template** and send (or schedule where supported)  
+
+Used to start conversations outside the 24h window or message new numbers.
+
+Requires active **WhatsApp** channel for template sends.
+
+---
+
+## Threads, contacts & channels
+
+### One contact, multiple channels
+
+A customer may message on WhatsApp and Instagram. Vendschat links them under one **contact** when possible:
+
+- Thread list may show **related threads**  
+- **Composer channel picker** lists all channels for that contact  
+- **Preferred channel** auto-selects the channel that last received an **inbound** message  
+
+### Thread status values
+
+| Status | Meaning |
+|--------|---------|
+| **open** | Active — needs handling |
+| **pending** | Waiting (e.g. external dependency) |
+| **snoozed** | Paused until later |
+| **resolved** | Closed via **End Chat** |
+
+### Unread vs read
+
+| Field | Meaning |
+|-------|---------|
+| `unread_count` | Messages customer sent since last read |
+| `is_read` | Thread marked read by a teammate |
+
+Opening a thread clears unread for that conversation group.
+
+---
+
+## Labels in Chat
+
+| Where | Action |
+|-------|--------|
+| Thread list filter | Funnel icon → filter by label(s) |
+| Thread row | Colored label chips on row |
+| Conversation header | Add/remove labels |
+| Recipient panel | Full label editor |
+
+Create/manage definitions: **Settings → Workspace → Labels**.
+
+Deep dive: [Shared inbox & labels](/inbox/shared-inbox-and-labels).
+
+---
+
+## Assignments in Chat
+
+**Assigned to** dropdown (recipient panel or mobile header):
+
+- **Teammate** — named owner  
+- **Group** — queue (e.g. Tier 1)  
+- **AI Agent** — bot handles thread until handoff  
+- **Unassigned** — shared pool  
+
+Deep dive: [Assignments & teams](/inbox/assignments-and-teams).
+
+---
+
+## Generate Reply in Chat
+
+Composer **sparkle / wand** menu → draft reply from recent messages, apply **tones** (empathetic, simplify, translate, etc.).
+
+Human always reviews before **Send**. Not the same as **AI Agents**.
+
+Deep dive: [Composer & Generate Reply](/inbox/composer-generate-reply).
+
+---
+
+## Co-Admin & live inbox data
+
+| Customer asks… | Co-Admin approach |
+|----------------|-------------------|
+| “How many open threads?” | Workspace overview tool |
+| “How do I filter unread?” | Product docs — **Unread** toggle |
+| “Are we connected on WhatsApp?” | List channels tool |
+
+Co-Admin uses the user’s **current workspace** session.
+
+---
+
+## Troubleshooting
+
+| Problem | Check |
+|---------|-------|
+| Empty thread list | Customer must message connected channel first; verify channel **active**; correct **workspace** |
+| Can’t type in composer | **24h window** expired → **Templates**; channel `can_send` false |
+| Message not delivered | Channel disconnected; WhatsApp registration — see error modal |
+| Don’t see **Chat** in nav | Role may lack Chat page access |
+| Wrong conversations | **Workspace switcher** in Settings; **channel filter** set to one account |
+| Labels missing in filter | Create in **Settings → Labels**; check label-scoped membership |
+| Panel won’t load | Refresh; reselect thread |
+| No real-time messages | Rare — refresh page; verify workspace channel connection |
+
+---
+
+## Related docs
+
+- [Shared inbox & labels](/inbox/shared-inbox-and-labels)
+- [Assignments & teams](/inbox/assignments-and-teams)
+- [Composer & Generate Reply](/inbox/composer-generate-reply)
+- [Inbox FAQ](/inbox/inbox-faq)
+- [Channels](/channels/workspaces-and-channels-overview)
+- [First channel & inbox](/getting-started/first-channel-and-inbox)
+- [AI Agents overview](/ai-agents/ai-agents-overview)

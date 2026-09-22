@@ -1,0 +1,240 @@
+---
+title: 'Creating WhatsApp templates'
+description: 'Design and submit WhatsApp Business message templates to Meta for approval — with live mobile preview.'
+---
+
+Design and submit **WhatsApp Business message templates** to Meta for approval — with live mobile preview.
+
+**Path:** `/template/whatsapp/create?channelId={channelId}`
+
+**Entry:** **Templates** → WhatsApp channel card → **Create New Template**
+
+---
+
+## Quick reference
+
+| Section | What you configure |
+|---------|-------------------|
+| **Template Details** | Name, category, language |
+| **Message Content** | Header, body, footer, attachment type |
+| **Buttons** | Quick reply, URLs, calls, copy code |
+| **Template Preview** | Real-time WhatsApp-style preview |
+| Submit | **Submit for Approval** (not draft — drafts not saved yet) |
+
+---
+
+## Before you start
+
+1. Open **Templates** (`/template`)  
+2. Pick the **WhatsApp channel** (business number) — URL must include `channelId`  
+3. If no channel: **Add Channel** → connect WhatsApp in **Settings → Channels**  
+
+---
+
+## Template Details
+
+| Field | Rules | Notes |
+|-------|-------|-------|
+| **Template Name** | Unique id, max **512** chars shown in UI | e.g. `order_confirmation` — lowercase_snake_case common |
+| **Category** | **Marketing** · **Utility** · **Authentication** | Meta uses this for policy & pricing |
+| **Language** | `en_US`, `es_ES`, `fr_FR`, `de_DE`, `pt_BR` | One language per template row |
+
+### Category guide
+
+| Category | Use when | Meta scrutiny |
+|----------|----------|---------------|
+| **Marketing** | Promos, sales, re-engagement | Stricter — clear opt-out language |
+| **Utility** | Order updates, appointments, account info | Lighter — must be transactional |
+| **Authentication** | OTP / verification codes | Special auth form (copy code, validity) |
+
+**Help text:** *“Choose the category that best fits your message purpose”*
+
+---
+
+## Message Content (Marketing & Utility)
+
+### Attachment type
+
+| Type | Header behavior |
+|------|-----------------|
+| **None** | Optional text header (max **60** chars) |
+| **Image / Video / Document** | Upload sample → Meta resumable upload → `header_handle` |
+| **Location** | No sample media; coords supplied at send time |
+
+Sample media is uploaded via `POST …/templates/header-media`, then the create payload includes `header_type` + `header_handle`.
+
+### Body text
+
+| Rule | Value |
+|------|--------|
+| Max length | **1024** characters (counter shown) |
+| Variables | `{{1}}`, `{{2}}`, … via **Add Variable** or typing |
+| Sample values | Required for Meta — sent as `body_example` → `example.body_text: [["…"]]` |
+
+**Example body:**
+
+```text
+Hello {{1}}, your order #{{2}} has been confirmed and will be delivered by {{3}}. Thank you for shopping with us!
+```
+
+**Formatting toolbar:** Bold, italic, strikethrough, monospace icons (WhatsApp formatting when supported by Meta).
+
+### Footer (optional)
+
+Max **60** characters — e.g. `Reply STOP to unsubscribe`
+
+### Variables panel
+
+When body contains `{{n}}`, **Variables** section lists each with **sample value** for preview and Meta examples.
+
+---
+
+## Buttons (optional)
+
+**Meta limits (shown in UI):**
+
+| Button type | Max count |
+|-------------|-----------|
+| **Quick Reply** | 10 |
+| **Visit Website** | 2 |
+| **Call Phone** | 1 |
+| **Call WhatsApp** (voice) | 1 |
+| **Copy Offer Code** | 1 |
+| **Total** | 10 |
+
+Quick replies are grouped before CTA buttons on submit (Meta requirement).
+
+### Quick Reply
+
+- Button text max **25** chars  
+- e.g. `Yes, I'm interested`
+
+### Visit Website
+
+| Field | Notes |
+|-------|-------|
+| Button text | Max 25 chars |
+| **URL Type** | **Static** or **Dynamic** |
+| Website URL | Max 2000 chars |
+| Sample URL parameter | Required for **Dynamic** — appends `{{1}}` to URL |
+
+Static URLs cannot contain `{{1}}` — switch to Dynamic if needed.
+
+### Call WhatsApp
+
+Voice call to business — label only (no phone field). Meta `VOICE_CALL` type.
+
+### Call Phone
+
+Button text + phone number (max **20** chars, normalized).
+
+### Copy Offer Code
+
+Fixed label “Copy Offer Code” + offer code sample (max **15** chars) for Meta review.
+
+**Preview note:** More than 3 buttons show in a list in the mobile preview.
+
+---
+
+## Authentication category
+
+When **Authentication** is selected, Meta requires a fixed OTP layout (no custom body/header/media/buttons). The form shows **Authentication Settings** only:
+
+| Field | Meta mapping | Rules |
+|-------|--------------|-------|
+| **Copy Code Button Label** | `buttons[].text` on OTP `copy_code` | Optional, max **25** chars (defaults to localized “Copy Code”) |
+| **Code Validity Period** | `footer.code_expiration_minutes` | **1–90** minutes → footer: “This code expires in X minutes.” |
+| **Include Security Disclaimer** | `body.add_security_recommendation` | Adds: “For your security, do not share this code.” |
+
+**Fixed body (not editable):** `{{1}} is your verification code.`
+
+**Create payload (backend → Meta):**
+
+```json
+{
+  "name": "verification_code",
+  "language": "en_US",
+  "category": "authentication",
+  "message_send_ttl_seconds": 600,
+  "components": [
+    { "type": "body", "add_security_recommendation": true },
+    { "type": "footer", "code_expiration_minutes": 10 },
+    {
+      "type": "buttons",
+      "buttons": [{ "type": "otp", "otp_type": "copy_code", "text": "Copy Code" }]
+    }
+  ]
+}
+```
+
+**Live preview** mirrors WhatsApp: sample code `123456`, optional security line, expiry footer, and Copy Code button.
+
+**Submit:** Template name required; Submit disabled until name + valid expiry (1–90) are set.
+
+---
+
+## Template Preview (right panel)
+
+**Template Preview** — WhatsApp-style bubble with:
+
+- Media header placeholder (if attachment type set)  
+- Header / body / footer with variables substituted from samples  
+- Action buttons (up to 3 visible inline, rest in list)  
+
+---
+
+## Submit actions
+
+| Button | Behavior |
+|--------|----------|
+| **Save as Draft** | Toast: *“Drafts are not available yet”* — use Submit |
+| **Submit for Approval** | POST to Meta via backend → redirect to template list |
+
+**Success toast:** *“Your WhatsApp template was sent to Meta for review.”*
+
+Redirects to: `/template/whatsapp/list?channelId={id}`
+
+---
+
+## Meta approval tips
+
+1. Match **category** to content — no promos in **Utility**  
+2. Keep **few variables** — easier approval and fewer send errors  
+3. Include opt-out in **footer** for marketing  
+4. Provide realistic **sample values** for every `{{n}}`  
+5. Duplicate approved templates for new **languages** instead of rewriting  
+6. If **Rejected**, read Meta’s reason in Business Manager / sync status  
+
+---
+
+## Starter template set (any business)
+
+| Name idea | Category | Body idea |
+|-----------|----------|-----------|
+| `hello_we_replied` | Utility | We’re back online — reply to this message |
+| `appointment_reminder` | Utility | Reminder: {{1}} at {{2}} |
+| `order_update` | Utility | Order {{1}} status: {{2}} |
+| `feedback_request` | Marketing | How was your experience? Rate us |
+
+Four templates cover most outbound needs.
+
+---
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| Channel missing | Open create from WhatsApp card (includes `channelId`) |
+| Media submit blocked | Use **None** attachment + text header |
+| Button limit error | Remove extras per Meta table above |
+| Dynamic URL error | Add sample parameter |
+| Name rejected by Meta | Use unique snake_case; avoid spaces |
+
+---
+
+## Related docs
+
+- [Templates overview](/templates/templates-overview)
+- [Managing templates & sync](/templates/managing-templates-and-sync)
+- [Templates in Chat & broadcasts](/templates/templates-in-chat-and-broadcasts)
+- [Templates FAQ](/templates/templates-faq)

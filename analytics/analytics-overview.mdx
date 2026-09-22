@@ -1,0 +1,64 @@
+---
+title: 'Analytics overview'
+description: 'Historical WhatsApp messaging performance in the dashboard — sent, delivered, read, failed, trends, template reply rates, and message-level logs. Use…'
+---
+
+Historical **WhatsApp messaging performance** in the dashboard — sent, delivered, read, failed, trends, template reply rates, and message-level logs. Use **Co-Admin** for live workspace snapshots and **per-contact** lookups.
+
+**Who this is for:** Marketing leads, support managers, agency account leads, and anyone reviewing broadcast results or troubleshooting failed sends.
+
+**Primary path:** Sidebar → **Analytics** → `/analytics`
+
+---
+
+## Doc map
+
+| Doc | Use when… |
+|-----|-----------|
+| [Analytics & message performance](/analytics/channel-performance) | Navigation, UI workflows, exports, post-broadcast checklist |
+| [Analytics metrics reference](/analytics/analytics-metrics-reference) | Formulas, API endpoints, Meta vs database sources |
+| [Analytics FAQ](/analytics/analytics-faq) | Short Q&A for Co-Admin |
+
+---
+
+## Product snapshot (current)
+
+| Topic | Behavior |
+|-------|----------|
+| **Full dashboard** | **WhatsApp only** — charts, exports, template performance, real message logs |
+| **Other channels** | Listed on Analytics home; opening them shows *“Analytics is currently available for WhatsApp only.”* |
+| **Data source (dashboard)** | **Database-powered** — counts from Vendschat messages + WhatsApp status webhooks (subtitle on WhatsApp analytics page) |
+| **Default range** | **Last 7 days**; change period → click **Apply** |
+| **Meta WABA API** | Separate backend routes (`/analytics/templates`, `/template-groups`, `capabilities`) — **not** wired to the main dashboard UI today |
+| **Plan** | **Reports & analytics** on Starter and above (see [billing](/billing/pricing-plans-reference)) |
+
+---
+
+## Routes
+
+| URL | Purpose |
+|-----|---------|
+| `/analytics` | Channel grid + message-logs **preview** (sample UI) |
+| `/analytics/whatsapp/{channelId}` | Full WhatsApp dashboard |
+| `/analytics/messenger/{channelId}` | Placeholder (WhatsApp-only message) |
+| `/analytics/instagram/{channelId}` | Placeholder (WhatsApp-only message) |
+| `/analytics/channel/{channelId}` | Fallback for non–WA/Messenger/IG channel types |
+
+---
+
+## Analytics vs Co-Admin
+
+| Need | Tool |
+|------|------|
+| Charts, CSV export, custom calendar range | **Analytics** dashboard |
+| “Delivery rate this week?” (no UI) | **Co-Admin** — `get_channel_analytics` (default 7d, optional `14d`) |
+| One customer by phone/email | **Co-Admin** — `get_contact_analytics` (default **30d**, optional label filter) |
+| Open threads right now | **Co-Admin** — workspace overview (not channel analytics) |
+
+---
+
+## Related
+
+- [Broadcasts](/broadcasts/campaigns) — post-send review checklist
+- [Templates](/templates/templates-overview) — template approval before campaigns
+- [AI Agents](/ai-agents/ai-agents-overview) — Co-Admin vs customer-facing bots

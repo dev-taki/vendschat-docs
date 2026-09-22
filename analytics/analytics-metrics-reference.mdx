@@ -1,0 +1,267 @@
+---
+title: 'Analytics metrics reference'
+description: 'Technical reference for what each Analytics number means, how it is calculated, and what data powers it. Use when customers ask “How do you calculate…'
+---
+
+Technical reference for what each Analytics number means, how it is calculated, and what data powers it. Use when customers ask *“How do you calculate read rate?”* or *“Why doesn’t this match Meta?”*
+
+**Dashboard source of truth:** WhatsApp channel analytics UI (`/analytics/whatsapp/{channelId}`).
+
+**Data source:** Vendschat **message database** — updated by outbound sends and WhatsApp **status webhooks** (sent → delivered → read / failed). This is **not** the same as opening Meta Business Manager analytics, though numbers should be close.
+
+---
+
+## Message lifecycle & statuses
+
+### Outbound status progression
+
+```
+Sent → Delivered → Read
+         ↘ Failed (can fail at send or delivery)
+```
+
+| Status | Meaning | Badge color in UI |
+|--------|---------|-------------------|
+| **sent** | Accepted by WhatsApp/Meta API, not yet confirmed on device | Blue |
+| **delivered** | Reached recipient’s device | Green (success) |
+| **read** | Recipient opened the chat / read receipt fired | Brand |
+| **failed** | Send or delivery error | Red |
+
+Timestamps stored per message: `sent_at`, `delivered_at`, `read_at`, `failed_at`. The log **Updated at** column uses the latest meaningful status time.
+
+### Inbound messages
+
+Inbound (customer → you) messages appear in **Message logs** with direction **inbound**. They are **not** included in summary **Sent/Delivered/Read/Failed** totals (those measure **your outbound** performance).
+
+---
+
+## Summary metrics (formulas)
+
+All summary and trend metrics use **outbound, non-internal** messages unless noted.
+
+| Metric | SQL logic (conceptual) | Formula |
+|--------|------------------------|---------|
+| **messages_sent** | `direction = outbound` AND `is_internal = false` | Count |
+| **messages_delivered** | Outbound AND (`status IN (delivered, read)` OR `delivered_at` OR `read_at` set) | Count |
+| **messages_read** | Outbound AND (`status = read` OR `read_at` set) | Count |
+| **messages_failed** | Outbound AND (`status = failed` OR `failed_at` set) | Count |
+| **delivery_rate_pct** | | `round(delivered / sent × 100, 1)` — null if sent = 0 |
+| **read_rate_pct** | | `round(read / delivered × 100, 1)` — null if delivered = 0 |
+| **failed_rate_pct** | | `round(failed / sent × 100, 1)` — null if sent = 0 |
+
+### Period-over-period deltas
+
+When the selected range has a defined previous window (e.g. last 7d vs prior 7d):
+
+| Delta field | Meaning |
+|-------------|---------|
+| `sent_vs_prev_pct` | % change in sent count |
+| `delivered_vs_prev_pct` | % change in delivered |
+| `read_vs_prev_pct` | % change in read |
+| `failed_vs_prev_pct` | % change in failed |
+
+Formula: `round((current - previous) / previous × 100, 1)` — null if previous = 0.
+
+---
+
+## Time range parsing
+
+| Input | Behavior |
+|-------|----------|
+| `range=7d` | Rolling 7 days ending now (also: `14d`, `30d`, `60d`, `90d`) |
+| `start` + `end` ISO | Custom window; **end is exclusive** |
+| UI **Today** | Start of local calendar day → start of next day (custom `start`/`end` dates) |
+| Default | **7d** if not specified |
+
+**Dashboard dropdown** offers Today, 7d, 30d, 60d, 90d, Custom — **not** 14d. The API and Co-Admin `get_channel_analytics` / `get_contact_analytics` **do** accept `14d`.
+
+Previous period for deltas = equal-length window immediately before current `start`.
+
+---
+
+## Timeseries (daily chart)
+
+| Field | Meaning |
+|-------|---------|
+| `date` | UTC calendar date `YYYY-MM-DD` |
+| `sent` | Outbound sent that day |
+| `delivered` | Outbound delivered that day |
+| `read` | Outbound read that day |
+| `failed` | Outbound failed that day |
+
+Days with zero activity still appear (zero values) when using daily rollup tables.
+
+**Performance:** Aggregates prefer `channel_message_stats_daily` rollup; falls back to raw `messages` table if rollup unavailable.
+
+---
+
+## Conversation type segments
+
+**Scope:** Outbound, non-internal messages in range.
+
+| Segment `type` | Source |
+|----------------|--------|
+| `marketing` | Template category = marketing |
+| `utility` | Template category = utility |
+| `authentication` | Template category = authentication |
+| `transactional` | Template category = transactional |
+| `service` | Default when no template category matched |
+
+Each segment includes `count` and `pct` (% of total outbound in range).
+
+---
+
+## Top countries
+
+**Scope:** All non-internal messages (inbound + outbound) in range.
+
+| Field | Source |
+|-------|--------|
+| `country` | `contacts.country`, or **Unknown** if empty |
+| `count` | Messages tied to contact |
+| `pct` | % of total in top-country set |
+
+Limited to **top 10** countries by count.
+
+**Data quality:** Country depends on contact profile — enrich contacts for accurate geo reports.
+
+---
+
+## Template performance metrics
+
+**Scope:** Outbound template sends in range (`type = template` OR `template_name` set).
+
+| Metric | Definition |
+|--------|------------|
+| `sent_count` | Template messages sent |
+| `replied_count` | Inbound messages in same **thread** after template send, before range end |
+| `reply_rate_pct` | `replied_count / sent_count × 100` |
+| `button_clicked_count` | Inbound replies after template with **non-empty content** (proxy for button/quick-reply interaction) |
+| `button_click_rate_pct` | `button_clicked_count / sent_count × 100` |
+| `button_breakdown` | Group inbound reply `content` text → count (top 20) |
+
+**Caveat:** Button tracking infers clicks from inbound message text matching button labels — not separate Meta click IDs in all cases.
+
+---
+
+## Message log filters
+
+| `type` filter | Includes |
+|---------------|----------|
+| `all` | Everything in range |
+| `sent` | `direction = outbound` |
+| `received` | `direction = inbound` |
+| `template` | `type = template` OR `template_name IS NOT NULL` |
+
+| `status` filter | Matches `messages.status` exactly |
+
+| `phone` | Case-insensitive partial match on `contacts.phone_number` |
+
+**Pagination:** Default `per_page=10`, max `50`. Ordered by latest status timestamp descending.
+
+**CSV export (`message-logs`):** Uses the same query params but defaults to **page 1, per_page 10** — the dashboard **Export** button does not pass `page`, so you get **at most 10 rows** unless you build the export URL with a higher `per_page` (max 50).
+
+---
+
+## CSV export kinds
+
+| `export/{kind}` | CSV filename |
+|-----------------|--------------|
+| `summary` | `whatsapp-analytics-summary.csv` |
+| `timeseries` | `whatsapp-analytics-timeseries.csv` |
+| `conversation-types` | `whatsapp-conversation-types.csv` |
+| `top-countries` | `whatsapp-top-countries.csv` |
+| `template-performance` | `whatsapp-template-performance.csv` (+ `template_id` query) |
+| `message-logs` | `whatsapp-message-logs.csv` (+ type, status, phone filters) |
+
+Exports require workspace membership and a **WhatsApp** channel.
+
+---
+
+## REST API endpoints (WhatsApp channel)
+
+Base path: `GET /workspaces/{workspaceId}/channels/{channelId}/analytics/...`
+
+| Endpoint | Powers dashboard section | Source |
+|----------|-------------------------|--------|
+| `summary` | Top stat cards | **Database** |
+| `timeseries?granularity=day` | Message trend chart | **Database** |
+| `conversation-types` | Conversation type pie | **Database** |
+| `top-countries` | Top countries | **Database** |
+| `template-list` | Template dropdown | **Database** |
+| `template-performance?template_id=` or `template_name=` | Template performance cards | **Database** (thread reply logic) |
+| `message-logs` | Message logs table | **Database** |
+| `message-logs/{messageId}` | Log detail modal | **Database** |
+| `export/{kind}` | CSV downloads | **Database** |
+| `capabilities` | Integrator / future UI flags | Describes Meta vs DB availability |
+| `templates?template_ids=&range=` | Not used by dashboard UI | **Meta Graph** (max 10 IDs, 90d) |
+| `template-groups?template_group_ids=&range=` | Not used by dashboard UI | **Meta Graph** (max 10 group IDs, 90d) |
+
+**Caching:** `summary` and `timeseries` responses are cached in memory for **10 minutes** per process (`withAnalyticsCache`). Other endpoints are uncached.
+
+**Client:** Dashboard uses React Query (`staleTime` 60s, `refetchOnWindowFocus: false`) under `AnalyticsQueryProvider` in the app layout.
+
+---
+
+## Meta WABA analytics (backend capability)
+
+The product backend also exposes **Meta Graph API** analytics for WhatsApp Business Accounts when channel credentials include a valid WABA token. The **current dashboard UI does not call these routes** — it uses **database-powered** analytics described above.
+
+| Meta route | Purpose |
+|------------|---------|
+| `GET .../analytics/templates` | Per-template sent, delivered, read, clicks, cost (Meta-shaped `meta` array) |
+| `GET .../analytics/template-groups` | Same for template **groups** (max 10 group IDs per request) |
+| `GET .../analytics/capabilities` | Whether Meta analytics is available; optional filter docs |
+
+Capabilities endpoint documents:
+
+- Optional filters on Meta summary/timeseries (when used): `country_codes`, `product_types`, phone number slice vs whole WABA
+- Template analytics via Meta: max **90-day** lookback, max **10** template IDs per request
+- Limitations: BSP-billed WABAs may omit cost; Meta data can differ from invoices; template read/click metrics follow Meta’s **7-day** rules
+
+**Dashboard template performance** (`template-performance`) measures **reply rate** and **button text breakdown** from Vendschat threads — different from Meta template sent/delivered/read.
+
+**Customer guidance:** Trust **Analytics** dashboard for day-to-day ops; reconcile Meta billing in Meta Business Manager for **conversation charges**.
+
+---
+
+## Co-Admin contact analytics metrics
+
+When Co-Admin looks up a **contact** by phone/email:
+
+| Parameter | Default | Notes |
+|-----------|---------|-------|
+| `range` | `30d` | Also `7d`, `14d`, `60d`, `90d` |
+| `label` | (none) | Optional — limit stats to threads with that label name |
+
+| Metric | Meaning |
+|--------|---------|
+| `inbound` | Customer messages received |
+| `outbound` | All outbound to contact |
+| `outbound_human` | Sent by human agents (`sent_by_user_id`, not AI) |
+| `outbound_ai` | AI-generated outbound |
+| `outbound_template` | Template sends |
+| `delivered` / `read` / `failed` | Same rules as channel summary, scoped to contact |
+| `estimated_cost_usd` | Rough estimate: outbound count × configured rate (default ~$0.01/msg) — **not Meta invoice** |
+
+Also returns: thread list, labels, assignees (user/team/AI agent), daily inbound/outbound series, support agents ranked by outbound count.
+
+**Default range:** 30 days for contact analytics (vs 7 days for channel tool).
+
+---
+
+## WhatsApp vs other channels
+
+| Channel | Dashboard analytics | Co-Admin channel tool |
+|---------|--------------------|-----------------------|
+| **WhatsApp** | Full UI + exports | Full summary |
+| **Messenger** | “WhatsApp only” placeholder | Notes to use dashboard for WA |
+| **Instagram** | “WhatsApp only” placeholder | Notes to use dashboard for WA |
+
+---
+
+## Related
+
+- [Analytics overview](/analytics/analytics-overview)
+- [Analytics & message performance](/analytics/channel-performance) — navigation & workflows
+- [Analytics FAQ](/analytics/analytics-faq)

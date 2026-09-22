@@ -1,0 +1,259 @@
+---
+title: 'Chat & inbox — FAQ'
+description: 'Extended Q&A for AI Workspace Co-Admin about Chat, threads, filters, assignments, composer, and labels.'
+---
+
+Extended Q&A for **AI Workspace Co-Admin** about **Chat**, threads, filters, assignments, composer, and labels.
+
+---
+
+## Basics
+
+### Where is the inbox?
+
+**Chat** in the sidebar → `/chat`. Default landing page after sign-in for most users.
+
+### What is a thread?
+
+One conversation with a customer on a channel (or linked across channels for the same contact). Shows in the left **thread list**.
+
+### Why is my thread list empty?
+
+- No customer has messaged your **connected channels** yet  
+- Wrong **workspace** — switch in **Settings**  
+- **Channel filter** set to an account with no threads  
+- Active filters (**Unread** + label) exclude everything  
+
+Connect channels: [channels docs](/channels/workspaces-and-channels-overview).
+
+### Can multiple agents reply to the same conversation?
+
+**Yes.** All see the same timeline. Use **assignment** and **labels** for ownership clarity.
+
+---
+
+## Navigation & layout
+
+### What are the three parts of Chat on desktop?
+
+| Column | Purpose |
+|--------|---------|
+| Left | Thread list (search, filters) |
+| Center | Messages + composer |
+| Right | Recipient panel (contact, assign, labels) |
+
+### How does mobile Chat work?
+
+Three screens: **Threads** → tap row → **Conversation** → contact icon → **Recipient**. Back button returns.
+
+### How do I hide the recipient panel?
+
+Desktop: click the small **chevron** on the panel’s left edge.
+
+### What is the empty center logo?
+
+No thread selected. Pick a conversation from the left list.
+
+---
+
+## Thread list filters
+
+### How do I see only unread messages?
+
+Above thread list: toggle **Unread** (between **All** and **Read**).
+
+### How do I filter by WhatsApp only?
+
+Header **channel dropdown** → select your WhatsApp account (not **All channels**).
+
+### How do I search for a customer?
+
+**Search by Phone or Name…** field — matches contact phone and display name.
+
+### How do I filter by label?
+
+**Funnel** icon → select label(s). **All labels** clears.
+
+### What does the inbound red arrow mean?
+
+Last message was **from the customer** (inbound). Unread threads emphasize this.
+
+---
+
+## Opening threads & URLs
+
+### How do I share a link to a conversation?
+
+With thread open, copy URL — includes `?thread={id}` e.g. `/chat?thread=42`.
+
+### What is `?dl=` in the URL?
+
+**Deep link token** — opens a specific message (highlighted). Used in notifications or internal links.
+
+### Does opening a thread mark it read?
+
+**Yes**, automatically. Unread count clears for that conversation.
+
+---
+
+## Replying & composer
+
+### How do I send a message?
+
+1. Open thread  
+2. Type in *“Type your message…”*  
+3. **Send** or press **Enter** (Shift+Enter for new line)  
+
+### Why can’t I type — only templates?
+
+**24-hour messaging window** expired (WhatsApp/Meta rule). Customer must reply **or** you send an approved **Template**.
+
+Composer shows an expiry banner. Click **Templates**.
+
+### How do I send a WhatsApp template from Chat?
+
+**Templates** button in composer → choose template → fill fields → send.
+
+### How do I pick which channel to send from?
+
+Use **channel dropdown** in composer when contact has WhatsApp + Instagram, etc. Defaults to last **inbound** channel.
+
+### What do delivery ticks mean?
+
+On outbound messages: clock (pending) → single check (sent) → double check (delivered) → blue double check (read). WhatsApp-style.
+
+---
+
+## Labels
+
+### Where do I create labels?
+
+**Settings → Workspace → Labels** or **Chat** header **Labels** icon.
+
+### How do I tag a conversation?
+
+Conversation **header** label control or **recipient panel** → Labels section.
+
+### Can I auto-tag by keyword?
+
+**Keyword hints** on labels (when configured in Settings) can auto-apply when customers use certain words.
+
+### I only see some labels / threads
+
+You may have **label-scoped access** — ask admin to adjust membership.
+
+---
+
+## Assignments
+
+### How do I assign a thread to someone?
+
+**Recipient panel** → **Assigned to** → pick teammate, **group**, or **AI Agent**.
+
+### What is Unassigned?
+
+Thread in shared pool — no named owner.
+
+### Where do I create groups for routing?
+
+**Settings → Workspace → Groups**.
+
+### How do I invite agents who only reply in Chat?
+
+**Team Members** → Invite as **Member** (Chat-only).
+
+---
+
+## Resolve & status
+
+### How do I close a conversation?
+
+**Recipient panel** → **End Chat** → optional note → confirm. Thread becomes **resolved**.
+
+### Will history disappear?
+
+**No.** Reopening when customer returns keeps prior messages.
+
+### What’s the difference between resolved and unread?
+
+**Resolved** = workflow status (closed). **Unread** = new messages since someone last read.
+
+---
+
+## New Chat & outbound
+
+### How do I message a new customer?
+
+Thread list header → **New Chat** (+) → template modal → channel + phone + template.
+
+Requires active **WhatsApp** for template outbound.
+
+---
+
+## Generate Reply & AI
+
+### Where is Generate Reply?
+
+Composer toolbar → sparkle / **Generate Reply**.
+
+### Does Generate Reply send automatically?
+
+**No.** Human must click **Send**.
+
+### What’s the difference between Generate Reply and AI Agents?
+
+| Generate Reply | AI Agents |
+|----------------|-----------|
+| Helps **agents** draft | Talks **to customers** |
+| Human sends | Can auto-send when assigned |
+
+### What is Co-Admin?
+
+Internal assistant for **your team** — setup help, workspace status. Not customer-facing.
+
+---
+
+## Real-time & notifications
+
+### Do messages appear without refresh?
+
+**Yes** for WhatsApp, Messenger, Instagram — live updates in open **Chat**.
+
+### Why is sidebar Chat badge still showing?
+
+May reflect other unread threads. Open **Unread** filter to triage.
+
+---
+
+## Permissions
+
+### I don’t see Chat in the sidebar
+
+Role may lack **Chat** page access — ask owner/admin.
+
+### Can members connect channels?
+
+Usually **no** — **Admin**/**Owner** use **Settings → Channels**.
+
+---
+
+## Troubleshooting
+
+| Symptom | Try |
+|---------|-----|
+| Send failed | Check channel **active**; WhatsApp registration modal |
+| Wrong customer name | Edit in recipient panel or inline in header |
+| Panel won’t load | Reselect thread; refresh page |
+| Stale thread list | Scroll to refresh; change filter and back |
+| Template list empty | Create templates in **Templates** page; sync WhatsApp |
+
+---
+
+## Related docs
+
+- [Chat & inbox overview](/inbox/chat-inbox-overview)
+- [Shared inbox & labels](/inbox/shared-inbox-and-labels)
+- [Assignments & teams](/inbox/assignments-and-teams)
+- [Composer & Generate Reply](/inbox/composer-generate-reply)
+- [Template messages overview](/templates/templates-overview)
+- [Channels](/channels/workspaces-and-channels-overview)

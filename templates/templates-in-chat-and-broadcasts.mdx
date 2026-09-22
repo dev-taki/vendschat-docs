@@ -1,0 +1,197 @@
+---
+title: 'Templates in Chat & broadcasts'
+description: 'How approved WhatsApp templates are sent from Chat — including the 24-hour window, scheduling, and label broadcasts.'
+---
+
+How approved **WhatsApp templates** are sent from **Chat** and from **Broadcast → New broadcast** — including the 24-hour window and scheduling.
+
+---
+
+## Quick reference
+
+| Task | Where |
+|------|--------|
+| Send template in open thread | **Chat** → composer → **Templates** |
+| Window expired | Banner in composer — only templates allowed |
+| Pick template | **Send Template Message** modal |
+| Fill variables | Compose step in modal |
+| Schedule send | Modal → schedule date/time |
+| Broadcast to a segment | **Broadcast → New broadcast** (labels or CSV), then compose the template |
+| New outbound thread | **New Chat** → often template-first for WhatsApp |
+
+---
+
+## 24-hour messaging window
+
+WhatsApp **session messaging** allows free-form replies while the customer has messaged you within the last **24 hours**.
+
+When the window **expires**:
+
+1. Normal composer input is **hidden**  
+2. **Alert banner** appears:  
+   > *“The 24-hour messaging window has expired. You can only send template messages until the recipient replies to reopen the conversation window.”*  
+3. Agent uses **Templates** button to send an **approved** template  
+4. When the customer **replies**, the window **reopens** — free-form chat returns  
+
+Co-Admin should explain this as a **WhatsApp policy**, not a Vendschat bug.
+
+Deep dive: [Channels FAQ — 24-hour window](/channels/channels-faq)
+
+---
+
+## Opening the template modal in Chat
+
+**Templates** control in the message composer toolbar (when `expired` or for proactive template sends).
+
+**Modal title flow:** **Send Template Message**
+
+### Steps inside modal
+
+| Step | When |
+|------|------|
+| **Channel** | **New Chat** flow — pick WhatsApp channel |
+| **Templates** | Browse & select approved template |
+| **Compose** | Fill `{{1}}`, `{{2}}`, … variables + preview |
+
+### Template filters (in modal)
+
+| Filter | Options |
+|--------|---------|
+| **Category** | All · marketing · utility · authentication · … |
+| **Status** | Default **Approved + Pending** filter in UI — **only Approved sends** |
+| **Search** | Template name |
+
+**Backend rule:** `Template must be approved before sending` — pending templates cannot deliver.
+
+### Modes
+
+| Mode | Use |
+|------|-----|
+| **Single** | One recipient (current thread or new number) |
+| **Broadcast** | Multiple contacts via **label** selection |
+
+---
+
+## Sending a template (single)
+
+1. Open **Chat** thread (or **New Chat**)  
+2. Click **Templates** in composer  
+3. Select **approved** template  
+4. Enter **variable values** matching `{{n}}` in body  
+5. Review preview (WhatsApp-style)  
+6. **Send Template Message**  
+
+Message appears in thread history as a template send; delivery statuses follow normal WhatsApp ticks.
+
+---
+
+## Scheduling a template
+
+From the template modal:
+
+1. Choose template + variables  
+2. Set **schedule** date/time  
+3. Confirm schedule  
+
+Backend stores scheduled template message for the thread — fires at scheduled time (requires approved template + valid session/channel).
+
+**API path concept:** `threads/{threadId}/template-schedules`
+
+---
+
+## Template broadcast from Chat
+
+**Broadcast mode** in template modal:
+
+1. Select template  
+2. Choose **labels** (segment) — same label system as [shared inbox](/inbox/shared-inbox-and-labels)  
+3. Optionally create label inline  
+4. Send broadcast  
+
+Replies land in **Chat** — staff should monitor labeled threads (e.g. `MOM-2025-reply`).
+
+Large campaigns use the same **Chat** → template composer → **Broadcast** flow. The sidebar **Broadcast** page (`/broadcast`) lists campaigns in the UI roadmap but **Create New Broadcast** there is not wired yet — compose from **Chat**.
+
+Deep dive: [Broadcasts — campaigns](/broadcasts/campaigns)
+
+---
+
+## New Chat + templates
+
+**New Chat** (+) from Chat header:
+
+- For **WhatsApp**, first outbound message to a new number typically requires an **approved template**  
+- Modal may start at **channel** step when multiple WhatsApp lines exist  
+- Phone number field for recipient  
+
+Agents cannot cold-message arbitrary text outside session rules.
+
+---
+
+## Messenger & Instagram
+
+**Template Messages** hub shows Messenger/Instagram cards, but **WhatsApp** has full create/list/send integration today.
+
+Messenger and Instagram DMs follow **session messaging** rules on those platforms — not WhatsApp template catalog. Co-Admin: route WhatsApp template questions here; route IG/FB session questions to [Messenger & Instagram channels](/channels/messenger-and-instagram).
+
+---
+
+## Variable mapping at send time
+
+Template body stored as:
+
+```text
+Hi {{1}}, your order {{2}} ships today.
+```
+
+At send, agent or automation supplies:
+
+| Variable | Example value |
+|----------|---------------|
+| `{{1}}` | Sam |
+| `{{2}}` | #10482 |
+
+Mismatch or missing variables cause send errors — keep templates simple.
+
+---
+
+## Analytics & template performance
+
+After sends:
+
+- **Analytics** → WhatsApp channel → **Template performance**  
+- Compare reply rates, button engagement  
+- **Message logs** — filter **Template** type, **Failed** status  
+
+Deep dive: [Analytics FAQ](/analytics/analytics-faq)
+
+---
+
+## Compliance checklist
+
+- Only message customers who **opted in** or **messaged you first**  
+- Match template text to what you promised in chat  
+- Honor opt-out — label `Do-not-broadcast`  
+- Use **Utility** for transactional; **Marketing** only with consent  
+
+---
+
+## Troubleshooting
+
+| Symptom | Cause / fix |
+|---------|-------------|
+| Composer greyed out | 24h expired — use **Templates** |
+| Template not in list | Not **APPROVED** — check **Templates** list |
+| Send fails | Variables missing; template rejected; invalid number |
+| Broadcast empty | No contacts on selected labels |
+| “Template must be approved” | Wait for Meta or **Sync** status |
+
+---
+
+## Related docs
+
+- [Templates overview](/templates/templates-overview)
+- [Managing templates & sync](/templates/managing-templates-and-sync)
+- [Creating WhatsApp templates](/templates/creating-whatsapp-templates)
+- [Templates FAQ](/templates/templates-faq)
+- [Chat inbox overview](/inbox/chat-inbox-overview)

@@ -1,0 +1,385 @@
+---
+title: 'Workspaces & channels — overview'
+description: 'How organizations, workspaces, and channels fit together — and exactly where to connect WhatsApp, Messenger, and Instagram in Vendschat.'
+---
+
+How **organizations**, **workspaces**, and **channels** fit together — and exactly where to connect WhatsApp, Messenger, and Instagram in Vendschat.
+
+**Who this is for:** Owners setting up the account, admins connecting Meta channels, and anyone asking Co-Admin *“How do I add WhatsApp?”* or *“What’s a workspace?”*
+
+**Hub:** [Channels overview](/channels/channels-overview) — doc map and route reference.
+
+---
+
+## Quick reference
+
+| Concept | Plain language |
+|---------|----------------|
+| **Organization** | Your company account — **billing**, legal entity, plan limits |
+| **Workspace** | A team’s **operating environment** — Chat, channels, labels, AI agents |
+| **Channel** | One connected messaging account (one WhatsApp number, one FB Page, one IG account) |
+| **Channels live in** | **One workspace** — not shared across workspaces |
+| **Switch workspace** | Settings sidebar dropdown (when you have 2+) |
+| **Add channel** | **Settings → Workspace → Channels → Add Channel** |
+| **Multiple workspaces** | **Advanced** plan (see [billing](/billing/plans-and-usage)) |
+| **Who connects channels** | Typically **Owner** or **Admin** with Settings access |
+
+---
+
+## Organization vs workspace vs channel
+
+```text
+Organization (Acme Corp)
+├── Billing & plan (Starter / Growth / Advanced)
+├── Organization settings
+│   ├── Account Info
+│   ├── Workspaces  ← create / delete / list
+│   └── Billing & Usage
+│
+└── Workspace A (Support)
+    ├── Channels  ← WhatsApp +1 555…, Messenger Page, Instagram @brand
+    ├── Chat inbox (threads from those channels)
+    ├── Labels, Team, AI Agents, Webhooks
+    └── General Info (name, address, email)
+│
+└── Workspace B (EU Brand)   [Advanced plan]
+    └── Separate channels, inbox, labels…
+```
+
+| Layer | What it controls | Settings path |
+|-------|------------------|---------------|
+| **Organization** | Subscription, invoices, workspace list | **Settings → Organization → …** |
+| **Workspace** | Channels, chat, labels, team for that unit | **Settings → Workspace → …** |
+| **Channel** | Single messaging connection | **Settings → Workspace → Channels** |
+
+**Critical rule:** When you **switch workspace**, everything scoped to that workspace changes — **Chat** threads, **Channels**, **Labels**, **Analytics** for that workspace’s accounts. Billing stays at the **organization** level.
+
+---
+
+## Example: Pulse Digital (agency)
+
+**Pulse Digital** runs three clients on **Advanced**:
+
+| Workspace | Channels | Team |
+|-----------|----------|------|
+| `Client — BloomBox` | WhatsApp + Instagram | 2 agents |
+| `Client — Metro Clinics` | WhatsApp only | 3 agents |
+| `Pulse Internal` | Messenger (company page) | Leadership |
+
+Each client’s messages **never mix** because channels and inboxes are **workspace-isolated**. Billing is one **organization** invoice.
+
+---
+
+## How to navigate settings
+
+### Settings sidebar structure
+
+**Organization** (owners see billing + workspaces):
+
+| Menu item | Path | Purpose |
+|-----------|------|---------|
+| Account Info | `/settings/organization/account-info` | Organization profile |
+| Workspaces | `/settings/organization/workspaces` | Create, edit, delete workspaces |
+| Billing & Usage | `/settings/organization/billing&usages` | Plan, usage, Stripe |
+
+**Workspace** (everyone with settings access):
+
+| Section | Menu item | Path |
+|---------|-----------|------|
+| General | General Info | `/settings/workspace/general` |
+| Chat | **Channels** | `/settings/workspace/channels` |
+| Chat | Labels | `/settings/workspace/labels` |
+| Chat | Team Members | `/settings/workspace/team-members` |
+| Chat | Groups | `/settings/workspace/groups` |
+| Chat | Generate Reply | `/settings/workspace/generate-reply` |
+| Connections | API Keys, Integrations, Webhooks, REST API | `/settings/workspace/...` |
+
+Mobile: **Settings** hub lists the same destinations.
+
+### Other entry points to channels
+
+| From | Action |
+|------|--------|
+| **Analytics** home | **Connect new channel** card → Channels catalog |
+| **Analytics** header | **Add channel** button |
+| **Templates** | Channel filter uses workspace channels |
+| **Onboarding** | First-channel wizard (see [getting started](/getting-started/first-channel-and-inbox)) |
+
+---
+
+## Workspaces — full guide
+
+### Path
+
+**Settings → Organization → Workspaces** (`/settings/organization/workspaces`)
+
+### What you see
+
+- **All Workspaces** list with name + organization name
+- **Current** badge on the workspace you’re in
+- **Create Workspace** (owners only)
+- Per workspace (if you’re **owner** of that workspace): **Edit** name, **Delete**
+
+### Switch workspace (without opening Workspaces page)
+
+1. Open **Settings**
+2. At top of **Workspace** section, click the **workspace name dropdown** (appears when you have **2+** workspaces)
+3. Select another workspace — app reloads session into that context
+
+Or: **Create workspace** link at bottom of dropdown → Workspaces page.
+
+### Create a workspace
+
+**Who:** **Organization owner** only  
+**Plan:** **Advanced** required for multiple workspaces (Starter/Growth typically operate on one primary workspace)
+
+**Steps:**
+
+1. **Settings → Organization → Workspaces**
+2. Click **Create Workspace**
+3. Enter **name** → confirm
+4. You are **switched into** the new workspace automatically
+5. Connect **channels** fresh for this workspace — channels do **not** copy from other workspaces
+
+### Edit workspace name
+
+**Who:** **Workspace owner**
+
+1. **Settings → Organization → Workspaces**
+2. Click **Edit** on the row
+3. Save new name (slug updates in backend for URLs)
+
+### Delete workspace
+
+**Who:** **Workspace owner**  
+**Rules:**
+
+- Cannot delete your **only** workspace — you must have at least one
+- Deletion is **soft** (workspace marked inactive) — data retained per policy
+- If you delete the workspace you’re currently in, app switches to another workspace you belong to
+
+**Steps:** Workspaces list → trash icon → confirm in dialog.
+
+### Workspace general info
+
+**Settings → Workspace → General Info** (`/settings/workspace/general`)
+
+| Field | Purpose |
+|-------|---------|
+| Workspace Name | Display name (also editable from Workspaces page) |
+| Address | Optional business address |
+| Email | Optional contact email |
+
+Click **Save Information** after edits.
+
+**Note:** Default **AI Agent** for new threads may be configured via workspace settings API (`default_ai_agent_id`) — assign in product when exposed in UI; Co-Admin can reference workspace AI agent counts via overview.
+
+### Workspace membership & roles
+
+| Role | Workspaces | Channels | Billing |
+|------|------------|----------|---------|
+| **Owner** | Create, delete, edit; switch all joined | Connect, manage | Pay & upgrade |
+| **Admin** | Switch joined workspaces | Connect, manage (if page access) | View usage typically |
+| **Member** | Switch if invited | Usually **no** Settings — **Chat** only | No |
+
+Team invites are **per workspace** — **Settings → Workspace → Team Members**.
+
+---
+
+## Channels — full guide
+
+### What is a channel?
+
+A **channel** is one linked messaging account:
+
+| Channel type | Identifier example | Customer sees |
+|--------------|-------------------|---------------|
+| **WhatsApp** | E.164 phone number | Your business WhatsApp |
+| **Messenger** | Facebook Page ID | Messages to your Page |
+| **Instagram** | IG business account | Instagram Direct |
+
+Future types in system (`telegram`, `sms`, `email`, `web_chat`) may appear in catalog as **Request New Channel** — today self-serve connect is **WhatsApp, Messenger, Instagram**.
+
+### Channel status
+
+| Status | Meaning | What to do |
+|--------|---------|------------|
+| **pending** | Connection started; Meta verification incomplete | Finish setup wizard; check Meta Business Manager |
+| **active** | Messages flow into **Chat** | No action — monitor health |
+| **disconnected** | Token expired or user revoked access | **Manage** channel → reconnect |
+| **error** | Integration error | Reconnect; check Meta permissions; contact support |
+
+### Channels list page
+
+**Path:** **Settings → Workspace → Channels** (`/settings/workspace/channels`)
+
+| UI element | Action |
+|------------|--------|
+| **Connected Channels** grid | One card per active connection |
+| Card click / **Manage** | Opens setup for that channel (`?channelId=`) |
+| **Add Channel** | → Channel catalog |
+| **Browse Channels** (dashed card) | → Channel catalog |
+| Card shows | Icon, display name, **Channel ID:** identifier (Meta routing ID — phone number ID, Page ID, or IG user ID) |
+
+**Not on the list card:** connection **status** (`active`, `pending`, etc.) — open **Manage** to see status, connected date, and reconnect controls.
+
+**Multiple channels:** You can connect **more than one** WhatsApp number (or multiple Messenger/Instagram accounts) in the same workspace — each appears as its own card.
+
+**Display names:**
+
+- WhatsApp: `display_name` or type label
+- Instagram: `@username` from metadata when available
+- Messenger: Page name when available
+
+### Channel catalog
+
+**Path:** `/settings/workspace/channels/catalog`
+
+| Card | Connect path |
+|------|----------------|
+| **WhatsApp Business** | `/settings/workspace/channels/whatsapp/setup` |
+| **Facebook Messenger** | `/settings/workspace/channels/messenger/setup` |
+| **Instagram Direct** | `/settings/workspace/channels/instagram/setup` |
+| **Request New Channel** | Placeholder for future types (`telegram`, `sms`, `email`, `web_chat`) — **Submit Request** is not wired in the UI; contact **support** to request a channel type |
+
+Each card: description + **Connect Channel**.
+
+---
+
+## Connect flow summary (all channels)
+
+### New connection
+
+1. Ensure correct **workspace** selected (workspace switcher in **Settings**)
+2. **Settings → Workspace → Channels → Add Channel**
+3. Pick channel type in catalog
+4. Complete **Prepare** checklist (permissions, Meta admin access)
+5. **Connect** via Meta / Instagram OAuth
+6. Wait for **active** status
+7. Open **Chat** — customer message or send outbound where allowed
+
+### Manage / reconnect existing
+
+1. **Settings → Workspace → Channels**
+2. Click channel card → **Manage**
+3. Opens setup with `?channelId={id}` — skips use-case step for WhatsApp when managing
+4. Re-run **Connect** if **disconnected**
+
+**Disconnect:** There is **no Disconnect button** in the dashboard today. Backend APIs exist (`POST …/channels/{id}/disconnect` per channel type). To stop using a channel, **reconnect** a replacement number, revoke access in Meta, or contact **support**.
+
+**Manage URL pattern:**  
+`/settings/workspace/channels/{type}/setup?channelId=123`
+
+---
+
+## Channel-specific documentation
+
+| Channel | Deep-dive doc |
+|---------|----------------|
+| WhatsApp Business | [WhatsApp](/channels/whatsapp) — use cases, embedded signup, templates, 24h window |
+| Messenger & Instagram | [Messenger & Instagram](/channels/messenger-and-instagram) — Page connect, IG Business login |
+
+---
+
+## How channels affect the rest of the product
+
+| Feature | Channel relationship |
+|---------|-------------------|
+| **Chat** | Threads belong to a **channel** — filter inbox by channel type |
+| **Templates** | WhatsApp templates scoped to workspace (and channel) |
+| **Broadcasts** | Send via connected **WhatsApp** |
+| **Analytics** | Per **channel** card on Analytics home; full metrics **WhatsApp only** today |
+| **AI Agents** | Reply on threads from any connected channel |
+| **Webhooks** | Events include `channel_id` — workspace-wide |
+| **Contacts** | Unified per workspace; **contact identities** tie phone/IG/FB IDs across channels |
+
+### One contact, multiple channels
+
+Vendschat links identities under one **contact** when possible. A customer who DMs on Instagram then messages on WhatsApp may share one timeline in **Chat** — agents see full context.
+
+---
+
+## Plan limits (channels & workspaces)
+
+| Plan | Workspaces | Channels |
+|------|------------|----------|
+| **Starter** | Typically **one** primary workspace | Unlimited channel connections (subject to Meta limits) |
+| **Growth** | Typically **one** | Same |
+| **Advanced** | **Multiple workspaces** | Same — each workspace has its own channel set |
+
+Exact enforcement may evolve — **Advanced** is required for agency/multi-brand separation. See [pricing reference](/billing/pricing-plans-reference).
+
+**Billing contacts** are counted at **organization** level, not per channel.
+
+---
+
+## Co-Admin & live data
+
+Co-Admin tools for channels/workspaces:
+
+| Tool | Use when customer asks… |
+|------|-------------------------|
+| `get_workspace_overview` | “How many channels do we have?” “Any open threads?” |
+| `list_channels` | “List our WhatsApp numbers” “Is Instagram connected?” |
+| `get_channel_analytics` | “Delivery rate this week?” (WhatsApp) |
+
+Co-Admin reads the **current workspace** from the user’s session — tell users to **switch workspace** if they manage multiple.
+
+**Docs vs live data:** Connection steps → product docs. “Are we connected?” → Co-Admin tools.
+
+---
+
+## Backend channel API (reference)
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /settings/workspaces/{id}/channels` | Aggregate channel list (merged in UI with per-type lists) |
+| `GET …/channels/whatsapp` | List WhatsApp channels for workspace |
+| `POST …/channels/whatsapp/onboard` | Connect WhatsApp (requires `Idempotency-Key` header) |
+| `POST …/channels/{channel_id}/disconnect` | Disconnect WhatsApp |
+| `POST …/channels/{channel_id}/register` | Register phone with Meta Cloud API (PIN) — support/internal when Meta returns error 133010 |
+| `GET …/channels/messenger` | List Messenger channels |
+| `POST …/channels/messenger/onboard` | Connect Messenger Page |
+| `POST …/channels/messenger/{channel_id}/disconnect` | Disconnect Messenger |
+| `GET …/channels/instagram` | List Instagram channels |
+| `POST …/channels/instagram/onboard` | Connect Instagram (Business Login) |
+| `POST …/channels/instagram/{channel_id}/disconnect` | Disconnect Instagram |
+
+Onboard requests store tokens **server-side** (encrypted) — never returned to the browser.
+
+---
+
+## Troubleshooting
+
+| Problem | Check |
+|---------|-------|
+| Don’t see **Channels** in Settings | Role may be **Member** (chat-only) — ask owner |
+| Connected but no messages in Chat | Status must be **active**; customer must message first (or outbound rules) |
+| Wrong business number connected | Disconnect and reconnect correct WABA number in Meta flow |
+| Two workspaces, wrong inbox | **Switch workspace** in Settings dropdown |
+| Channel missing after create | Refresh Channels page; verify you’re in the workspace where you connected |
+| Instagram shows @ handle wrong | Reconnect; ensure **Professional/Business** account |
+
+---
+
+## First-time checklist
+
+- [ ] Correct **workspace** selected  
+- [ ] At least one channel **Active**  
+- [ ] Two **labels** created before campaign volume  
+- [ ] Teammate invited (**Team Members**)  
+- [ ] Test message appears in **Chat**  
+- [ ] **Analytics** bookmarked (WhatsApp)  
+
+See [First channel & inbox](/getting-started/first-channel-and-inbox).
+
+---
+
+## Related docs
+
+- [Channels overview](/channels/channels-overview) — hub and route map
+- [WhatsApp](/channels/whatsapp)
+- [Messenger & Instagram](/channels/messenger-and-instagram)
+- [Channels FAQ](/channels/channels-faq)
+- [Analytics](/analytics/channel-performance)
+- [Billing — multiple workspaces](/billing/pricing-plans-reference)

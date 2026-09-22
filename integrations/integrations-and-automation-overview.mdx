@@ -1,0 +1,237 @@
+---
+title: 'Integrations & automation — overview'
+description: 'Connect Vendschat to the tools you already use — CRM, workflow automation, custom backends — without replacing your shared Chat inbox.'
+---
+
+Connect Vendschat to the tools you already use — CRM, workflow automation, custom backends — without replacing your shared **Chat** inbox.
+
+**Who this is for:** Ops leads, developers, and anyone asking Co-Admin *“How do I connect Zapier?”*, *“Where are webhooks?”*, or *“Do we have an API?”*
+
+**Hub path:** Sidebar **Integrations** (`/integrations`) for Agent Skill, Lovable, MCP, Zapier, Make, n8n, HubSpot. Webhooks, API keys, and REST API stay under **Settings → Workspace**.
+
+---
+
+## Quick reference
+
+| Need | Where to go | Plan (typical) |
+|------|-------------|----------------|
+| Agent Skill / Lovable / MCP | Sidebar **Integrations** | Paid plans |
+| Integration catalog (n8n, Zapier, Make, HubSpot) | Sidebar **Integrations** | Growth+ for automation platforms |
+| Outbound event webhooks | **Settings → Workspace → Webhooks** | Growth+ |
+| API keys for scripts | **Settings → Workspace → API Keys** | **Advanced** (Developer API) |
+| REST API reference | **Settings → Workspace → REST API** | **Advanced** |
+| Hosted n8n instance | **n8n** in sidebar (`/n8n`) | **Advanced** (managed instance) |
+| HubSpot CRM sync | Integrations → **HubSpot** → Connect (OAuth) | All paid tiers* |
+| Onboarding automation step | **Onboarding** Step 3 → **Set Up Integrations** | — |
+
+\*HubSpot listed on all tiers in pricing matrix — confirm current plan in **Billing & Usage**.
+
+---
+
+## Navigation map
+
+```text
+Sidebar
+├── Integrations            /integrations
+│   ├── Agent Skill
+│   ├── Lovable
+│   ├── MCP
+│   ├── Zapier / Make / n8n
+│   └── HubSpot
+└── n8n (hosted)            /n8n   (Advanced)
+
+Settings → Workspace
+├── API Keys                /settings/workspace/api-keys
+├── Webhooks                /settings/workspace/webhooks
+└── REST API                /settings/workspace/rest-api
+```
+
+| Entry point | Lands on |
+|-------------|----------|
+| **Onboarding** → Step 3 **Set Up Integrations** | `/settings/workspace/integrations` |
+| Mobile **More** → **Integrations** | `/settings/workspace/integrations` |
+| Sidebar **n8n** | `/n8n` |
+| **REST API** page **Get API Key** button | API Keys flow |
+
+---
+
+## Example: RidgeRunner Outdoor
+
+**RidgeRunner** uses **Shopify**, **Slack**, and **HubSpot**.
+
+| Goal | Tool | Vendschat path |
+|------|------|----------------|
+| CRM stays updated when customers message | **HubSpot** | **Integrations** → HubSpot → **Connect** |
+| “New VIP message” alert in Slack | **Webhook** → Make scenario | **Webhooks** → **Add destination** |
+| Custom inventory lookup before reply | **REST API** + **API Keys** | **Advanced** plan |
+
+Their developer extends the inbox — they don’t rebuild it.
+
+---
+
+## Integration catalog page
+
+**Path:** **Settings → Workspace → Integrations** (`/settings/workspace/integrations`)
+
+**Title:** *Integrations* — *“Connect your tools and automate your workflow”*
+
+### Cards on the catalog
+
+| Integration | Description (in app) | Status shown in UI | Action |
+|-------------|----------------------|-------------------|--------|
+| **n8n** | Self-hosted workflow automation with full customization | Active / workflow count | **Manage** |
+| **Zapier** | Automate workflows with 5,000+ app integrations | Not connected / zap count | **Connect** |
+| **Make** | Visual automation platform with drag-and-drop workflows | Active / scenario count | **Manage** |
+| **HubSpot** | Sync CRM data and automate marketing workflows | Not connected / contact count | **Connect** |
+| **Custom API** | Build custom integrations using our REST API | Setup needed | **View Docs** · **Configure** |
+| **Request Integration** | Don’t see your tool? Let us know | — | **Submit Request** |
+
+**Search:** *“Search integrations…”* field at top of catalog.
+
+**Note:** Catalog cards show connection status and counts. Some **Connect** / **Manage** actions may route to dedicated setup flows as each integration is fully wired in the product.
+
+---
+
+## How integrations relate to Chat
+
+| Layer | Role |
+|-------|------|
+| **Chat** | Humans (and AI Agents) reply to customers |
+| **Webhooks** | Push real-time **events** to your URLs (Make, Zapier, n8n, custom) |
+| **HubSpot** | Sync **contacts** and field mappings with CRM |
+| **REST API** | Pull/push data from your backend (threads, messages, channels) |
+| **n8n / Make / Zapier** | Orchestrate multi-step automation using webhooks + API |
+
+Integrations do **not** replace **Chat** — they extend what happens when messages arrive or get sent.
+
+---
+
+## Plan requirements (summary)
+
+From [billing — pricing reference](/billing/pricing-plans-reference):
+
+| Feature | Starter | Growth | Advanced |
+|---------|---------|--------|----------|
+| HubSpot integration | ✅ | ✅ | ✅ |
+| Zapier, Make, n8n (connect via webhooks/automation) | ❌ | ✅ | ✅ |
+| Incoming & outgoing **webhooks** | ❌ | ✅ | ✅ |
+| **Developer REST API** + API keys | ❌ | ❌ | ✅ |
+| **Managed n8n instance** (hosted) | ❌ | ❌ | ✅ |
+
+**Upgrade path:** **Settings → Organization → Billing & Usage → Plans** (owner only).
+
+**Starter** teams often use **Chat** + **HubSpot** manually; move to **Growth** before webhooks/Zapier campaigns; choose **Advanced** when engineering needs API access or hosted n8n.
+
+---
+
+## Webhooks (real-time events)
+
+When something happens in Vendschat, notify your HTTPS endpoint.
+
+**Path:** **Settings → Workspace → Webhooks** (`/settings/workspace/webhooks`)
+
+**UI sections:**
+
+- **Event destinations** — table of webhook URLs  
+- **Add destination** · **Import**  
+- Per row: Destination URL, Name, **Active** / **Disabled**, event count, **Edit** / **Enable** / **Disable** / **Delete**  
+- **Filter by Channel** · Search  
+
+Deep dive: [Webhooks guide](/integrations/webhooks-guide)
+
+---
+
+## HubSpot CRM
+
+OAuth connect, contact sync, field mapping.
+
+**Backend flow:** Authorize → HubSpot callback → initial contact sync job.
+
+Deep dive: [HubSpot integration](/integrations/hubspot-integration)
+
+---
+
+## API Keys & REST API
+
+**API Keys:** **Settings → Workspace → API Keys** — create named keys, optional expiry, revoke/delete.
+
+**REST API docs in app:** **Settings → Workspace → REST API**
+
+- Base URL shown: `https://api.vendschat.com/v1`  
+- Auth: `Authorization: Bearer YOUR_API_KEY`  
+- Sections: Authentication, Messages, Users, Channels, Webhooks  
+- Rate limit note: 1000 requests/hour per key  
+
+Deep dive: [API keys & REST API](/integrations/api-keys-and-rest-api)
+
+---
+
+## n8n automation
+
+Two ways to use n8n with Vendschat:
+
+| Mode | Path | Plan |
+|------|------|------|
+| **Self-serve / external n8n** | Connect via **Webhooks** + Vendschat triggers | Growth+ |
+| **Hosted n8n instance** | Sidebar **n8n** (`/n8n`) → **Generate Free Instance** | **Advanced** (managed specs in billing docs) |
+
+**n8n page** (`/n8n`) — *“Start automating with n8n”*
+
+| Field | Purpose |
+|-------|---------|
+| Instance Name | Unique subdomain (e.g. `my-company.n8n.cloud`) |
+| Region | US East, Europe (Frankfurt), Asia (Singapore) |
+| Admin Email | Instance admin |
+| **Generate Free Instance** | Provision hosted instance |
+
+**Free tier highlights (in UI):** 20 active workflows · 1,000 executions/month · 200+ nodes · community support.
+
+Deep dive: [n8n, Zapier & Make](/integrations/n8n-zapier-make)
+
+---
+
+## Security habits
+
+- Rotate **webhook signing secrets** when staff leave  
+- Subscribe only to **events** you actually process  
+- Use **HTTPS** endpoints for webhooks in production  
+- Store **API keys** in secrets managers — never in **Chat** with customers  
+- Test with staging URLs before production  
+- Revoke unused API keys promptly  
+
+---
+
+## Co-Admin & live data
+
+| Customer asks… | Co-Admin approach |
+|----------------|-------------------|
+| “List our webhooks” | `list_webhooks` tool (current workspace) |
+| “How do I add a webhook?” | Product docs → [Webhooks guide](/integrations/webhooks-guide) |
+| “Do we have API access?” | Check plan + [API doc](/integrations/api-keys-and-rest-api) |
+| “Is HubSpot connected?” | Workspace overview / integration status |
+
+Co-Admin uses the user’s **current workspace** session.
+
+---
+
+## Growth path
+
+| Stage | Stack |
+|-------|-------|
+| **Starting** | **Chat** + **HubSpot** (manual + sync) |
+| **Growing** | **Growth** → **Webhooks** + **Make** or **Zapier** |
+| **Scaling** | **Advanced** → **REST API** + **hosted n8n** + label-based **Broadcasts** |
+
+---
+
+## Related docs
+
+- [Webhooks guide](/integrations/webhooks-guide)
+- [HubSpot integration](/integrations/hubspot-integration)
+- [API keys & REST API](/integrations/api-keys-and-rest-api)
+- [n8n, Zapier & Make](/integrations/n8n-zapier-make)
+- [Integrations FAQ](/integrations/integrations-faq)
+- [Billing — plans](/billing/plans-and-usage)
+- [Onboarding Step 3](/getting-started/onboarding-and-setup-guide)
+
+See [Agent Skill, Lovable, and MCP](/integrations/agent-skill) for editor clients.

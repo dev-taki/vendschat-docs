@@ -1,0 +1,155 @@
+---
+title: 'Use case: Marketing agency (multi-client)'
+description: 'Scenario: Pulse Digital manages WhatsApp and Instagram for six restaurant and retail brands. Each client has its own voice, hours, and menu — one wrong…'
+---
+
+**Scenario:** **Pulse Digital** manages WhatsApp and Instagram for six restaurant and retail brands. Each client has its own voice, hours, and menu — one wrong reply destroys trust.
+
+**Plan:** **Advanced** — multiple **workspaces** under one organization invoice, plus **API** for internal reporting.
+
+---
+
+## The challenge
+
+- Agents must never mix Client A’s promo with Client B’s thread
+- Freelancers should only see one client’s conversations
+- Clients ask for weekly message stats without sharing Meta passwords
+- Some clients run **Click-to-WhatsApp** ads; others are inbox-only
+
+---
+
+## How Pulse structures the account
+
+### Organization vs workspaces
+
+| Layer | Pulse Digital setup |
+|-------|---------------------|
+| **Organization** | One billing account, one owner (agency principal) |
+| **Workspace** | One per client brand — isolated channels, labels, agents, templates |
+| **Channels** | Connected inside each workspace separately |
+
+```text
+Pulse Digital (org)
+├── Workspace: Bistro 22      → WhatsApp + Instagram
+├── Workspace: Green Bowl Co  → Instagram only
+├── Workspace: Taco Norte     → WhatsApp (ads use case)
+└── Workspace: Pulse Internal → Messenger (agency ops)
+```
+
+**Switch workspace:** **Settings** → workspace name **dropdown** at top of the **Workspace** section (not the main app header). Members without **Settings** access use the **Settings** icon → **Switch workspace** popover.
+
+**Important:** Product marketing positions **multiple workspaces** on **Advanced**. Confirm the client’s plan before promising unlimited workspace creation.
+
+### Scoped team access
+
+For a junior freelancer on **Green Bowl Co** only:
+
+| Setting | Value |
+|---------|--------|
+| Workspace | Invite only to `Green Bowl Co` |
+| Role | **Member (Custom)** |
+| Page access | **Chat** + **Templates** only |
+| Label access | Toggle only `Green Bowl`-related labels (optional) |
+
+Owners keep **Billing & Usages** and **API Keys** (organization owner only).
+
+**Member (Chat-only)** is fine for full-time client agents who don’t need **Templates** or **Analytics**.
+
+**Label restrictions:** When a custom member has specific labels selected, they only see threads with those labels in **Chat**. Empty label selection = see all threads (use explicit toggles for freelancers).
+
+### AI Agent per brand
+
+Each workspace gets its own **AI Agent** — knowledge never crosses workspaces.
+
+| Workspace | Agent | Template | Knowledge |
+|-----------|-------|----------|-----------|
+| Bistro 22 | Bistro Concierge | Receptionist | Menu PDF |
+| Taco Norte | Taco Sales | Sales | Catering packages + hours |
+| Green Bowl | (none — human only) | — | — |
+
+**Pause globally:** **AI Agents** list → toggle **Paused** during client crises or menu changes.
+
+**Assign in Chat:** Recipient panel → **Assigned to** → brain icon → pick agent.
+
+### Templates per approval cycle
+
+Agency submits WhatsApp templates per client in **Templates → My Templates**. Account lead tracks **Approved / Pending / Rejected** before any broadcast.
+
+Never reuse Client A’s template name for Client B — Meta approval is per WABA/workspace context.
+
+### Client reporting without Meta access
+
+Weekly deliverable for Bistro 22:
+
+1. Switch to **Bistro 22** workspace in **Settings**
+2. **Analytics** → WhatsApp channel → **Last 7 days** → **Apply**
+3. Screenshot summary cards or **Export** CSV (message trend, template performance)
+4. Optional: **Message logs** filtered by **Failed** for ops notes
+
+Messenger/Instagram volume: **Analytics** home channel cards + **Chat** filters — full delivery/read dashboard is **WhatsApp-focused** today.
+
+### Broadcasts for client promos (Growth+ per client org)
+
+Taco Norte’s weekend special:
+
+1. Label engaged diners `Taco-VIP` during the week
+2. **Chat** → template composer → **Broadcast** → labels `Taco-VIP` → approved template
+3. Schedule Saturday 11:00 UTC
+
+Each client workspace runs its own broadcast — no cross-workspace audience.
+
+### Co-Admin for account managers
+
+Before a client call:
+
+- *“Give me an overview of this workspace”* — channels, open threads
+- *“List our WhatsApp channels”* — confirm connected numbers
+- *“What plan are we on?”* — billing context
+
+Remind account managers to **switch workspace** in Settings first — Co-Admin reads the **current session workspace**.
+
+### Optional: API dashboard (Advanced)
+
+Pulse’s engineering team uses **API Keys** to feed a TV screen: open `Enterprise` label thread count per workspace. Not required for day-to-day agency work.
+
+---
+
+## What Pulse does *not* do (common mistakes)
+
+| Mistake | Why it fails |
+|---------|----------------|
+| One workspace, labels only for separation | Freelancers still see all labels unless restricted; higher mix-up risk |
+| Share one AI Agent across clients | Knowledge and tone bleed |
+| Promise HubSpot live sync in **Chat** panel | Integration connect exists; full CRM panel sync may not be visible yet |
+| Use `/broadcast` page for campaigns | Primary flow is **Chat** template modal → **Broadcast** tab |
+
+---
+
+## Results agencies care about
+
+- Zero cross-client thread leaks via workspace isolation
+- Faster freelancer onboarding with **Member (Custom)** roles
+- Client-ready reporting from **Analytics** exports — no Meta seat license per client
+
+---
+
+## Copy-paste playbook
+
+1. **Advanced** plan + **Settings → Organization → Workspaces** — one workspace per client  
+2. **Channels** catalog per workspace — WhatsApp / Instagram / Messenger as needed  
+3. WhatsApp **Support only** vs **Support, sales & ads** per client ad strategy  
+4. Labels per workflow: `Reservation`, `Catering`, `Complaint`  
+5. One **AI Agent** + brand knowledge per workspace (optional)  
+6. **Member (Custom)** for freelancers; owners on billing  
+7. Weekly **Analytics** CSV/screenshot per client WhatsApp number  
+8. **Co-Admin** for pre-call workspace snapshot  
+
+---
+
+## Related docs
+
+- [Use cases overview](/use-cases/use-cases-overview)
+- [Workspaces & channels](/channels/workspaces-and-channels-overview)
+- [Assignments & teams](/inbox/assignments-and-teams)
+- [Billing — Advanced](/billing/pricing-plans-reference)
+- [Analytics](/analytics/channel-performance)

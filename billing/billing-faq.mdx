@@ -1,0 +1,300 @@
+---
+title: 'Billing FAQ'
+description: 'Extended question-and-answer bank for Co-Admin when customers ask about plans, pricing, usage, invoices, seats, trials, and upgrades. Answers use…'
+---
+
+Extended question-and-answer bank for Co-Admin when customers ask about **plans, pricing, usage, invoices, seats, trials, and upgrades**. Answers use dashboard language — no engineering jargon.
+
+---
+
+## Plans & pricing
+
+### What plans does Vendschat offer?
+
+Three families: **Starter** ($40/mo, unlimited contacts), **Growth** (from $20/mo with 200 contacts included — scales to 1,500), and **Advanced** (from $30/mo with 200 contacts — adds API, multiple workspaces, and managed n8n). Above **1,500 contacts/month**, contact **Sales** for custom pricing.
+
+### How much does Starter cost?
+
+**$40 per month** (or **$384/year** with annual billing — about 20% savings). Includes **unlimited contacts** and **10 team seats free**. Extra seats are **$10/seat/month**.
+
+### How much does Growth cost?
+
+Depends on contact tier:
+
+- 200 contacts: **$20/mo**
+- 350: **$30/mo**
+- 500: **$40/mo**
+- 1,000: **$60/mo**
+- 1,500: **$80/mo**
+- 1,500+: **Contact Sales**
+
+Add **$20/seat/month** for each team member above **10 free seats**.
+
+### How much does Advanced cost?
+
+Depends on contact tier:
+
+- 200 contacts: **$30/mo**
+- 350: **$40/mo**
+- 500: **$50/mo**
+- 1,000: **$70/mo**
+- 1,500: **$90/mo**
+- 1,500+: **Contact Sales**
+
+Add **$20/seat/month** for each team member above **10 free seats**.
+
+### What’s the difference between Growth and Advanced?
+
+Same contact tier options, but **Advanced** adds **Developer API**, **multiple workspaces**, a **managed n8n instance** (4 vCPU, 8 GB RAM, 75 GB storage), **dedicated account manager**, and **SLA**. **Growth** is right for broadcasts, webhooks, and integrations without API/multi-workspace needs.
+
+### Is there a free plan?
+
+New organizations start on an internal **`free`** tier with a **100-contact** limit until subscribing. The main public offer is a **14-day Growth free trial** — no credit card required. You must **choose and pay** for a plan before trial ends to continue without interruption.
+
+### Where is billing in settings?
+
+**Settings → Organization → Billing & Usages** (`/settings/organization/billing&usages`). Page title: **Billing & Usage**.
+
+### Can I downgrade from the dashboard?
+
+**Not with a dedicated downgrade button.** Use **Stripe Billing Portal**, contact **support**, or (for owners) the backend downgrade-request flow. Plan downgrades may require sales review if contact usage exceeds the target tier.
+
+### Why does Current Plan say “per month” on an annual subscription?
+
+The Billing & Usage card always shows *“per month”* under the base price. Check **Next billing date** and your Stripe invoice for annual vs monthly billing.
+
+### Do plan card prices match checkout?
+
+Plan cards show **display prices** plus extra seats. **Stripe Checkout** uses live Stripe price IDs — if totals differ, trust checkout.
+
+### Do you offer annual billing?
+
+Yes. Toggle **Annual (Save up to 20%)** on **Settings → Billing & Usage → Plans** or on [vendschat.com/pricing](https://vendschat.com/pricing). You pay once per year at a discounted rate.
+
+### Do you offer non-profit discounts?
+
+Yes — **20% off** for qualified non-profit organizations. Contact **support** with verification to apply.
+
+### Do you offer enterprise or custom pricing?
+
+Yes. For **more than 1,500 monthly contacts**, compliance requirements, or custom terms, use **Contact Sales** on the Plans page or email your account team.
+
+### Are prices inclusive of tax?
+
+No. Applicable **VAT, GST, or sales tax** may be added at checkout based on your location.
+
+### Do WhatsApp or Meta fees count toward my Vendschat bill?
+
+**Meta WhatsApp conversation fees are separate** from your Vendschat subscription. You may pay Meta directly or through a partner depending on setup. Vendschat bills subscription, seats, and contact overage — not Meta’s per-conversation charges.
+
+---
+
+## Contacts & usage
+
+### What counts as a “contact” for billing?
+
+A **unique person** your organization **messages** during the **current billing period**. Messaging the same person multiple times in one cycle counts **once**.
+
+### Where do I see my contact usage?
+
+**Settings → Organization → Billing & Usage → Usage Overview → Contacts**. Shows used/limit, percentage, and remaining.
+
+### Does Starter have a contact limit?
+
+**No** — Starter includes **unlimited contacts**. You still see usage stats, but there is no cap or overage.
+
+### What happens if I exceed my contact limit on Growth or Advanced?
+
+You are charged **$0.125 per additional contact** beyond your included bucket for that billing period. Billing adjusts **automatically** — you do not have to manually upgrade for overage to apply. You may save money by **upgrading your contact tier** if you consistently go over.
+
+### Do inbound messages from customers count toward contacts?
+
+Billing tracks **unique contacts your organization messages** in the cycle (outbound billing events). Inbound-only conversations where you never reply may not count — but any outbound reply or campaign message to that person does.
+
+### Do broadcasts count toward contacts?
+
+**Yes.** Each **unique recipient** you message in a broadcast counts toward your monthly contact usage.
+
+### If the same person messages on WhatsApp and Instagram, is that two contacts?
+
+Vendschat uses a **unified contact record** per person where possible. Billing counts **unique contacts messaged**, not channels — typically **one person = one contact** per cycle.
+
+### When does contact usage reset?
+
+At the start of each **billing period** (see “Plan started” / “Next billing date” on Billing & Usage).
+
+### Can I buy more contacts without changing plan family?
+
+On **Growth** or **Advanced**, move the **contact slider** to a higher tier (e.g. 200 → 500) on the Plans page. Alternatively, pay **overage** at $0.125/contact without changing tier.
+
+---
+
+## Seats & team size
+
+### How many team members are included?
+
+**10 seats free** on every plan.
+
+### How much do extra seats cost?
+
+- **Starter:** **$10/seat/month**
+- **Growth & Advanced:** **$20/seat/month**
+
+### What’s the difference between “Active” and “Billed” seats?
+
+- **Active:** seats you’re using now
+- **Billed:** what Stripe charges this period
+
+If you reduce seats, active may drop immediately while billed stays higher until the **end of the billing period**.
+
+### Do I need an extra seat for a read-only manager?
+
+Any user with login access counts as a **seat**. Review roles with your owner — there is no separate “viewer-only” seat SKU in self-serve billing.
+
+### How do I add seats?
+
+**Owner:** go to **Plans**, increase the seat selector, and complete checkout — or adjust subscription via **Stripe portal** where available.
+
+---
+
+## Billing, payment & invoices
+
+### Who can manage billing?
+
+Only the **organization owner** can upgrade, open Stripe portal, or change paid seat counts. Admins and members see usage but get *“Contact owner to manage billing.”*
+
+### How do I update my credit card?
+
+**Settings → Billing & Usage → Open Stripe Portal → Payment method**.
+
+### Where are my invoices?
+
+**Stripe Billing Portal → Invoice history**. Download PDFs from there.
+
+### What payment methods are accepted?
+
+Card payments processed by **Stripe** (major cards supported per Stripe in your region).
+
+### When am I charged?
+
+At the **start of each billing period** (monthly or annual). Overage and prorated upgrades may appear on the same or next invoice per Stripe rules.
+
+### Can I get a refund?
+
+Subscription fees are **generally non-refundable**, including partial periods and mid-cycle downgrades. Exceptions only where **law requires**. Email **support@vendschat.com** for case-by-case review.
+
+### How do I cancel?
+
+**Stripe Billing Portal → Manage subscription**, or email **support@vendschat.com**. Cancellation takes effect at the **end of the current paid period**.
+
+### My payment failed — what now?
+
+Status may show **Past due** or **Unpaid**. Update your card in the **Stripe portal** immediately to avoid service interruption.
+
+---
+
+## Upgrades, downgrades & changes
+
+### Can I switch plans later?
+
+**Yes.** Upgrade anytime from **Billing & Usage → Plans**. Downgrades may require support/sales review, especially if your **current contact usage** exceeds the lower tier’s limit.
+
+### Can I upgrade from Starter to Growth mid-cycle?
+
+Yes — owner completes new checkout. Stripe typically **prorates** charges.
+
+### Can I downgrade from Advanced to Growth?
+
+Submit a downgrade request. If you use **API** or **multiple workspaces**, those features stop when the downgrade takes effect. Check **contact usage** vs new limit to avoid disruption.
+
+### What is “Contact Sales” on the 1500+ tier?
+
+Self-serve checkout is not available above **1,500 contacts**. Sales provides custom pricing and contract.
+
+### Is the “Advanced add-on” still available?
+
+**No** — it’s deprecated. Choose a full **Advanced** plan (e.g. Advanced 500) instead.
+
+---
+
+## Features & plan eligibility
+
+### Which plan includes broadcasts?
+
+**Growth** and **Advanced**. Not **Starter**.
+
+### Which plan includes webhooks and Zapier/Make/n8n?
+
+**Growth** and **Advanced** for integrations. **Hosted n8n instance** is **Advanced only**.
+
+### Which plan includes custom AI Agents?
+
+**Growth** and **Advanced**.
+
+### Which plan includes the Developer API?
+
+**Advanced** only.
+
+### Which plan includes multiple workspaces?
+
+**Advanced** only. Starter and Growth are typically **single-workspace** oriented for billing (check current product limits in dashboard).
+
+### Which channels are on every plan?
+
+**WhatsApp Business**, **Facebook Messenger**, and **Instagram Direct** on all paid tiers.
+
+### Which plan has priority support?
+
+**Growth** and **Advanced**. **Dedicated account manager** and **SLA** are **Advanced** only.
+
+---
+
+## Trials & getting started
+
+### How long is the free trial?
+
+**14 days** on **Growth**.
+
+### Do I need a credit card for the trial?
+
+**No** for the standard marketing trial signup.
+
+### Does the trial auto-convert to paid?
+
+**No.** You must **actively select and pay** for a plan.
+
+### What happens when the trial ends?
+
+Subscribe to **Starter**, **Growth**, or **Advanced** to continue. Without a paid plan, features may be restricted or access limited.
+
+---
+
+## Security & compliance (billing context)
+
+### Is my payment data stored by Vendschat?
+
+Card details are handled by **Stripe** — Vendschat does not store full card numbers on its servers.
+
+### Is my data secure?
+
+Vendschat uses enterprise-grade encryption and backups. See Terms and Privacy Policy for full details. Enterprise customers on **Advanced / Sales** can discuss **SLA** and compliance needs.
+
+---
+
+## Co-Admin phrasing tips
+
+When answering from this FAQ:
+
+1. **Point to the UI** — “Open **Settings → Billing & Usage**”
+2. **State limits clearly** — numbers beat vagueness
+3. **Separate Vendschat vs Meta fees** when discussing “why is my bill high?”
+4. **Mention owner role** when user can’t click Upgrade
+5. **Offer next step** — upgrade path, portal for invoices, or support email
+
+---
+
+## Related
+
+- [Billing overview](/billing/billing-overview)
+- [Plans, billing & usage](/billing/plans-and-usage)
+- [Pricing & plan reference](/billing/pricing-plans-reference)

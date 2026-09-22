@@ -1,0 +1,308 @@
+---
+title: 'Channels & workspaces — FAQ'
+description: 'Extended Q&A for AI Workspace Co-Admin — navigation, permissions, connection issues, and how channels relate to billing and analytics.'
+---
+
+Extended Q&A for **AI Workspace Co-Admin** — navigation, permissions, connection issues, and how channels relate to billing and analytics.
+
+Use this when customers ask *“where do I…?”*, *“why can’t I…?”*, or *“what’s the difference between…?”*
+
+---
+
+## Organization, workspace & channel basics
+
+### What is the difference between an organization and a workspace?
+
+| | **Organization** | **Workspace** |
+|---|------------------|-----------------|
+| **Purpose** | Company account — billing, legal entity | Team’s daily operating environment |
+| **Settings path** | **Settings → Organization → …** | **Settings → Workspace → …** |
+| **Billing** | Yes — one subscription per org | No — usage rolls up to org |
+| **Channels** | No — channels live in workspaces | Yes — each workspace has its own channels |
+| **Chat inbox** | No | Yes — threads for that workspace’s channels |
+
+**Example:** Agency **Pulse Digital** (organization) has workspaces `Client A`, `Client B`, `Internal` — each with separate WhatsApp numbers and inboxes. One invoice.
+
+### What is a channel?
+
+A **channel** is one connected messaging account: one WhatsApp number, one Facebook Page (Messenger), or one Instagram business account. Channels belong to exactly **one workspace**.
+
+### Can the same WhatsApp number be in two workspaces?
+
+**No.** Each connection is scoped to the workspace where you completed setup. Connect again in another workspace only if Meta allows a separate integration (typically one production number per WABA context).
+
+### Do channels share across my team?
+
+**Yes, within a workspace.** All members with **Chat** access see threads from that workspace’s channels. **Settings → Channels** is usually for owners/admins.
+
+---
+
+## Navigation
+
+### Where do I see all my connected channels?
+
+**Settings → Workspace → Channels** (`/settings/workspace/channels`)
+
+Shows **Connected Channels** grid: icon, name, **Channel ID**, **Manage** button, and **Browse Channels** / **Add Channel** for more.
+
+### How do I add a new channel?
+
+1. **Settings → Workspace → Channels**
+2. Click **Add Channel** (or **Browse Channels** dashed card)
+3. **Channel Catalog** (`/settings/workspace/channels/catalog`)
+4. Pick **WhatsApp**, **Messenger**, or **Instagram** → **Connect Channel**
+5. Complete the setup wizard
+
+**Other entry points:**
+- **Analytics** home → **Connect new channel** card → Channels list → Add Channel
+- Onboarding wizard (first channel) — see [First channel & inbox](/getting-started/first-channel-and-inbox)
+
+### How do I manage or reconnect an existing channel?
+
+1. **Settings → Workspace → Channels**
+2. Click the channel card (or **Manage**)
+3. Opens setup with your channel pre-selected, e.g.  
+   `/settings/workspace/channels/whatsapp/setup?channelId=123`
+
+Use **Connect** step to reconnect if status is **disconnected** or **error**.
+
+### Where is the Channel Catalog?
+
+**Settings → Workspace → Channels → Add Channel**  
+URL: `/settings/workspace/channels/catalog`
+
+Shows: WhatsApp Business, Facebook Messenger, Instagram Direct, and **Request New Channel** (for future types like Telegram, SMS, email, web chat).
+
+### What channel types exist in the product today?
+
+**Self-serve connect:** WhatsApp, Messenger, Instagram  
+
+**Listed for future / request:** Telegram, SMS, Email, Web chat (catalog “Request New Channel” — submit via support)
+
+### Where are workspace settings vs organization settings?
+
+| Section | Path examples |
+|---------|---------------|
+| **Organization** | Account Info, **Workspaces**, Billing & Usage |
+| **Workspace** | General Info, **Channels**, Labels, Team Members, Groups, API Keys, Webhooks |
+
+Mobile: **Settings** hub lists the same destinations.
+
+---
+
+## Workspaces
+
+### Where do I manage workspaces?
+
+**Settings → Organization → Workspaces** (`/settings/organization/workspaces`)
+
+### How do I switch workspace?
+
+**Method 1 (fast):** **Settings** → click **workspace name dropdown** at top of Workspace section (visible when you have **2+** workspaces) → select another.
+
+**Method 2:** Workspaces page — note which has **Current** badge; switching happens via dropdown or after create/delete flows.
+
+Switching updates your session: **Chat**, **Channels**, **Labels**, and **Analytics** all reflect the new workspace.
+
+### Who can create a workspace?
+
+**Organization owner** only. After create, you are **automatically switched** into the new workspace.
+
+Button: **Create Workspace** on Workspaces page.
+
+### How many workspaces can I have?
+
+| Plan | Typical expectation |
+|------|---------------------|
+| **Starter / Growth** | One primary workspace for most teams |
+| **Advanced** | **Multiple workspaces** — agencies and multi-brand setups |
+
+See [Billing — pricing reference](/billing/pricing-plans-reference). Enforcement may evolve; **Advanced** is the plan marketed for multi-workspace.
+
+### Who can rename or delete a workspace?
+
+**Workspace owner** (your role on that workspace row):
+
+- **Edit** — change name  
+- **Delete** (trash icon) — confirm in dialog  
+
+**Rules:**
+- Cannot delete your **only** workspace  
+- Deletion is **permanent from active use** (workspace marked inactive)  
+- If you delete the workspace you’re in, app switches you to another you belong to  
+
+### What happens to channels when I create a new workspace?
+
+**Nothing carries over.** New workspace starts empty — connect channels again from **Channel Catalog**.
+
+### Where do I edit workspace name, address, email?
+
+| Action | Path |
+|--------|------|
+| Rename (owner) | **Settings → Organization → Workspaces** → **Edit** |
+| Address & email | **Settings → Workspace → General Info** → **Save Information** |
+
+### I have two workspaces but don’t see the switcher
+
+The dropdown appears only when you belong to **2 or more** workspaces. With one workspace, the sidebar shows the static label **Workspace**.
+
+---
+
+## WhatsApp
+
+### Support only vs Support, sales & ads — which do I pick?
+
+| | **Support only** | **Support, sales & ads** |
+|---|------------------|--------------------------|
+| **Pick if** | Inbox + templates only | You run Click-to-WhatsApp ads |
+| **Includes** | Shared inbox, templates | Above + ad attribution & Meta sales signals |
+
+Path: first step of **WhatsApp setup** before Prepare.  
+Deep dive: [WhatsApp guide](/channels/whatsapp).
+
+### Can I connect more than one WhatsApp number?
+
+**Yes.** Each number is a separate channel card in **Settings → Workspace → Channels**. Run the WhatsApp setup wizard again from the catalog.
+
+### Why don’t I see channel status on the Channels list?
+
+The grid shows name and **Channel ID** only. Open **Manage** (`?channelId=`) to see **Status**, connected date, and reconnect options.
+
+### How do I disconnect a channel?
+
+There is **no Disconnect button** in the dashboard UI. Use **Manage → Connect** to refresh tokens, revoke the app in Meta/Instagram, or contact **support**. Backend disconnect APIs exist for operators.
+
+### “This WhatsApp number is already connected to another workspace”
+
+The same Meta phone number ID cannot be active in two Vendschat workspaces. Disconnect it from the other workspace or choose a different number.
+
+### What does Channel ID mean on the card?
+
+Meta **routing identifier** — WhatsApp **phone number ID**, Messenger **Page ID**, or Instagram **user ID** — not always the human-readable phone number or @handle.
+
+### Why can’t I type a free-form message in Chat?
+
+WhatsApp’s **24-hour window**: if the customer hasn’t messaged recently, you must use an **approved template** from **Templates**. The inbox indicates when this applies.
+
+### Can multiple agents answer the same WhatsApp number?
+
+**Yes.** Use assignments and labels for clarity.
+
+### Where do I see WhatsApp delivery analytics?
+
+**Analytics** → click your WhatsApp channel card → full dashboard (date range, exports). See [Analytics docs](/analytics/channel-performance).
+
+### WhatsApp status is “pending” — how long?
+
+Finish **Meta embedded signup** and Business Manager verification. If stuck >24h, reconnect via **Manage** or check Meta Business Suite for alerts.
+
+---
+
+## Messenger & Instagram
+
+### Do I need a Facebook Page for Instagram Direct?
+
+**Not for the current Instagram Business Login flow** in Vendschat. You need a **professional** (business or creator) Instagram account with messaging authorization.
+
+Messenger **does** require a Facebook **Page** with messaging enabled.
+
+### Instagram connect says popup blocked
+
+Allow popups for the Vendschat site, then click **Connect with Instagram** again.
+
+### Can I run broadcasts on Messenger or Instagram?
+
+**Broadcasts** in Vendschat are **WhatsApp** campaigns. Messenger/Instagram are conversation-based in **Chat**.
+
+### Why does Instagram show @username on the channel card?
+
+Display name prefers `display_name`, then `@ig_username` from connection metadata, then type label.
+
+---
+
+## Permissions & roles
+
+### Who can connect channels?
+
+Typically **Owner** or **Admin** with access to **Settings → Workspace → Channels**. **Members** usually have **Chat** only.
+
+### Who can create/delete workspaces?
+
+| Action | Who |
+|--------|-----|
+| Create workspace | **Organization owner** |
+| Edit / delete workspace | **Workspace owner** on that row |
+| Pay / upgrade plan | **Organization owner** |
+
+### I’m a member and don’t see Channels in Settings
+
+Expected if your role is **Chat-only**. Ask an owner or admin to connect channels or upgrade your role.
+
+---
+
+## Billing & limits
+
+### Are channels included in my plan?
+
+**Yes** — WhatsApp, Messenger, and Instagram are included on paid plans. See [Plans & usage](/billing/plans-and-usage).
+
+### Do I pay per channel?
+
+**No** separate per-channel fee. **Contacts** and **seats** are counted at **organization** level.
+
+### Does each workspace need its own subscription?
+
+**No.** One **organization** subscription covers all workspaces on that account (subject to plan features).
+
+---
+
+## Analytics & Co-Admin
+
+### Where does Analytics get channel list?
+
+From the **current workspace’s** connected channels. Switch workspace if you’re looking at the wrong client.
+
+### Which channel has the full analytics dashboard?
+
+**WhatsApp** has the richest metrics today (delivery, read, response time, exports). Messenger/Instagram have channel cards; see [Analytics FAQ](/analytics/analytics-faq).
+
+### What can Co-Admin tell me about channels?
+
+Co-Admin can use live tools (in the **current workspace** session):
+
+| Question type | Tool |
+|---------------|------|
+| “How many channels?” / thread counts | Workspace overview |
+| “List our WhatsApp numbers” | List channels (filter by type) |
+| “Delivery rate this week?” | Channel analytics (WhatsApp) |
+
+Tell users to **switch workspace** first if they manage multiple brands.
+
+**Docs vs live data:** Setup steps → product docs. “Are we connected?” → Co-Admin live tools.
+
+---
+
+## Troubleshooting quick hits
+
+| Symptom | First check |
+|---------|-------------|
+| Empty **Chat** | Customer sent inbound? Channel **active**? Correct workspace? |
+| Channel missing after setup | Refresh Channels page; confirm workspace |
+| “No active workspace” | Reload app; open Settings from dashboard |
+| Wrong inbox / wrong brand | **Switch workspace** in Settings dropdown |
+| Can’t delete workspace | Must have **2+** workspaces; must be **workspace owner** |
+| Can’t create workspace | Must be **organization owner** |
+| Disconnected status | **Manage** channel → reconnect OAuth |
+| Request New Channel button | Contact support — future channel types not self-serve yet |
+
+---
+
+## Related docs
+
+- [Channels overview](/channels/channels-overview)
+- [Workspaces & channels overview](/channels/workspaces-and-channels-overview)
+- [WhatsApp](/channels/whatsapp)
+- [Messenger & Instagram](/channels/messenger-and-instagram)
+- [First channel & inbox](/getting-started/first-channel-and-inbox)
+- [Billing](/billing/plans-and-usage)
+- [Analytics](/analytics/channel-performance)

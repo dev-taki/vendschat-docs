@@ -1,0 +1,123 @@
+---
+title: 'Use case: Social commerce seller'
+description: 'Scenario: Nadia sells handmade jewelry on Instagram Direct and confirms payments on WhatsApp. She has one assistant (Sara) and peaks during Eid and…'
+---
+
+**Scenario:** **Nadia** sells handmade jewelry on **Instagram Direct** and confirms payments on **WhatsApp**. She has one assistant (**Sara**) and peaks during Eid and wedding season.
+
+**Plan:** **Growth** — broadcasts to past buyers, custom **AI Agent**, unlimited contacts not needed but Growth unlocks campaigns.
+
+---
+
+## The challenge
+
+- Story replies and DMs flood in during live sales
+- *“Is this still available?”* asked dozens of times per drop
+- She needs to message past buyers without copying numbers into a spreadsheet
+- Sara must run the inbox without Nadia’s personal phone
+
+---
+
+## Drop night — how Nadia and Sara work
+
+| Time | Nadia | Sara |
+|------|-------|------|
+| 7 PM | Goes live on Instagram stories | Opens **Chat**, filter **Instagram** + label `Live-[date]` |
+| 7–9 PM | Handles payment proofs on WhatsApp | Replies to availability questions using **Generate Reply** |
+| 9 PM | Pauses **AI Agent** | Labels paid orders `Paid`, `Ship pending` |
+| Next day | **Broadcast** `back_in_stock` to `Repeat buyer` on WhatsApp | Packs orders |
+
+---
+
+## How Nadia uses Vendschat
+
+### Instagram + WhatsApp in one Chat
+
+**Settings → Workspace → Channels** → connect **Instagram Direct** + **WhatsApp**.
+
+During a live sale, both see every *“PRICE?”* reply in **Chat** (`/chat`). Filter by channel icon or label — no app switching.
+
+**Instagram setup:** Allow **popups** in the browser for **Connect with Instagram** — blocked popups are the #1 setup failure.
+
+### Labels for drop workflow
+
+| Label | Meaning |
+|-------|---------|
+| `Live-Mar14` | Asked during tonight’s live |
+| `Paid` | Payment confirmed (screenshot in thread) |
+| `Ship pending` | Needs courier |
+| `Repeat buyer` | Bought before — broadcast audience |
+
+Create labels in **Settings → Workspace → Labels**. Sara filters **Chat** to `Live-Mar14` + unread — works top to bottom.
+
+### Quick replies with Generate Reply
+
+**Settings → Workspace → Generate Reply** — Nadia adds tones:
+
+- **Friendly short** — *“Yes love, still available! Want me to hold it 30 min?”*
+- **Translate** — when buyers write in English
+
+In **Chat**, highlight draft text → sparkle **Generate Reply** → pick tone → edit one line → send.
+
+Generate Reply helps **humans** — it does not auto-send to customers.
+
+### AI Agent during live hour only
+
+| Setting | Value |
+|---------|--------|
+| **Agent** | Nadia Studio Bot |
+| **Template** | Support |
+| **Knowledge** | Size chart + materials page (website source) |
+| **Status** | **Paused** most days — toggle **Active** only during drops |
+| **Instructions** | Answer length/size/material; never confirm payment |
+
+**Actions** (Update labels, Add comments): train in instructions — e.g. *“When someone asks price during a live, mention the live discount.”* Automated label application from bot actions is **instruction-guided** today; Sara still labels `Paid` manually when she sees proof.
+
+**Assignment:** For high-volume drops, leave low-value threads **Unassigned** with bot **Active**; Sara takes over threads she assigns to herself.
+
+### WhatsApp broadcast to past buyers
+
+After restocking a bestseller:
+
+1. Label everyone who bought before: `Repeat buyer` (during normal chats)
+2. Ensure template `back_in_stock` is **Approved** in **Templates**
+3. **Chat** → composer **Templates** → **Broadcast** tab
+4. Select labels: `Repeat buyer` → pick template (image header if configured)
+5. Optional **Schedule at (UTC)** for 8 PM local (convert to UTC)
+
+**Requires Growth plan** for label broadcasts. Starter can still run inbox + Instagram; upgrade before the campaign.
+
+### Product photos on WhatsApp
+
+Nadia sends **product images** from **Chat** composer (photo attachment) when buyers ask *“show me the gold set.”*
+
+**WhatsApp catalog product cards** (Meta Commerce catalog) are supported on the platform backend but **do not have a product picker in the composer UI yet** — use images + links in templates or manual media until catalog composer ships.
+
+---
+
+## Results solo sellers care about
+
+- Never miss a story reply while packing orders
+- Repeat revenue from labeled `Repeat buyer` broadcasts
+- Sara runs **Chat** without Nadia’s personal phone — same workspace login
+
+---
+
+## Copy-paste playbook
+
+1. Connect **Instagram Direct** + **WhatsApp**  
+2. Labels: `Live-[date]`, `Paid`, `Ship pending`, `Repeat buyer`  
+3. **Generate Reply** tones for Nadia’s voice  
+4. **AI Agent** — **Paused** by default; **Active** only during drops  
+5. **Growth** plan + approved template before first **Broadcast**  
+6. **Analytics** on WhatsApp number after campaigns (24h wait for read rate)  
+
+---
+
+## Related docs
+
+- [Use cases overview](/use-cases/use-cases-overview)
+- [Messenger & Instagram](/channels/messenger-and-instagram)
+- [Composer & Generate Reply](/inbox/composer-generate-reply)
+- [Broadcasts](/broadcasts/campaigns)
+- [Templates in Chat](/templates/templates-in-chat-and-broadcasts)

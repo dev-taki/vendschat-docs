@@ -1,0 +1,145 @@
+---
+title: 'Co-Admin vs customer AI Agents'
+description: 'Vendschat has two different AI systems. Confusing them is the most common operator mistake. Co-Admin must explain the distinction clearly whenever users…'
+---
+
+Vendschat has **two different AI systems**. Confusing them is the most common operator mistake. Co-Admin must explain the distinction clearly whenever users mention “AI”, “bot”, or “agent” without context.
+
+---
+
+## One-line distinction
+
+| | **AI Workspace Co-Admin** | **Customer AI Agents** |
+|--|---------------------------|-------------------------|
+| **Talks to** | Your employees | Your customers |
+| **Lives in** | **AI Workspace Co-Admin** (`/co-admin`) | **AI Agents** settings + **Chat** inbox |
+| **Knows** | Vendschat product docs + live workspace metrics | Your FAQ, website, files you upload |
+| **Can send customer messages?** | **No** | **Yes** (when assigned to a thread) |
+
+---
+
+## Side-by-side comparison
+
+| Dimension | Co-Admin | Customer AI Agents |
+|-----------|----------|-------------------|
+| **Audience** | Internal team | End customers on WhatsApp, Messenger, Instagram |
+| **Navigation** | Left nav → **AI Workspace Co-Admin** | **AI Agents** + thread assignment in **Chat** |
+| **Configuration** | None (enabled per deployment) | Create bot, knowledge sources, prompts, test |
+| **Knowledge** | Ingested `co-admin-docs/` (product) | `ai_knowledge_*` — URLs, files, Q&A you provide |
+| **Live workspace tools** | Yes (6 read-only tools) | No |
+| **Inbox message read** | No (aggregates only via contact analytics) | Yes, in assigned threads |
+| **Inbox message send** | No | Yes, as the bot identity |
+| **Handover to human** | N/A | Yes — `ai_handover_status` on threads |
+| **Generate Reply** | Explains feature only | Separate inbox **assist** for human agents drafting replies |
+| **Billing** | Uses org OpenRouter for Co-Admin chat | AI usage may count against plan AI limits (see `billing/`) |
+
+---
+
+## Customer AI Agents — what they are
+
+Customer AI Agents are **bots you configure** to handle conversations with shoppers, patients, leads, etc.
+
+Typical setup path (Co-Admin cites docs; does not perform):
+
+1. **AI Agents** → Create agent → name, tone, instructions  
+2. Add **knowledge** — website crawl, PDFs, manual Q&A  
+3. Test in the agent tester  
+4. Assign to channels or let **Chat** routing assign threads  
+5. Monitor handover when the bot escalates to humans  
+
+Deep guides: `ai-agents/` folder (overview, create/train, assignment, knowledge, FAQ).
+
+---
+
+## Co-Admin — what it is
+
+Co-Admin helps **your team run Vendschat**:
+
+- “How many open threads?”  
+- “How do templates work?”  
+- “What webhooks are active?”  
+- “WhatsApp read rate last week?”  
+
+It never impersonates a customer-facing brand voice in the inbox.
+
+---
+
+## Generate Reply (third concept)
+
+**Generate Reply** is **not** a customer AI Agent and **not** Co-Admin.
+
+| | Generate Reply | Customer AI Agent | Co-Admin |
+|--|----------------|-------------------|----------|
+| **User** | Human agent in Chat | Customer | Internal operator |
+| **Trigger** | Agent clicks generate | Customer message | Operator asks in Co-Admin |
+| **Output** | Draft for human to edit/send | Automatic bot reply | Guidance + data |
+| **Knowledge** | Thread context + settings | Agent knowledge base | Product docs + tools |
+
+When users ask “Should I use AI Agent or Generate Reply?” → search `ai-agents/` docs and explain: **Agent** = autonomous customer bot; **Generate Reply** = copilot for staff.
+
+---
+
+## Thread assignment and handover
+
+From `get_contact_analytics`, each conversation may show:
+
+| Field | Meaning |
+|-------|---------|
+| `assignee.type === "ai_agent"` | Customer bot owns the thread |
+| `assignee.type === "user"` | Human workspace member |
+| `assignee.type === "team"` | Group/team queue |
+| `ai_handover_status` | Handover state when bot escalates |
+
+**Handover trigger (product accuracy):** Handover is tied to **bot behavior** and configuration — not merely “customer typed an angry message.” See `ai-agents/` for handover rules.
+
+Co-Admin can **report** handover status via contact analytics but **cannot** change assignment.
+
+---
+
+## Example scenarios
+
+### Scenario A — Pulse Digital (agency)
+
+- **Co-Admin:** Account lead asks “How many channels in Client A workspace?” (after switching workspace).  
+- **Customer AI Agent:** End shopper asks Client A’s WhatsApp “Do you ship to Dhaka?”  
+- **Wrong:** Training the client’s FAQ in Co-Admin — Co-Admin cannot access `ai_knowledge_*`.
+
+### Scenario B — UrbanGear (e-commerce)
+
+- **Customer AI Agent:** Handles order status on Instagram.  
+- **Generate Reply:** Support rep drafts a personalized apology in Chat.  
+- **Co-Admin:** Ops lead asks “How do I connect Instagram?” and “Overview of unread threads.”
+
+### Scenario C — Metro Clinics
+
+- **Customer AI Agent:** Appointment FAQ on WhatsApp.  
+- **Co-Admin:** Office manager asks “How many AI agents are active?” → `get_workspace_overview`.  
+- **Contact analytics:** “Show threads for patient ali@email.com” — metadata only, not clinical notes in messages (user must open Chat for content).
+
+---
+
+## What to tell users who conflate the two
+
+> **Co-Admin** is your internal guide to Vendschat and your workspace stats.  
+> **AI Agents** are the customer-facing bots you build under **AI Agents** with your own knowledge.  
+> To change what customers hear, edit the **AI Agent** — not Co-Admin.
+
+---
+
+## Privacy comparison
+
+| Data | Co-Admin | Customer AI Agent |
+|------|----------|-------------------|
+| Product documentation | Yes (RAG) | No |
+| Agent knowledge base | **No access** | Yes |
+| Full message transcripts | **No** | Yes (assigned threads) |
+| Workspace metrics | Yes | No |
+
+---
+
+## Related documents
+
+- [Overview](/co-admin/co-admin-overview)  
+- [Question routing](/co-admin/co-admin-question-routing) — disambiguating “agents”  
+- `ai-agents/customer-ai-agents.md` — customer bot product guide  
+- [Limitations & FAQ](/co-admin/co-admin-limitations-and-faq)

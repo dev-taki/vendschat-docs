@@ -1,0 +1,90 @@
+---
+title: "Broadcasts"
+description: "Send one approved WhatsApp message to a segment from Broadcast → New broadcast. Labels, CSV, 24-hour window, Growth plan."
+---
+
+Send one approved message to a whole segment — product launches, appointment reminders, win-back campaigns.
+
+<Info>
+  **Live path (Sep 2026):** sidebar **Broadcast** (`/broadcast`) → **New broadcast**. Campaign name, channel, Existing contacts or New numbers (CSV), then **Create & compose**. Older notes that said the Broadcast page was unwired are **out of date**.
+</Info>
+
+<Warning>
+  WhatsApp’s 24-hour session window is real. Inside it you can send a session message. Outside it you must use a Meta-**Approved** template. Most campaigns go out as templates.
+</Warning>
+
+## How to send a broadcast
+
+<Steps>
+  <Step title="Prepare the segment">
+    Apply a label in **Chat** while you work (`VIP`, `Appt-Mon`, `Newsletter`). Or keep a CSV of numbers that already consented.
+  </Step>
+  <Step title="Approve the template">
+    **Templates** → WhatsApp channel card → **Create New Template**. Wait for Meta **Approved**. Drafts are not saved — finish the form in one sitting. See [Creating WhatsApp templates](/templates/creating-whatsapp-templates).
+  </Step>
+  <Step title="Open New broadcast">
+    **Broadcast** → **New broadcast**. Name the campaign for history and analytics (not a random date stamp). Pick the WhatsApp channel.
+  </Step>
+  <Step title="Choose recipients">
+    **Existing contacts** — target people already in Vendschat (labels you applied in Chat). **New numbers** — CSV upload when the list is not already in the workspace.
+  </Step>
+  <Step title="Create & compose">
+    Pick the approved template, map variables, send now or **schedule (UTC)**. Dry-run an internal test number first.
+  </Step>
+</Steps>
+
+The green callout on the dialog is the rule: approved templates to any contact, or session messages only inside the 24-hour window.
+
+**Plan:** reminder and marketing broadcasts need **Growth**.
+
+## Example: BloomBox Flowers
+
+Mother’s Day — 400 past buyers should get the same offer.
+
+| Step | What BloomBox did |
+| --- | --- |
+| 1 | Labeled repeat buyers `MOM-2025` during April chats |
+| 2 | Created WhatsApp template `mothers_day_15off` (image + button) |
+| 3 | **Broadcast → New broadcast** → Existing contacts → label `MOM-2025` |
+| 4 | Scheduled Sunday 10 AM UTC |
+| 5 | Watched **Analytics** next morning for delivered / read / failed |
+
+Replies land in **Chat**. Staff a `MOM-2025-reply` label.
+
+## Example: Metro Clinics reminders
+
+Sunday 5 PM UTC to everyone labeled `Appt-Mon`, template `appointment_reminder` + **Confirm** button. Never put lab values in the template. Full playbook: [Clinics & appointments](/use-cases/clinics-and-appointments).
+
+## When to use broadcasts
+
+| Use case | Template idea |
+| --- | --- |
+| Sale announcement | Image header + shop link button |
+| Appointment reminder | Date variable + Confirm button |
+| Back in stock | Product name + “Order now” |
+| Win-back | “We miss you” + discount code |
+
+## After send
+
+- Watch **Analytics** — delivered, read, failed
+- Staff **Chat** for replies
+- Honor stop requests — label `Do-not-broadcast`
+- Pause the next campaign if failure rate spikes (bad numbers, variable mapping)
+
+## First broadcast checklist
+
+<AccordionGroup>
+  <Accordion title="Before you click send">
+    - Template **Approved** in Meta
+    - Label (or CSV) is the list you intend
+    - Test send to an internal number
+    - Agents briefed on reply volume
+    - **Analytics** bookmarked for the next morning
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+- [Templates in Chat & broadcasts](/templates/templates-in-chat-and-broadcasts)
+- [Shared inbox & labels](/inbox/shared-inbox-and-labels)
+- [Channel performance](/analytics/channel-performance)

@@ -1,0 +1,165 @@
+---
+title: 'HubSpot CRM integration'
+description: 'Connect your HubSpot account to sync contacts and keep CRM fields aligned with Vendschat customer profiles.'
+---
+
+Connect your **HubSpot** account to sync contacts and keep CRM fields aligned with Vendschat customer profiles.
+
+**Who this is for:** Sales and marketing teams using HubSpot alongside **Chat**.
+
+**Entry:** **Settings → Workspace → Integrations** → **HubSpot** card → **Connect**
+
+**Plan:** HubSpot is listed on **Starter**, **Growth**, and **Advanced** in the pricing matrix. Confirm your workspace plan in **Billing & Usage**.
+
+---
+
+## Quick reference
+
+| Task | Where |
+|------|--------|
+| Open catalog | **Settings → Workspace → Integrations** |
+| Connect HubSpot | HubSpot card → **Connect** (OAuth) |
+| Check status | Card shows **Active** / **Not connected** + contact count |
+| Disconnect | HubSpot settings / integration detail (after connect) |
+| Manual sync | Trigger re-sync from integration management (when available in UI) |
+| Field mapping | Configure HubSpot ↔ Vendschat contact fields |
+
+---
+
+## What HubSpot integration does
+
+| Capability | Benefit |
+|------------|---------|
+| **OAuth connect** | Secure link to your HubSpot portal — no API key pasting |
+| **Contact sync** | Vendschat customers map to HubSpot contacts |
+| **Field mapping** | Control which HubSpot properties sync to Vendschat fields |
+| **Initial sync job** | After connect, background job imports/syncs contacts |
+
+HubSpot does **not** send WhatsApp messages for you — it enriches **who** the customer is while your team uses **Chat**.
+
+---
+
+## Example: Harbor Legal Services
+
+**Harbor** uses HubSpot for intake pipeline stages.
+
+1. **Integrations** → HubSpot → **Connect**
+2. HubSpot OAuth — approve Vendschat app for their portal
+3. Default field mappings created (name, email, phone, company, lifecycle stage)
+4. Initial contact sync runs in background
+5. When a new WhatsApp lead messages **Chat**, recipient panel shows synced HubSpot fields
+6. Lifecycle stage updates in HubSpot when ops updates mapped fields in Vendschat
+
+---
+
+## Integration catalog card
+
+On **Settings → Workspace → Integrations**:
+
+| UI element | Meaning |
+|------------|---------|
+| **HubSpot** title | CRM integration |
+| Status dot | Green **Active** or gray **Not connected** |
+| Contact count | e.g. `0 contacts` or synced count |
+| Description | *“Sync CRM data and automate marketing workflows”* |
+| **Connect** | Starts OAuth (when not connected) |
+| **Manage** | Opens connection settings (when connected) |
+
+**Search:** Use *“Search integrations…”* to filter cards.
+
+---
+
+## Connect flow (OAuth)
+
+```text
+Vendschat Integrations → Connect
+    → HubSpot login & authorize
+    → Redirect back to Vendschat
+    → Connection saved + default field mappings
+    → Initial contact sync enqueued
+```
+
+**What gets stored:**
+
+- HubSpot portal ID and domain  
+- OAuth tokens (refreshed automatically)  
+- Connection status (active / disconnected)  
+
+**Scopes:** Vendschat requests HubSpot scopes needed for contact read/write per product configuration.
+
+---
+
+## Default contact field mappings
+
+When you connect, these mappings are created automatically:
+
+| HubSpot property | Vendschat field | Editable in mapping |
+|------------------|-----------------|---------------------|
+| `firstname` | Custom HubSpot first name | Yes |
+| `lastname` | Custom HubSpot last name | Yes |
+| `email` | Email | No (identity) |
+| `phone` | Phone number | No (identity) |
+| `company` | Custom HubSpot company | Yes |
+| `lifecyclestage` | Custom HubSpot lifecycle stage | Yes |
+
+**Locked identity fields:** `email`, `phone`, `mobilephone` — mapped to core Vendschat identity fields and not remapped to arbitrary targets.
+
+You can adjust visible/editable mappings after connect where the product UI allows.
+
+---
+
+## Sync behavior
+
+| When | What happens |
+|------|--------------|
+| **First connect** | Initial contact sync job queued |
+| **Manual sync** | Re-enqueue sync from integration management |
+| **Ongoing** | Updates follow product sync rules (contact changes propagate per mapping) |
+
+If sync seems stale, try manual sync or disconnect/reconnect after checking HubSpot permissions.
+
+---
+
+## Disconnect
+
+Disconnecting:
+
+- Revokes the active HubSpot connection for the workspace  
+- Stops future sync  
+- Does **not** delete historical **Chat** threads  
+
+Use disconnect when switching HubSpot portals or offboarding CRM sync.
+
+---
+
+## HubSpot vs webhooks vs API
+
+| Tool | Best for |
+|------|----------|
+| **HubSpot integration** | Bi-directional **contact** CRM sync |
+| **Webhooks** | Real-time **message events** to Make/Zapier/custom |
+| **REST API** | Custom apps reading/writing messages programmatically (**Advanced**) |
+
+Many teams use **HubSpot** + **webhooks** together: CRM for contacts, webhooks for message-triggered automations.
+
+---
+
+## Troubleshooting
+
+| Issue | What to try |
+|-------|-------------|
+| **Connect** does nothing | Ensure you have workspace admin access; pop-up blockers for OAuth |
+| 0 contacts after connect | Wait for initial sync; check HubSpot has contacts |
+| Wrong portal connected | Disconnect → Connect with correct HubSpot account |
+| Fields not updating | Review field mappings; check locked identity fields |
+| Plan question | HubSpot on all paid tiers in matrix — webhooks need **Growth+** separately |
+
+---
+
+## Related docs
+
+- [Integrations overview](/integrations/integrations-and-automation-overview)
+- [Webhooks guide](/integrations/webhooks-guide)
+- [Integrations FAQ](/integrations/integrations-faq)
+- [Chat inbox — recipient panel](/inbox/chat-inbox-overview)
+- [Billing](/billing/pricing-plans-reference)

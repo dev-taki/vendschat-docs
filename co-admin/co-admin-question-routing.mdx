@@ -1,0 +1,170 @@
+---
+title: 'Co-Admin question routing'
+description: 'How Co-Admin decides whether to call live data tools, product documentation search, or answer from general knowledge — and how to avoid common routing…'
+---
+
+How Co-Admin decides whether to call **live data tools**, **product documentation search**, or answer from **general knowledge** — and how to avoid common routing mistakes.
+
+---
+
+## Three intent classes
+
+| Intent | Meaning | Primary tools |
+|--------|---------|---------------|
+| `live_data` | Questions about **this workspace right now** | `get_workspace_overview`, `list_channels`, `list_webhooks`, `get_channel_analytics`, `get_contact_analytics` |
+| `product_docs` | **How Vendschat works** — setup, features, concepts | `search_product_docs` |
+| `general` | Simple questions not needing tools | Direct answer (still prefer tools if workspace-specific) |
+
+Classification runs in `classifyCoAdminIntent` (backend) and a lighter `buildRoutingHint` (frontend chat route). Hints are injected into the system prompt — the model **may still choose** tools, but hints reduce wrong paths.
+
+---
+
+## Live data patterns (→ tools, not docs)
+
+Trigger examples:
+
+| User says | Tool |
+|-----------|------|
+| “How many channels are connected?” | `get_workspace_overview` or `list_channels` |
+| “List my webhooks” | `list_webhooks` |
+| “What’s connected in this workspace?” | `get_workspace_overview` |
+| “How many open threads?” | `get_workspace_overview` |
+| “Unread messages in inbox?” | `get_workspace_overview` → `inbox.unread_messages_total` |
+| “WhatsApp delivery rate last 14 days” | `get_channel_analytics` (`range: 14d`) |
+| “Show analytics for +8801712345678” | `get_contact_analytics` (`phone_number`) |
+| “Customer jane@example.com stats” | `get_contact_analytics` (`email`) |
+| “Performance metrics this month” | `get_channel_analytics` (`range: 30d`) or overview |
+
+Regex-style signals (backend): `my/our workspace`, `how many` + `channels/webhooks/threads/agents`, `unread`, `delivery/delivered/read rate/sent/failed`, `analytics/performance/metrics`, contact + email/phone.
+
+**Rule:** Never invent counts. If tools return empty or zero, state that explicitly.
+
+---
+
+## Product docs patterns (→ search_product_docs)
+
+Trigger examples:
+
+| User says | Search query direction |
+|-----------|------------------------|
+| “How do I set up WhatsApp?” | `connect whatsapp channel setup` |
+| “What is a customer AI agent?” | `customer ai agents overview handover` |
+| “How do broadcasts work?” | `broadcast label campaign template` |
+| “Explain Co-Admin vs AI Agents” | `co-admin vs ai agents` + this folder |
+| “How does billing work?” | `billing plans usage` |
+| “HubSpot integration steps” | `hubspot sync integration` |
+| “How do labels work in the inbox?” | `shared inbox labels` |
+
+Regex-style signals: `how do/to`, `what is`, `setup/configure`, `vendschat` + feature words, `ai agent`, `broadcast`, `template`, `webhook`, `billing`, `plan`, industry + help.
+
+**Rule:** Do **not** call `search_product_docs` for “how many channels do I have?” — that is live data.
+
+---
+
+## Mixed questions (use multiple tools in one turn)
+
+| User question | Tool sequence |
+|---------------|---------------|
+| “Overview plus how do I add WhatsApp?” | `get_workspace_overview` → `search_product_docs` |
+| “Delivery rate and how to improve it?” | `get_channel_analytics` → `search_product_docs` (templates, quality) |
+| “Lookup email X — and what does handover mean?” | `get_contact_analytics` → `search_product_docs` |
+
+Maximum **6 tool steps** per message — prioritize the user’s primary ask if the budget is tight.
+
+---
+
+## Disambiguation guide
+
+### “Agents” — which kind?
+
+| Phrasing | Meaning | Route |
+|----------|---------|-------|
+| “How many **AI agents**?” | Customer bots in workspace | `get_workspace_overview` → `ai_agents` |
+| “How do **AI agents** work?” | Product concept | `search_product_docs` → `ai-agents/` |
+| “**Co-Admin**” / “workspace agent” | Internal assistant | `search_product_docs` → `co-admin/` |
+| “Who’s assigned to this thread?” | Inbox assignment | `get_contact_analytics` if contact known |
+
+### “Analytics” — Co-Admin tool vs dashboard
+
+| User wants | Route |
+|------------|-------|
+| Quick WhatsApp sent/delivered/read | `get_channel_analytics` |
+| Messenger/Instagram performance | Docs + “open **Analytics** page” |
+| CSV export / message log | `search_product_docs` → `analytics/` (export limits) |
+| Meta cost billing detail | Analytics UI + `billing/` docs |
+
+### “Contacts” vs “team members”
+
+| Term | Route |
+|------|-------|
+| Customer / contact / shopper | `get_contact_analytics` (needs email/phone) |
+| Teammate / seat / invite | `search_product_docs` → getting-started / settings |
+| Active team count | `get_workspace_overview` → `team_members.active` |
+
+### “Campaigns” / “broadcasts”
+
+| User wants | Route |
+|------------|-------|
+| How to send a broadcast | `search_product_docs` → `broadcasts/`, `templates/` |
+| Past broadcast delivery stats | `get_channel_analytics` (WhatsApp template sends aggregate) |
+| Compose path | Explain: **Chat** → template composer → **Broadcast** (not a standalone `/broadcast` page) |
+
+---
+
+## Frontend routing hints (chat API)
+
+The Next.js route `/api/agent/chat` adds a hint from the **latest user message** only:
+
+| Pattern in message | Hint |
+|--------------------|------|
+| `how many/list/show/status` + `channel/webhook/workspace/thread/inbox/agent` | Prefer overview, list_channels, list_webhooks |
+| `analytics/delivery/delivered/read rate/sent/failed` | Prefer channel or contact analytics |
+| `contact/customer` + `email/phone/number/@` | Use contact analytics |
+| `how do/to`, `setup`, `configure`, `what is`, `guide` | Prefer search_product_docs |
+
+Backend `buildRoutingSystemHint` uses the fuller `classifyCoAdminIntent` patterns for services that call the router directly.
+
+---
+
+## Answering when tools return empty
+
+| Situation | Co-Admin should |
+|-----------|-----------------|
+| No channels | “No channels connected — open **Settings → Channels** to connect WhatsApp, Messenger, or Instagram.” |
+| No webhooks | “No webhooks configured — see **Settings → Integrations**.” |
+| Contact not found | “No contact with that email/phone in this workspace — check spelling or Chat search.” |
+| Doc search no hits | Rephrase query, suggest Settings area, or answer from high-level product knowledge with caveat |
+| Non-WhatsApp analytics | Explain Analytics dashboard for that channel type |
+
+---
+
+## What Co-Admin should not route to tools
+
+| Request | Response approach |
+|---------|-------------------|
+| “Send a message to customer X” | Cannot — use **Chat** |
+| “Disconnect WhatsApp” | Cannot mutate — guide to Settings (note: disconnect UI may be limited; see `channels/` docs) |
+| “Change our plan” | Cannot — **Settings → Billing** |
+| “Read what the customer said yesterday” | Cannot read message bodies — open thread in **Chat** |
+
+---
+
+## Training examples (input → expected behavior)
+
+| User input | Expected behavior |
+|------------|-------------------|
+| “Give me a workspace overview” | Call `get_workspace_overview`; summarize with bullets; optional chart for channel mix (pie) |
+| “How do I invite a teammate?” | `search_product_docs`; mention Settings → Team |
+| “List webhooks” | `list_webhooks` |
+| “Delivery rate?” | Ask which channel or default all WhatsApp, `get_channel_analytics`; line chart for daily delivered % |
+| “Tell me about Sarah” | Ask for Sarah’s email or phone |
+| “Difference between Generate Reply and AI Agent?” | `search_product_docs` + `ai-agents/` |
+| “How many unread?” | `get_workspace_overview` → inbox.unread_messages_total |
+
+---
+
+## Related documents
+
+- [Tools reference](/co-admin/co-admin-tools-reference)  
+- [vs customer AI Agents](/co-admin/co-admin-vs-customer-ai-agents)  
+- [Limitations & FAQ](/co-admin/co-admin-limitations-and-faq)

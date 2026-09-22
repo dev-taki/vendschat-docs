@@ -1,0 +1,213 @@
+---
+title: 'Assignments, groups & team routing'
+description: 'Clear ownership beats fastest typer. Vendschat lets you assign threads to teammates, groups (queues), or AI Agents — all from Chat.'
+---
+
+Clear ownership beats fastest typer. Vendschat lets you assign threads to **teammates**, **groups** (queues), or **AI Agents** — all from **Chat**.
+
+**Hub doc:** [Chat & inbox overview](/inbox/chat-inbox-overview)
+
+---
+
+## Quick reference
+
+| Topic | Where |
+|-------|--------|
+| Assign thread | **Chat** → open thread → recipient panel → **Assigned to** |
+| Mobile assign | Conversation header → assignee dropdown |
+| Create groups | **Settings → Workspace → Groups** |
+| Invite teammates | **Settings → Workspace → Team Members** |
+| Assignee types | **User**, **Group** (team), **AI Agent**, **Unassigned** |
+
+---
+
+## Example: CloudHost Support
+
+CloudHost has 12 agents and two tiers. Manager **Priya** designs routing:
+
+| Assignment type | Used for |
+|-----------------|----------|
+| **Teammate** | Named owner — *“Jamal owns this enterprise ticket”* |
+| **Group** | Queue — *“Tier 1”* pulls from pool |
+| **AI Agent** | After-hours FAQ bot |
+
+---
+
+## Assign from Chat
+
+### Desktop — recipient panel
+
+1. Open **Chat** → select thread  
+2. **Recipient panel** (right) → **Assigned to**  
+3. Open dropdown → search if many options  
+4. Pick:
+   - **Teammate** (user)  
+   - **Group** (internal team queue)  
+   - **AI Agent**  
+5. Saves immediately — header shows new assignee  
+
+### Mobile — conversation header
+
+Same **Assigned to** control in the compact header without opening full panel.
+
+### Unassign
+
+Select **Unassigned** in dropdown → thread returns to shared pool.
+
+---
+
+## Assignee types explained
+
+| Type | When to use | Customer sees |
+|------|-------------|---------------|
+| **User** | One person accountable | Your team member’s replies |
+| **Group** | Shared queue — any member can pick up | Replies from whoever responds |
+| **AI Agent** | Automated first line / after hours | Bot messages until handoff |
+| **Unassigned** | Triage pool | Whoever grabs it first |
+
+Assignment options load from workspace **users**, **groups**, and **AI Agents** configured in Settings.
+
+---
+
+## Groups (internal teams)
+
+**Path:** **Settings → Workspace → Groups** (`/settings/workspace/groups`)
+
+Create teams with members:
+
+| Example group | Purpose |
+|---------------|---------|
+| `Tier 1 Support` | First-line queue |
+| `Billing Specialists` | Invoice disputes |
+| `Weekend On-call` | Saturday–Sunday coverage |
+
+Groups are for **internal routing** — customers never see group names.
+
+### Weekend on-call example
+
+Saturday 9 AM: only **Weekend On-call** is staffed. New WhatsApp threads assigned to that **group** (manually or via AI Agent action). Monday: manager reassigns leftovers to weekday tiers.
+
+---
+
+## Team members & roles
+
+**Path:** **Settings → Workspace → Team Members** (`/settings/workspace/team-members`)
+
+| Role | Typical user | Chat access |
+|------|--------------|-------------|
+| **Owner** | Founder | Full Chat + billing + channels |
+| **Admin** | Ops lead | Chat + most Settings |
+| **Member (Chat-only)** | Frontline agents | **Chat** only |
+| **Member (Custom)** | Specialist | Selected pages only |
+
+### Invite flow
+
+1. **Team Members** → **Invite**  
+2. Email + role (+ custom page access if applicable)  
+3. Teammate accepts link → lands in **Chat**  
+4. Owner audits access monthly — remove ex-contractors promptly  
+
+See [Getting started — invites](/getting-started/getting-started-faq#invited-teammates).
+
+---
+
+## Label-scoped access
+
+Restrict a freelancer to threads labeled `Client-X`:
+
+- Configure on membership (accessible labels)  
+- They only see matching threads in **Chat** list  
+- Useful for agencies and regulated verticals  
+
+Works alongside normal label filtering — not a replacement for workspace separation on **Advanced** multi-workspace setups.
+
+---
+
+## Page access (custom members)
+
+Grant only what’s needed via **page access**:
+
+| Persona | Typical pages |
+|---------|----------------|
+| Intern | **Chat** + **Onboarding** |
+| Template editor | **Chat** + **Templates** |
+| Marketing | **Broadcast** + **Analytics** + **Templates** |
+| Chat-only agent | **Chat** only — no Settings |
+
+Members without Settings cannot connect channels — ask an **Admin** or **Owner**.
+
+---
+
+## Default AI Agent (workspace)
+
+Some workspaces set a **default AI Agent** for new threads (workspace setting).
+
+*Example: **NovaFit Gym** sets “Front Desk Bot” as default. New member DMs get instant class schedule answers; trainer takes over when someone asks for injury advice.*
+
+Configure via workspace settings / admin — assign overrides per thread in **Chat**.
+
+---
+
+## Handoff patterns that work
+
+### 1. AI → Human
+
+Bot escalates on keywords; human assigns **self** and replies.
+
+| Step | Action |
+|------|--------|
+| 1 | AI Agent assigned overnight |
+| 2 | Customer writes “speak to manager” |
+| 3 | Agent escalates (or human monitors) |
+| 4 | Reassign to **Priya** → personal reply |
+
+### 2. Human → Group
+
+Agent stuck → assign **Billing** group + label `Invoice dispute`.
+
+### 3. Group → Human
+
+On-call member **claims** thread by assigning to **self**.
+
+### 4. Shift change
+
+Outgoing agent adds **internal note** in contact record, reassigns to incoming shift lead.
+
+---
+
+## Assigned messages filter
+
+Thread list header shows an **inbox** button with badge — threads **assigned to you** for personal queue triage.
+
+Combine with **Unread** filter for morning standup: *“What’s mine and unread?”*
+
+---
+
+## AI Agents vs assignment
+
+| | **Assignment to AI Agent** | **Generate Reply** |
+|---|---------------------------|-------------------|
+| Sends to customer? | **Yes**, automatically when rules allow | **No** — human sends |
+| Where configured | **AI Agents** settings | **Settings → Generate Reply** |
+| Handoff | Reassign to human in **Chat** | N/A |
+
+---
+
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| Can’t assign | Check role — need Chat + thread access |
+| Group missing in dropdown | Create in **Settings → Groups**; add members |
+| AI Agent missing | Create in **AI Agents**; ensure active |
+| Assignee doesn’t see thread | Label-scoped access or wrong workspace |
+| Assignment didn’t save | Retry; refresh recipient panel |
+
+---
+
+## Related docs
+
+- [Chat & inbox overview](/inbox/chat-inbox-overview)
+- [Shared inbox & labels](/inbox/shared-inbox-and-labels)
+- [AI Agents overview](/ai-agents/ai-agents-overview)
+- [Inbox FAQ](/inbox/inbox-faq)

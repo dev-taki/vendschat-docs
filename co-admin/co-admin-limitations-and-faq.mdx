@@ -1,0 +1,326 @@
+---
+title: 'Co-Admin limitations, privacy & FAQ'
+description: 'Hard boundaries, troubleshooting, and a broad Q&A bank for the native Support AI. When a question maps here, Co-Admin should answer confidently without…'
+---
+
+Hard boundaries, troubleshooting, and a broad Q&A bank for the native Support AI. When a question maps here, Co-Admin should answer confidently without over-promising.
+
+---
+
+## Hard limitations (cannot do)
+
+Co-Admin **cannot**:
+
+1. **Read or send customer inbox messages** — no access to message bodies in Chat threads.  
+2. **Mutate workspace configuration** — no create/update/delete for channels, webhooks, labels, templates, AI agents, team, or billing.  
+3. **Build automation workflows** — n8n, Zapier, Make setup is documentation-only until a future phase.  
+4. **Access customer AI knowledge bases** — `ai_knowledge_*` content is isolated from Co-Admin.  
+5. **Cross workspace boundaries** — only the **current session workspace**.  
+6. **Invent live metrics** — must call tools; if tools fail, say so.  
+7. **Look up contacts by name alone** — requires **email or phone**.  
+8. **Export CSV / message logs** — direct users to **Analytics** (see export limits in `analytics/`).  
+9. **Change subscription or seats** — **Settings → Billing** only.  
+10. **Disconnect channels via chat** — guide to Settings (UI may not expose disconnect; see `channels/` FAQ).
+
+---
+
+## Soft limitations (partial or indirect)
+
+| Topic | Limitation | What to do instead |
+|-------|------------|-------------------|
+| Messenger/Instagram analytics | Tool is WhatsApp-deep | Open **Analytics** dashboard |
+| Meta API 14-day-only metrics | May not match tool window | Analytics UI + `analytics/` docs |
+| Estimated contact cost | Approximate USD | Note disclaimer; Meta billing may differ |
+| Contact message content | Aggregates only | Open thread in **Chat** |
+| Tool output size | May be Headroom-compressed | Summarize key fields for user |
+| 6 tool steps per turn | Complex multi-part asks | Answer in stages or narrow question |
+| Mobile history sidebar | Hidden | Use desktop for pin/rename/delete |
+| Doc search | Only `ready` ingested docs | Maintainer ingest pipeline |
+
+---
+
+## Privacy & security
+
+- **Workspace membership** enforced on every tool execution.  
+- **Per-user chat history** — coworkers cannot see your Co-Admin threads.  
+- **No training on customer PII** from inbox — contact tool returns operational metadata.  
+- Advise users not to paste unnecessary sensitive data into Co-Admin chat.  
+- Co-Admin route accessible to members limited to Chat — they still only see permitted workspace data.
+
+---
+
+## FAQ — Getting started with Co-Admin
+
+### What is AI Workspace Co-Admin?
+
+Your internal AI assistant for learning Vendschat and checking live workspace status. It does not talk to your customers.
+
+### Where do I find it?
+
+Left sidebar → **AI Workspace Co-Admin** (`/co-admin`).
+
+### Who can use it?
+
+Workspace members. The route is always accessible even when other pages are restricted.
+
+### Does it use my current workspace?
+
+Yes. Switch workspace in **Settings** to change context.
+
+### Are my chats saved?
+
+Yes — per user, per workspace. Use **New chat**, **Pin**, **Rename**, **Delete** in the sidebar (desktop).
+
+### Why does Co-Admin say “not configured”?
+
+Server missing OpenRouter API key — contact your Vendschat administrator.
+
+---
+
+## FAQ — Live data
+
+### How do I get a quick health check?
+
+Ask: “Give me a workspace overview.”
+
+### How many open inbox threads?
+
+Overview tool → `inbox.by_status.open.total`.
+
+### How many unread messages?
+
+Overview → `inbox.unread_messages_total`.
+
+### List connected channels?
+
+“List our channels” or filter “WhatsApp channels only.”
+
+### Are webhooks active?
+
+“List webhooks” with `active_only` or count from overview.
+
+### WhatsApp delivery rate?
+
+“WhatsApp delivery rate last 7/14/30 days” — channel analytics; ask for a chart.
+
+### Can Co-Admin show Messenger analytics?
+
+Not in depth via tools — use **Analytics** page.
+
+### Look up a customer?
+
+Provide **email or phone**: “Look up jane@company.com last 30 days.”
+
+### Customer name only?
+
+Co-Admin will ask for email or phone — it cannot search by name alone.
+
+### Filter contact stats by label?
+
+“Stats for +1… with label VIP” — passes `label` to contact analytics.
+
+### Estimated message cost for a contact?
+
+Contact analytics → `cost_based` with disclaimer.
+
+---
+
+## FAQ — Product & how-to
+
+### How do I connect WhatsApp?
+
+Doc search → **Settings → Channels** walkthrough in `channels/whatsapp.md`.
+
+### How do broadcasts work?
+
+Doc search → **Chat** → template composer → **Broadcast** (not a separate broadcast page).
+
+### Smart delivery in broadcasts?
+
+Not exposed in current UI — do not promise.
+
+### How do labels work?
+
+`inbox/shared-inbox-and-labels.md`.
+
+### How do I invite teammates?
+
+`getting-started/` and team settings docs.
+
+### What plans exist?
+
+`billing/pricing-plans-reference.md` — Co-Admin should not invent prices.
+
+### Can I downgrade in the app?
+
+Downgrade UI may be limited — see `billing/` FAQ.
+
+### HubSpot sync caveats?
+
+`integrations/` docs — sync limitations apply.
+
+### API keys and REST API?
+
+`integrations/api-keys-and-rest-api.md`.
+
+---
+
+## FAQ — AI & automation
+
+### Co-Admin vs customer AI Agent?
+
+See [Co-Admin vs customer AI Agents](/co-admin/co-admin-vs-customer-ai-agents).
+
+### Can Co-Admin train my bot?
+
+No — configure under **AI Agents**.
+
+### Generate Reply vs AI Agent?
+
+Agent = autonomous to customer; Generate Reply = draft assist for humans in Chat.
+
+### How does handover work?
+
+`ai-agents/` — handover on bot reply/escalation rules, not generic anger detection.
+
+### Can Co-Admin assign a bot to a thread?
+
+No — assign in **Chat** or automation rules per docs.
+
+---
+
+## FAQ — Analytics & reporting
+
+### Co-Admin vs Analytics dashboard?
+
+Co-Admin: quick WhatsApp metrics + narrative. Analytics: full UI, Meta views, exports.
+
+### Message log export limit?
+
+See `analytics/` — sample export may be capped (e.g. 10 rows in UI).
+
+### Cache / stale analytics?
+
+Analytics backend may cache ~10 minutes — mention if user sees timing mismatch.
+
+### Top countries CSV?
+
+Analytics feature — filename pattern in `analytics/` docs.
+
+---
+
+## FAQ — Billing & usage
+
+### Where to see usage?
+
+**Settings → Billing** — plans and usage docs.
+
+### Free tier contact limit?
+
+See `billing/` — e.g. 100 contacts on free tier (verify in pricing reference).
+
+### Seat changes via API?
+
+`seats/change` may exist but not wired in UI — billing FAQ.
+
+---
+
+## FAQ — Channels
+
+### Multiple WhatsApp per workspace?
+
+Supported — list_channels shows all.
+
+### Channel status on list cards?
+
+May not show on all cards — use list_channels or Settings.
+
+### Disconnect channel in UI?
+
+Limited — API may exist; see channels FAQ.
+
+### 409 when connecting?
+
+Conflict — channel linked elsewhere; channels docs.
+
+### Request New Channel button?
+
+May be unwired — docs note.
+
+---
+
+## FAQ — Troubleshooting Co-Admin itself
+
+### Wrong workspace numbers
+
+Switch workspace in Settings; retry overview.
+
+### “Tool failed” error
+
+Transient backend — retry; check membership.
+
+### Empty doc search results
+
+Rephrase; check if docs ingested as `ready`.
+
+### No chart in reply
+
+Ask: “Show that as a chart” — model should use ` ```chart ` JSON.
+
+### Co-Admin guessed a number
+
+Should not happen — report as bug; model must use tools.
+
+### Streaming stopped mid-answer
+
+Regenerate; simplify question.
+
+---
+
+## FAQ — Agencies & multi-workspace
+
+### One Co-Admin for all clients?
+
+One workspace per session — switch workspace in Settings between clients.
+
+### Agency use cases?
+
+`use-cases/marketing-agency.md`.
+
+---
+
+## FAQ — Compliance & data handling
+
+### Can I paste customer medical/financial data?
+
+Discourage unnecessary PII; Co-Admin stores chat history server-side.
+
+### GDPR / deletion
+
+Follow org policy; deleting Co-Admin chat removes that history via sidebar delete.
+
+### Does Co-Admin access Meta directly?
+
+Channel analytics uses Vendschat DB summaries; Meta billing via Analytics.
+
+---
+
+## When to escalate to human support
+
+Escalate to Vendocker support when:
+
+- Persistent 503 Co-Admin configuration errors  
+- Tool errors across all workspaces  
+- Data mismatch between tools and dashboard after cache window  
+- Security concern about workspace access  
+
+Co-Admin should provide **Support** / **Settings** paths first.
+
+---
+
+## Related documents
+
+- [Overview](/co-admin/co-admin-overview)  
+- [Tools reference](/co-admin/co-admin-tools-reference)  
+- [Navigation & UI](/co-admin/co-admin-navigation-and-ui)  
+- [Question routing](/co-admin/co-admin-question-routing)

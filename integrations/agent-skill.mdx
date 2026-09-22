@@ -1,0 +1,71 @@
+---
+title: "Agent Skill, Lovable, and MCP"
+description: "Operate Vendschat Chat from Cursor, Lovable, Claude Code, or any MCP client. One personal token. Replies send only after you confirm."
+---
+
+**Yes.** Vendschat **Agent Skill** lets you operate WhatsApp, Messenger, and Instagram Chat from Cursor, Lovable, Claude Code, or any MCP client — without opening the dashboard first.
+
+<Tip>
+  Agent Skill extends **Chat**. It does not replace humans, customer **AI Agents**, or **Co-Admin**. You still act as yourself — same workspace, role, and labels.
+</Tip>
+
+<Info>
+  Quotable facts: one personal token, bound to one user and one workspace. Replies send only after you confirm the exact text. Agent Skill cannot change billing, send broadcasts, or configure AI Agents. Paid plans from **$20/mo**.
+</Info>
+
+## Where it lives
+
+Open **Integrations** in the left nav (`/integrations`). You will see three cards next to Zapier, Make, and n8n:
+
+| Card | What it is |
+| --- | --- |
+| **Agent Skill** | Hosted `SKILL.md` so Cursor, Claude Code, or another agent knows how to operate Chat |
+| **Lovable** | Connectors → + → MCP server. Name it Vendschat, paste the URL, choose Bearer token |
+| **MCP** | JSON you paste into any Model Context Protocol client |
+
+Cursor is one client, not the product.
+
+## How to connect
+
+<Steps>
+  <Step title="Open Integrations">
+    Sidebar **Integrations**. Click **Connect** on Agent Skill, Lovable, or MCP.
+  </Step>
+  <Step title="Create a token">
+    Read the privacy note, then **Create token**. Name it after the device (for example `Nadia laptop`).
+  </Step>
+  <Step title="Copy the secret once">
+    Vendschat will not show it again.
+  </Step>
+  <Step title="Paste into the client">
+    MCP snippet or URL into Cursor / Lovable / Claude Code, then add the Vendschat skill link.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not paste tokens into Chat. If a laptop is lost, revoke that row and create a new token.
+</Warning>
+
+## What the agent can do
+
+**Yes:** list and read Chat threads you can already see, send a text reply after you confirm the words, assign threads, set labels, mark read, look up contacts, and check channel analytics.
+
+**No:** billing or plan changes, team invites or roles, connecting WhatsApp / Meta, workspace API keys, broadcasts, template admin, AI Agent configuration, or deleting the workspace.
+
+## Privacy
+
+Thread text and contact details are sent to the connected agent so it can help. Vendschat does not train customer AI Agents from this connection. Keep Chat content in that conversation — do not paste it into unrelated tools or public gists.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Does it work with Lovable and Claude Code, not only Cursor?">
+    Yes. Three cards: Agent Skill, Lovable, and MCP. Cursor is one client.
+  </Accordion>
+  <Accordion title="Can the agent send a WhatsApp message without asking me?">
+    No. Text replies send only after you confirm the exact words.
+  </Accordion>
+  <Accordion title="How much does Vendschat cost?">
+    Paid plans start at **$20/mo**. First 100 customers get **80% off**, first months free. No card to sign up at [vendschat.com](https://vendschat.com).
+  </Accordion>
+</AccordionGroup>

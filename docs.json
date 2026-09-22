@@ -1,0 +1,200 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Vendschat Docs",
+  "description": "Product documentation for Vendschat \u2014 WhatsApp, Messenger, and Instagram in one inbox.",
+  "colors": {
+    "primary": "#059669",
+    "light": "#34D399",
+    "dark": "#047857"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navigation": {
+    "pages": [
+      {
+        "group": "Getting started",
+        "icon": "rocket",
+        "pages": [
+          "index",
+          "quickstart",
+          "getting-started/welcome",
+          "getting-started/onboarding-and-setup-guide",
+          "getting-started/first-channel-and-inbox",
+          "getting-started/getting-started-faq"
+        ]
+      },
+      {
+        "group": "Use cases",
+        "icon": "briefcase",
+        "pages": [
+          "use-cases/use-cases-overview",
+          "use-cases/ecommerce-support",
+          "use-cases/social-commerce",
+          "use-cases/marketing-agency",
+          "use-cases/saas-automation",
+          "use-cases/clinics-and-appointments"
+        ]
+      },
+      {
+        "group": "Inbox",
+        "icon": "inbox",
+        "pages": [
+          "inbox/chat-inbox-overview",
+          "inbox/shared-inbox-and-labels",
+          "inbox/assignments-and-teams",
+          "inbox/composer-generate-reply",
+          "inbox/inbox-faq"
+        ]
+      },
+      {
+        "group": "Channels",
+        "icon": "signal",
+        "pages": [
+          "channels/channels-overview",
+          "channels/workspaces-and-channels-overview",
+          "channels/whatsapp",
+          "channels/messenger-and-instagram",
+          "channels/channels-faq"
+        ]
+      },
+      {
+        "group": "AI Agents",
+        "icon": "bot",
+        "pages": [
+          "ai-agents/ai-agents-overview",
+          "ai-agents/customer-ai-agents",
+          "ai-agents/creating-and-training-agents",
+          "ai-agents/assigning-agents-in-chat",
+          "ai-agents/knowledge-sources-and-testing",
+          "ai-agents/ai-agents-faq"
+        ]
+      },
+      {
+        "group": "Templates & broadcasts",
+        "icon": "megaphone",
+        "pages": [
+          "templates/templates-overview",
+          "templates/creating-whatsapp-templates",
+          "templates/managing-templates-and-sync",
+          "templates/whatsapp-templates",
+          "templates/templates-in-chat-and-broadcasts",
+          "broadcasts/campaigns",
+          "templates/templates-faq"
+        ]
+      },
+      {
+        "group": "Integrations",
+        "icon": "plug",
+        "pages": [
+          "integrations/integrations-and-automation-overview",
+          "integrations/agent-skill",
+          "integrations/n8n-zapier-make",
+          "integrations/webhooks-guide",
+          "integrations/automation-and-webhooks",
+          "integrations/hubspot-integration",
+          "integrations/api-keys-and-rest-api",
+          "integrations/integrations-faq"
+        ]
+      },
+      {
+        "group": "Analytics",
+        "icon": "chart-line",
+        "pages": [
+          "analytics/analytics-overview",
+          "analytics/channel-performance",
+          "analytics/analytics-metrics-reference",
+          "analytics/analytics-faq"
+        ]
+      },
+      {
+        "group": "Billing",
+        "icon": "credit-card",
+        "pages": [
+          "billing/billing-overview",
+          "billing/plans-and-usage",
+          "billing/pricing-plans-reference",
+          "billing/billing-faq"
+        ]
+      },
+      {
+        "group": "Co-Admin",
+        "icon": "sparkles",
+        "pages": [
+          "co-admin/co-admin-overview",
+          "co-admin/workspace-co-admin",
+          "co-admin/co-admin-vs-customer-ai-agents",
+          "co-admin/co-admin-navigation-and-ui",
+          "co-admin/co-admin-question-routing",
+          "co-admin/co-admin-tools-reference",
+          "co-admin/co-admin-limitations-and-faq"
+        ]
+      },
+      {
+        "group": "Legal",
+        "icon": "scale-balanced",
+        "pages": [
+          "privacy-policy/privacy-policy",
+          "terms-of-service/terms-of-service"
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "App",
+          "href": "https://app.vendschat.com",
+          "icon": "grid-2"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://vendschat.com/blog",
+          "icon": "newspaper"
+        },
+        {
+          "anchor": "Pricing",
+          "href": "https://vendschat.com/pricing",
+          "icon": "tag"
+        }
+      ]
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Login",
+        "href": "https://app.vendschat.com/signin"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get started",
+      "href": "https://vendschat.com"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://www.linkedin.com/company/vendschat",
+      "youtube": "https://www.youtube.com/@vendschat"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "canonical": "https://docs.vendschat.com"
+    }
+  }
+}

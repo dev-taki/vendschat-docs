@@ -1,0 +1,219 @@
+---
+title: 'Getting started — FAQ'
+description: 'Extended Q&A for AI Workspace Co-Admin about sign-up, account setup, the Onboarding page, and first-day product use.'
+---
+
+Extended Q&A for **AI Workspace Co-Admin** about sign-up, account setup, the **Onboarding** page, and first-day product use.
+
+---
+
+## Account & sign-up
+
+### How do I create a Vendschat account?
+
+Go to **`/signup`** or use **Start trial** from [vendschat.com](https://vendschat.com).
+
+Choose:
+- **Continue with Google**, or  
+- **Email** — full name, company name, work email, password  
+
+### What’s the difference between email signup and Google signup?
+
+| | **Email signup** | **Google signup (new user)** |
+|---|------------------|------------------------------|
+| Org + workspace | Created **immediately** at signup | Created on **`/oauth-onboarding`** after Google auth |
+| Lands on | `/chat` | `/oauth-onboarding` → then `/chat` |
+| Company name | From **Company name** field | From **Organization name** on oauth-onboarding |
+| Default workspace | **Headquarters** | **Headquarters** (if workspace name left blank) |
+
+### Do I need a credit card to sign up?
+
+The sign-up page says **“No credit card required”** for the trial. Upgrade and payment happen later in **Settings → Organization → Billing & Usage**. See [billing docs](/billing/plans-and-usage) for trial length and plan details.
+
+### What password rules apply?
+
+For email accounts: uppercase, lowercase, number, special character, minimum 8 characters. The form shows a live checklist and strength meter.
+
+### I signed up with Google and see “Set up your workspace” — is that normal?
+
+**Yes.** That’s **`/oauth-onboarding`**. Enter your **organization name** (required) and optional **workspace name**, then **Continue**. You only see this once for a new Google account.
+
+### I already have an account but Google sends me to oauth-onboarding
+
+You should redirect to **Chat** automatically. If not, sign out and sign in with the account that already has a workspace, or complete the form if you truly have no workspace yet.
+
+### Where do I sign in?
+
+**`/signin`** — email/password or **Continue with Google**.
+
+---
+
+## Onboarding page vs oauth-onboarding
+
+### What is the Onboarding page?
+
+**`/onboarding`** — in-app checklist: *“Let's get you set up”* with four steps:
+
+1. Connect a channel  
+2. Create labels  
+3. Set up integrations / automation  
+4. Invite team  
+
+Open from sidebar **Onboarding** or mobile **More → Onboarding**.
+
+### What is oauth-onboarding?
+
+**`/oauth-onboarding`** — one-time **account** setup for new **Google** users without a workspace. Not the same as the product Onboarding checklist.
+
+### Where do I go after email signup — onboarding or chat?
+
+**Chat** (`/chat`). Your organization and workspace already exist. Optionally visit **`/onboarding`** for the setup checklist.
+
+### Can I skip the Onboarding checklist?
+
+**Yes.** Nothing blocks **Chat** if you skip it. The page is guidance — connect channels and invite team when you’re ready.
+
+### I don’t see “Onboarding” in the sidebar
+
+Likely **Member (Chat-only)** role — nav may hide setup pages. Owners/admins see it. You can still open **`/onboarding`** directly if authenticated.
+
+---
+
+## Onboarding steps (detailed)
+
+### Step 1 — Where do I connect WhatsApp / Messenger / Instagram?
+
+**Onboarding → Manage channels** → `/settings/workspace/channels` → **Add Channel** → catalog.
+
+Or: **Settings → Workspace → Channels**.
+
+Full guide: [channels overview](/channels/workspaces-and-channels-overview).
+
+### Is there a video for channel setup?
+
+**Yes** — embedded in Onboarding Step 1 accordion (*“How it works”*).
+
+### Step 2 — Where do I create labels?
+
+**Onboarding → Create Your First Label** → `/settings/workspace/labels`.
+
+Or: **Settings → Workspace → Labels**.
+
+### How many labels should I create at first?
+
+At least **two** meaningful tags (e.g. `Sales`, `Support`) before high message volume.
+
+### Step 3 — What does “Set up automation” mean?
+
+Opens **Integrations** (`/settings/workspace/integrations`) — n8n, Zapier, Make, HubSpot, Custom API.
+
+Related: **AI Agents** (`/ai-agents`), **n8n** (`/n8n`), **Webhooks** in Settings.
+
+Optional for day one.
+
+### Step 4 — How do I invite teammates?
+
+**Onboarding → Add Team Member** → `/settings/workspace/team-members`.
+
+Or: **Settings → Workspace → Team Members → Invite**.
+
+---
+
+## Invited teammates
+
+### I got an invite email — what do I do?
+
+Click the link → accept page → set password (or use existing) → **Accept Invitation** → **Chat**.
+
+You join the inviter’s workspace — no separate company signup.
+
+### Do invited users see the Onboarding page?
+
+They **can** if their role includes **overview** access. Many **Members** only see **Chat**.
+
+### What role should I give a support agent?
+
+**Member** — Chat-only. **Admin** if they manage channels and templates.
+
+---
+
+## First channel & Chat
+
+### I connected a channel but Chat is empty
+
+Customers must **send you a message first** on that channel (inbound). Or your team starts outbound where the channel allows it.
+
+### How do I know my channel is ready?
+
+**Settings → Workspace → Channels** — status should be **active** (not pending/disconnected).
+
+### Support only vs Support, sales & ads for WhatsApp?
+
+**Support only** — inbox + templates. **Support, sales & ads** — adds Click-to-WhatsApp ads. See [WhatsApp doc](/channels/whatsapp).
+
+### Where is my first reply?
+
+**Chat** → select conversation → type in composer → send.
+
+Walkthrough: [First channel & inbox](/getting-started/first-channel-and-inbox).
+
+---
+
+## Roles & access during setup
+
+### Who can connect channels?
+
+Usually **Owner** or **Admin** with Settings access.
+
+### Who pays and upgrades the plan?
+
+**Organization owner** — **Settings → Organization → Billing & Usage**.
+
+### Can members complete onboarding steps?
+
+Only if they can reach **Settings** pages. Members invited for Chat often cannot connect channels themselves.
+
+---
+
+## Help & resources
+
+### What are the Resources on the Onboarding page?
+
+Right sidebar: **Intro**, **Contact**, **Book**, **Help center**, **Video guides** — shortcuts to learning and support content.
+
+### How do I ask questions in the app?
+
+Use **AI Workspace Co-Admin** — setup how-tos and live workspace status.
+
+### Should I turn on AI Agents on day one?
+
+Usually **no**. Handle manual replies first; add **AI Agents** when the same questions repeat. See [AI Agents overview](/ai-agents/ai-agents-overview).
+
+### What’s the difference between Co-Admin and AI Agents?
+
+| | **Co-Admin** | **AI Agents** |
+|---|--------------|---------------|
+| Helps | **Your team** | **Your customers** |
+| Where | Co-Admin chat | Assigned threads in **Chat** |
+
+---
+
+## Mobile
+
+### Where is Onboarding on mobile?
+
+**More** tab (bottom nav) → **Onboarding**.
+
+### Where are Settings on mobile?
+
+**More → Settings** or **Settings** hub — same workspace paths as desktop.
+
+---
+
+## Related docs
+
+- [Onboarding & setup guide](/getting-started/onboarding-and-setup-guide) — main reference  
+- [Welcome](/getting-started/welcome)  
+- [First channel & inbox](/getting-started/first-channel-and-inbox)  
+- [Channels FAQ](/channels/channels-faq)  
+- [Billing FAQ](/billing/billing-faq)

@@ -1,0 +1,150 @@
+---
+title: 'Use case: SaaS company with CRM automation'
+description: 'Scenario: FlowMetrics sells B2B analytics software. Leads message WhatsApp from Click-to-WhatsApp ads; Customer Success wants every conversation logged…'
+---
+
+**Scenario:** **FlowMetrics** sells B2B analytics software. Leads message **WhatsApp** from Click-to-WhatsApp ads; Customer Success wants every conversation logged with SLA alerts for enterprise accounts.
+
+**Plan:** **Advanced** — **API Keys**, **webhooks**, **multiple workspaces** (prod vs sandbox), **HubSpot** connection.
+
+---
+
+## The challenge
+
+- Sales and support both use WhatsApp — ownership gets messy
+- CRM should update when a lead replies, without copy-paste
+- Enterprise threads need faster human response than self-serve trials
+- Engineering wants events in Slack when `Enterprise` customers message
+
+---
+
+## FlowMetrics architecture
+
+```text
+WhatsApp (CTWA ads) → Vendschat Chat
+                         ├── Labels + teams (routing)
+                         ├── AI Agent (trials only)
+                         ├── HubSpot (connect + field mapping)
+                         └── Webhooks → Make → Slack + internal DB
+```
+
+---
+
+## How FlowMetrics uses Vendschat
+
+### Structured inbox
+
+| Label | Team | SLA |
+|-------|------|-----|
+| `Enterprise` | Account managers (`Enterprise AM` **group**) | 15 min human reply |
+| `Trial` | Inside sales | AI-first, human on request |
+| `Support` | Tier 2 **group** | 4 business hours |
+| `Churn risk` | Success manager | Same day |
+
+**Groups:** **Settings → Workspace → Groups** — create `Sales AMER`, `Support Tier 2`. In **Chat** → **Assigned to** → assign **team** (shown as group name in dropdown).
+
+### WhatsApp ads use case
+
+FlowMetrics connected WhatsApp with **Support, sales & ads** (not Support only) because they run **Click-to-WhatsApp** campaigns on Facebook.
+
+**Settings → Workspace → Channels → WhatsApp setup** → choose use case at first connect, or `?mode=ads` in setup URL.
+
+### HubSpot integration (honest expectations)
+
+**Settings → Workspace → Integrations → HubSpot** — OAuth connect, map standard fields (name, email, phone, company, lifecycle stage).
+
+**Today:** Connect and field visibility configuration are supported; **automatic background sync into the Chat recipient panel** may still be rolling out. Train reps to verify contact phone/email in **Chat** even when HubSpot is connected.
+
+**Workflow until full sync:** Rep confirms phone in thread → updates HubSpot manually → webhook still fires for automation.
+
+### Webhooks to internal ops
+
+**Settings → Workspace → Webhooks** — outgoing HTTPS endpoints.
+
+FlowMetrics subscribes to:
+
+| Event | Automation |
+|-------|------------|
+| Inbound WhatsApp message | Make scenario → if thread has label `Enterprise`, post Slack `#enterprise-alerts` |
+| Outbound message sent | Log to internal data warehouse |
+| Message failed | PagerDuty-style alert |
+
+**Coverage note:** WhatsApp inbound/outbound/status events are **fully wired** today. Instagram/Messenger outgoing events are in the catalog but **may not fire** on all send paths yet — FlowMetrics standardizes on **WhatsApp** for revenue-critical alerts.
+
+### AI Agent with strict boundaries
+
+| Setting | Value |
+|---------|--------|
+| **Agent** | FlowMetrics Trial Guide |
+| **Template** | Sales |
+| **Knowledge** | Pricing page + public docs site |
+| **Assigned to** | `Trial` threads only (humans own `Enterprise`) |
+| **Instructions** | Never discuss SOC2 contracts, custom MSAs, or invoices — hand off |
+
+**Handover:** Instructions tell the bot to escalate on *“contract”, “invoice”, “SOC2”, “enterprise”*. The system may also flag handover when the **bot’s reply** matches configured keywords — write instructions so the bot **says** it’s escalating when customers use those words.
+
+**Paused** during product launches when all hands on deck.
+
+### API keys for leadership dashboard (Advanced)
+
+**Settings → Workspace → API Keys** — read-only key for internal TV screen: count open threads with label `Enterprise`.
+
+Separate from **Co-Admin** — this is custom engineering on **Advanced**.
+
+### Sandbox workspace
+
+**Advanced** allows a second workspace `FlowMetrics Sandbox` for QA — test templates and webhooks without touching production threads. Switch in **Settings** workspace dropdown.
+
+### Co-Admin for new hires
+
+Junior SDR asks Co-Admin:
+
+- *“How do webhooks work?”* → product docs
+- *“What’s the difference between AI Agents and Generate Reply?”*
+- *“What’s our delivery rate this week?”* → live analytics tool
+
+Co-Admin is **not** a customer-facing bot and has **no** item in the sidebar — it’s the in-product assistant for staff.
+
+---
+
+## Trial vs enterprise — routing rules
+
+| Signal | Route |
+|--------|--------|
+| New inbound from CTWA ad | Auto-label `Trial` (keyword or manual first pass) |
+| Email domain matches account list | Relabel `Enterprise`, assign AM **team** |
+| Customer says “cancel” | `Churn risk` + success manager |
+| Technical error | `Support` + Tier 2 **team** |
+
+Keyword rules on labels help: `bug`, `error` → `Support`; `pricing` → `Trial`.
+
+---
+
+## Results B2B teams care about
+
+- CRM and inbox stay aligned — webhooks bridge gaps until HubSpot panel sync is complete
+- Enterprise SLAs protected by labels + **team** assignment + Slack alerts
+- Automation without replacing **Chat** as the agent UI
+
+---
+
+## Copy-paste playbook
+
+1. WhatsApp **Support, sales & ads** if running CTWA  
+2. Labels: `Enterprise`, `Trial`, `Support`, `Churn risk`  
+3. **Groups** for sales and support queues  
+4. **HubSpot** connect + field map — verify in UI before promising live sync  
+5. **Webhooks** → Make/Zapier/n8n → Slack  
+6. Sales **AI Agent** on `Trial` only — strict instructions  
+7. **Advanced** for API + sandbox workspace  
+8. **Analytics** weekly on WhatsApp delivery  
+
+---
+
+## Related docs
+
+- [Use cases overview](/use-cases/use-cases-overview)
+- [HubSpot integration](/integrations/hubspot-integration)
+- [Webhooks guide](/integrations/webhooks-guide)
+- [API keys & REST API](/integrations/api-keys-and-rest-api)
+- [AI Agents — handover](/ai-agents/assigning-agents-in-chat)

@@ -1,0 +1,200 @@
+---
+title: 'Managing templates & sync'
+description: 'View, search, sync, edit, and delete WhatsApp message templates per channel.'
+---
+
+View, search, sync, edit, and delete **WhatsApp message templates** per channel.
+
+**Path:** `/template/whatsapp/list?channelId={channelId}`
+
+**Entry:** **Templates** → channel card → **Manage Templates**
+
+---
+
+## Quick reference
+
+| Task | Control |
+|------|---------|
+| Open list | **Manage Templates** on WhatsApp card |
+| Search | *“Search templates…”* |
+| Sync from Meta | **Sync** |
+| Export | **Export** (not implemented — toast) |
+| View details | Click row or **View** (eye) |
+| Edit | **Edit** → `/template/{id}/edit?channelId=` |
+| Delete | **Delete** (confirm) — removes from Meta + workspace |
+| Create new | **Create Template** (header) |
+
+---
+
+## Page header
+
+**Title:** *My Templates*
+
+**Description:** *“Manage WhatsApp message templates for {channel name}.”*
+
+**Create Template** → `/template/whatsapp/create?channelId={id}`
+
+---
+
+## Summary cards
+
+| Card | Counts templates with status |
+|------|------------------------------|
+| **APPROVED** | `approved` |
+| **PENDING** | `pending` |
+| **SUBMITTED** | Other / in-flight statuses |
+| **REJECTED** | `rejected` |
+
+Use cards to gauge library health before a **Broadcast**.
+
+---
+
+## Template table
+
+| Column | Content |
+|--------|---------|
+| **Template Name** | Name + category subtitle |
+| **Language** | e.g. English (`en_US`) |
+| **Status** | APPROVED / PENDING / REJECTED badge |
+| **Last Edited** | Relative time from `updated_at` |
+| **Actions** | View · Edit · Delete |
+
+**Footer:** *“Showing X of Y templates”*
+
+### Status badges
+
+| Badge | Color | Send allowed? |
+|-------|-------|---------------|
+| **APPROVED** | Green | **Yes** |
+| **PENDING** | Neutral | No — wait for Meta |
+| **REJECTED** | Red | No — edit & resubmit |
+| Other | Warning | No |
+
+---
+
+## Sync from Meta
+
+**Sync** button:
+
+1. Fetches all templates from Meta Graph API for the channel’s WABA  
+2. Upserts rows in Vendschat database  
+3. Updates status, body, header, footer, buttons  
+4. Toast: *“{N} templates synced from WhatsApp.”*
+
+**When to sync:**
+
+- After approving templates in Meta Business Manager outside Vendschat  
+- When status looks stale  
+- After rejection — confirm updated status  
+
+**Requires:** Active WhatsApp channel with valid credentials and `waba_id` in channel metadata.
+
+---
+
+## View modal
+
+**View** (eye icon) or click row → **WhatsappTemplateViewModal**
+
+Shows read-only preview of:
+
+- Name, category, language, status  
+- Header, body, footer  
+- Buttons summary  
+
+Use before editing or sharing with compliance team.
+
+---
+
+## Edit template
+
+**Path:** `/template/{templateId}/edit?channelId={channelId}`
+
+### Editable fields
+
+| Field | Editable? |
+|-------|-------------|
+| Name | **No** (locked on edit screen) |
+| Category | **No** |
+| Language | **No** |
+| Header type / content | **Yes** (text header) |
+| Body | **Yes** (required) |
+| Footer | **Yes** |
+| Buttons | Via API/backend — edit UI focuses body/header/footer |
+
+**Save** pushes changes to Meta (when `external_template_id` exists) and updates local DB.
+
+**Note:** Meta may re-review substantive edits — status can return to **PENDING**.
+
+---
+
+## Delete template
+
+**Delete** → confirm:
+
+> *“Delete template "{name}" from WhatsApp and this workspace?”*
+
+Removes from Meta (when linked) and local database. **Cannot undo.**
+
+Threads that already received the template keep history; future sends must use another approved template.
+
+---
+
+## Per-channel scope
+
+Templates belong to a **specific WhatsApp channel** (`channel_id`).
+
+| Implication | Action |
+|-------------|--------|
+| Multiple WhatsApp numbers | Manage templates **per channel** |
+| Wrong channel in URL | Select channel from `/template` hub first |
+| Template not found on edit | `channelId` query must match list channel |
+
+---
+
+## Export
+
+**Export** shows toast: *“Template export is not implemented yet.”*
+
+Use **Sync** + table view or **Analytics** CSV for performance exports.
+
+---
+
+## Empty states
+
+| Message | Meaning |
+|---------|---------|
+| *“No templates found for this WhatsApp channel.”* | Create first template |
+| *“No templates match your search.”* | Clear search filter |
+| *“Select a WhatsApp channel from the template page first.”* | Missing `channelId` in URL |
+
+---
+
+## Usage metadata
+
+Each template row can track:
+
+- `usage_count` — how often sent  
+- `last_used_at` — last send timestamp  
+
+Visible in API/detail; use **Analytics → Template performance** for reply rates.
+
+---
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| Sync failed | Check WhatsApp channel active; token valid; WABA linked |
+| Edit 404 | Verify `channelId` + template id |
+| Approved in Meta but Pending here | Run **Sync** |
+| Can’t send in Chat | Status must be **APPROVED** |
+| Delete failed | Template may be in use; check Meta errors |
+
+---
+
+## Related docs
+
+- [Templates overview](/templates/templates-overview)
+- [Creating WhatsApp templates](/templates/creating-whatsapp-templates)
+- [Templates in Chat & broadcasts](/templates/templates-in-chat-and-broadcasts)
+- [Templates FAQ](/templates/templates-faq)

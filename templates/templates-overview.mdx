@@ -1,0 +1,175 @@
+---
+title: 'Template messages — overview'
+description: 'Template messages are pre-approved WhatsApp formats Meta requires for many outbound sends — especially outside the 24-hour messaging window, for…'
+---
+
+**Template messages** are pre-approved WhatsApp formats Meta requires for many outbound sends — especially outside the **24-hour messaging window**, for **Broadcasts**, and for proactive **New Chat** outreach.
+
+**Who this is for:** Ops leads, marketers, and support managers asking Co-Admin *“Where are templates?”*, *“Why can’t I type in Chat?”*, or *“How do I send a broadcast?”*
+
+**Main path:** Sidebar **Templates** → `/template`
+
+**Important:** This is **WhatsApp message templates** (Meta-approved). It is **not** the same as **AI Agent templates** at `/ai-agents/templates`.
+
+---
+
+## Quick reference
+
+| Need | Where to go |
+|------|-------------|
+| Template hub (by channel) | **Templates** → `/template` |
+| WhatsApp template list | **Manage Templates** → `/template/whatsapp/list?channelId={id}` |
+| Create WhatsApp template | **Create New Template** → `/template/whatsapp/create?channelId={id}` |
+| Edit template | List row **Edit** → `/template/{id}/edit?channelId={id}` |
+| Sync from Meta | List page **Sync** |
+| Send in Chat | **Chat** composer → **Templates** (when window expired or proactive) |
+| Schedule template | **Chat** template modal → schedule |
+| Label broadcast | **Chat** template modal → broadcast mode |
+| Add WhatsApp channel | **Templates** → **Add Channel** or **Settings → Channels** |
+
+---
+
+## Templates vs AI Agent templates
+
+| | **Template Messages** (`/template`) | **AI Agent templates** (`/ai-agents/templates`) |
+|---|-------------------------------------|------------------------------------------------|
+| Purpose | Meta-approved **WhatsApp** outbound messages | Starting configs for **customer bots** |
+| Approval | Meta review (Approved / Pending / Rejected) | No Meta approval |
+| Used in | **Chat**, **Broadcast**, scheduling | **AI Agents** training only |
+| Channels | **WhatsApp** (fully wired) | N/A |
+
+Co-Admin: if a customer says “templates” in a **WhatsApp / broadcast / 24-hour** context, use this folder. If they mean **bot personality**, use [AI Agents overview](/ai-agents/ai-agents-overview).
+
+---
+
+## Navigation map
+
+```text
+Sidebar
+└── Templates                         /template
+    ├── Channel cards (WhatsApp)      per connected number
+    │   ├── Create New Template       /template/whatsapp/create?channelId=
+    │   └── Manage Templates          /template/whatsapp/list?channelId=
+    ├── Messenger / Instagram cards   (placeholders — WhatsApp is live)
+    └── Connect New Channel           /settings/workspace/channels
+
+Chat
+└── Composer
+    ├── 24h window expired banner
+    └── Templates button → Send Template Message modal
+```
+
+| Entry point | Lands on |
+|-------------|----------|
+| Sidebar **Templates** | `/template` |
+| **Add Channel** (header) | **Settings → Workspace → Channels** |
+| WhatsApp card **Manage Templates** | List for that `channelId` |
+| Chat **Templates** icon | Template picker modal (approved templates) |
+
+---
+
+## Example: FixIt Home Services
+
+**FixIt** sends job confirmations and “technician on the way” updates on WhatsApp.
+
+| Template | Purpose |
+|----------|---------|
+| `job_confirmed` | Date, time slot, address snippet |
+| `tech_enroute` | Name + ETA + **Call** button |
+| `rate_service` | Post-job feedback link |
+
+Created under **Templates** for their WhatsApp channel, submitted to Meta, tracked as **APPROVED** / **PENDING** / **REJECTED**. Agents pick them in **Chat** when the 24-hour window is closed.
+
+---
+
+## Why templates matter
+
+| Situation | Template typically required? |
+|-----------|------------------------------|
+| Customer messaged within **24 hours** | Free-form reply OK (session open) |
+| **24-hour window expired** | **Yes** — composer shows banner |
+| You message first (**New Chat**) | **Yes** |
+| **Broadcast** to a label segment | **Yes** |
+| Scheduled reminder | **Yes** |
+
+**Chat composer message when expired:**
+
+> *“The 24-hour messaging window has expired. You can only send template messages until the recipient replies to reopen the conversation window.”*
+
+Deep dive: [Templates in Chat & broadcasts](/templates/templates-in-chat-and-broadcasts)
+
+---
+
+## Template hub page (`/template`)
+
+**Title:** *Template Messages* — *“Manage message templates across all your channels.”*
+
+### Header
+
+| Control | Action |
+|---------|--------|
+| **Add Channel** | → **Settings → Workspace → Channels** |
+
+### Search & filters
+
+- **Search channels…** — filter WhatsApp channel cards by name or number  
+- **Filter by Channel Type** — All Channels · WhatsApp · Messenger · Instagram (badges show counts)
+
+### WhatsApp channel cards
+
+Each connected WhatsApp number shows:
+
+| Element | Meaning |
+|---------|---------|
+| Display name + identifier | Business number |
+| Channel ID + status | Internal id · active/deleted |
+| **N templates** | Count for this channel |
+| **Create New Template** | → create flow with `channelId` |
+| **Manage Templates** | → list for this channel |
+
+### Messenger & Instagram cards
+
+Shown when those channel types exist in the workspace. UI describes templates for those platforms; **create/manage actions for WhatsApp are the fully implemented path today**. Co-Admin should direct WhatsApp template questions to the WhatsApp card flows.
+
+### Connect New Channel
+
+Dashed card → **Settings → Channels** to add another platform.
+
+---
+
+## WhatsApp template lifecycle (summary)
+
+```text
+Create in Vendschat → Submit for Approval → Meta reviews
+    → APPROVED (can send) | PENDING | REJECTED
+Sync pulls status from Meta → Edit content (body/header/footer) → Re-review as needed
+```
+
+| Status | Meaning | Send in Chat? |
+|--------|---------|---------------|
+| **APPROVED** | Meta accepted | **Yes** |
+| **PENDING** | Under review | **No** (backend blocks send) |
+| **REJECTED** | Meta declined | **No** — fix and resubmit |
+| **draft** / other | Local or in-flight | **No** |
+
+Only **approved** templates pass send validation in the messaging backend.
+
+---
+
+## Plan & channel requirements
+
+- At least one **connected WhatsApp channel** (**Settings → Channels**)  
+- **Broadcasts** (label campaigns) require **Growth+** and approved templates — see [broadcasts](/broadcasts/campaigns) and [billing](/billing/pricing-plans-reference)  
+- Templates themselves are part of normal WhatsApp channel setup on paid workspaces with WhatsApp connected  
+
+---
+
+## Related docs
+
+- [Creating WhatsApp templates](/templates/creating-whatsapp-templates)
+- [Managing templates & sync](/templates/managing-templates-and-sync)
+- [Templates in Chat & broadcasts](/templates/templates-in-chat-and-broadcasts)
+- [Templates FAQ](/templates/templates-faq)
+- [Channels — WhatsApp](/channels/whatsapp)
+- [Chat inbox overview](/inbox/chat-inbox-overview)
+- [Broadcasts](/broadcasts/campaigns)

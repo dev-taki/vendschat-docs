@@ -1,0 +1,215 @@
+---
+title: 'Integrations FAQ'
+description: 'Answers Co-Admin should give for common integration, webhook, API, and automation questions.'
+---
+
+Answers Co-Admin should give for common integration, webhook, API, and automation questions.
+
+---
+
+## Finding settings
+
+### Where are integrations?
+
+**Settings → Workspace → Connections → Integrations** (`/settings/workspace/integrations`).
+
+Also: **Onboarding** Step 3 **Set Up Integrations** · Mobile **More → Integrations**.
+
+### Where are webhooks?
+
+**Settings → Workspace → Connections → Webhooks** (`/settings/workspace/webhooks`).
+
+### Where are API keys?
+
+**Settings → Workspace → Connections → API Keys** (`/settings/workspace/api-keys`).
+
+### Where is the REST API documentation?
+
+**Settings → Workspace → Connections → REST API** (`/settings/workspace/rest-api`).
+
+### Where is n8n?
+
+Sidebar **n8n** → `/n8n` (hosted instance setup). External n8n connects via **Webhooks**.
+
+---
+
+## Plans & access
+
+### Which plan includes webhooks?
+
+**Growth** and **Advanced**. Not **Starter**.
+
+### Which plan includes Zapier, Make, and n8n?
+
+**Growth** and **Advanced** for connecting via webhooks/automation. **Hosted n8n instance** is **Advanced** only.
+
+### Which plan includes the Developer API?
+
+**Advanced** only. Create keys under **API Keys**.
+
+### Is HubSpot on Starter?
+
+HubSpot integration is listed on **Starter**, **Growth**, and **Advanced** in the pricing matrix. Webhooks still require **Growth+**.
+
+### How do I upgrade for integrations?
+
+**Settings → Organization → Billing & Usage → Plans** (workspace owner).
+
+---
+
+## Webhooks
+
+### How do I create a webhook?
+
+**Webhooks → Add destination** → name, HTTPS URL, select events → save. Store the signing secret (`whsec_…`).
+
+### What events should I start with?
+
+`incoming.vendschat.messages` for all inbound traffic, or `incoming.whatsapp.messages.text` for WhatsApp-only.
+
+### How do I pause a webhook without deleting?
+
+Row **⋯ → Disable**. Re-enable with **Enable**.
+
+### How do I verify webhook authenticity?
+
+Check `X-VendsChat-Signature` and `X-VendsChat-Timestamp` headers using your signing secret. See [Webhooks guide](/integrations/webhooks-guide).
+
+### What's the difference between thin and snapshot payload?
+
+**Thin** = minimal IDs/metadata. **Snapshot** = richer embedded data in the POST body.
+
+### Can Co-Admin list my webhooks?
+
+Yes — ask *“List our webhooks”*. Returns live destinations for the current workspace.
+
+### Why does the UI show sample Make URLs?
+
+The webhooks table may show demo rows during UI rollout. Co-Admin live data and your API responses are authoritative once wired.
+
+---
+
+## HubSpot
+
+### How do I connect HubSpot?
+
+**Integrations → HubSpot → Connect** → complete HubSpot OAuth.
+
+### What syncs from HubSpot?
+
+Contacts and mapped properties (name, email, phone, company, lifecycle stage by default).
+
+### Can I disconnect HubSpot?
+
+Yes — disconnect stops sync; **Chat** history remains.
+
+### HubSpot vs webhooks?
+
+**HubSpot** = CRM contact sync. **Webhooks** = real-time message events. Many teams use both.
+
+---
+
+## API keys & REST API
+
+### How do I create an API key?
+
+**API Keys → Create API key** → name → copy key on success screen (shown once).
+
+### I lost my API key. Can I copy it again?
+
+No. Revoke the old key and create a new one.
+
+### What is the API base URL?
+
+`https://api.vendschat.com/v1` (shown on REST API page).
+
+### What is the rate limit?
+
+1000 requests per hour per key (per REST API page).
+
+### Do API keys expire?
+
+Only if you set an optional **Expires at** date at creation.
+
+---
+
+## Make, Zapier, n8n
+
+### How do I connect Make or Zapier?
+
+Create a webhook in Make/Zapier → copy URL → **Vendschat Webhooks → Add destination**.
+
+### What's the difference between external n8n and hosted n8n?
+
+**External:** Your n8n instance + Vendschat webhooks (**Growth+**). **Hosted:** Vendschat provisions instance at `/n8n` (**Advanced**).
+
+### What are the hosted n8n free tier limits?
+
+20 active workflows · 1,000 executions/month · 200+ nodes (shown on `/n8n` page).
+
+### Integrations card says Active but Connect doesn't work?
+
+Some catalog buttons are still being wired. Use **Webhooks** for Make/Zapier/n8n today.
+
+---
+
+## Custom integrations
+
+### How do I build a custom integration?
+
+**Advanced** plan → **API Keys** + **REST API** docs. Optionally **Webhooks** on **Growth+** for events.
+
+### Can I request a new native integration?
+
+**Integrations → Request Integration** (dashed card at bottom of catalog).
+
+### Where is Custom API in the catalog?
+
+**Integrations → Custom API** → **View Docs** (REST API) · **Configure** (API Keys).
+
+---
+
+## Security
+
+### Can I share API keys in Chat with a customer?
+
+Never. Use secrets managers and revoke keys shared accidentally.
+
+### Should webhook URLs be HTTP or HTTPS?
+
+HTTPS in production.
+
+### When should I rotate webhook secrets?
+
+When staff with access leave or after a suspected leak.
+
+---
+
+## Troubleshooting
+
+### Webhooks not firing
+
+Check: destination **Active**, correct events, URL reachable, plan is **Growth+**, test with real inbound message.
+
+### API returns 401
+
+Invalid/revoked key, wrong `Bearer` format, or not on **Advanced**.
+
+### OAuth HubSpot failed
+
+Pop-up blockers, wrong HubSpot portal, or insufficient HubSpot permissions.
+
+### Starter user can't see Webhooks value
+
+Expected — upgrade to **Growth**.
+
+---
+
+## Related docs
+
+- [Integrations overview](/integrations/integrations-and-automation-overview)
+- [Webhooks guide](/integrations/webhooks-guide)
+- [HubSpot integration](/integrations/hubspot-integration)
+- [API keys & REST API](/integrations/api-keys-and-rest-api)
+- [n8n, Zapier & Make](/integrations/n8n-zapier-make)
+- [Billing FAQ](/billing/billing-faq)

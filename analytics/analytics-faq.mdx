@@ -1,0 +1,231 @@
+---
+title: 'Analytics FAQ'
+description: 'Question-and-answer bank for Co-Admin when customers ask about Analytics, delivery rates, exports, templates, and message logs.'
+---
+
+Question-and-answer bank for Co-Admin when customers ask about **Analytics**, delivery rates, exports, templates, and message logs.
+
+---
+
+## Getting started
+
+### Where is Analytics in the app?
+
+Open the sidebar → **Analytics** (route `/analytics`). Pick a connected channel → **View analytics**.
+
+### Which channels have full analytics?
+
+**WhatsApp only** today. Messenger and Instagram appear on the Analytics home page but detailed charts export only from **WhatsApp channel analytics**.
+
+### Do I need a specific plan?
+
+**Reports** are included on Starter and above (see [pricing reference](/billing/pricing-plans-reference)). Analytics does not require Growth/Advanced.
+
+### Why do I see “No connected channels”?
+
+Connect WhatsApp (or other channels) under **Settings → Workspace → Channels**, then return to **Analytics**.
+
+---
+
+## Date ranges & refresh
+
+### What is the default time period?
+
+**Last 7 days** when you open WhatsApp channel analytics.
+
+### How do I change the date range?
+
+Use the **Time period** dropdown (Today, 7d, 30d, 60d, 90d, Custom), then click **Apply**. Optional: calendar popover for custom start/end.
+
+### I changed the dropdown but numbers didn’t update
+
+You must click **Apply** after changing the period.
+
+### What does “% vs previous” mean on the Sent card?
+
+It compares the current range to the **previous period of equal length** (e.g. this week vs last week).
+
+### How do I refresh data?
+
+Click **Refresh** at the top of WhatsApp analytics — reloads summary, chart, logs, and template sections from the API. Totals may still match the prior fetch for up to **~10 minutes** because the backend caches summary aggregates.
+
+### Is there a 14-day preset in the dashboard?
+
+**Not in the UI dropdown** (Today, 7d, 30d, 60d, 90d, Custom only). Co-Admin and the REST API accept `range=14d` if you need exactly two weeks.
+
+### Does message log export include all matching messages?
+
+**No.** Export uses the same filters but only the **first page (10 rows)** unless you add `per_page` (max 50) to the export URL. Paginate in the UI or export multiple times for large sets.
+
+### What does “DB-powered” mean on the WhatsApp analytics page?
+
+Counts come from **Vendschat’s message database** (sends + WhatsApp delivery webhooks), not from opening Meta Business Manager. Numbers should be close to Meta but are the product’s operational source of truth.
+
+### Can Co-Admin filter contact stats by label?
+
+Yes — `get_contact_analytics` accepts an optional **label** name to scope message counts to threads with that label.
+
+---
+
+## Metrics & definitions
+
+### What’s the difference between sent, delivered, and read?
+
+- **Sent** — left your Vendschat/WhatsApp connection  
+- **Delivered** — reached the customer’s phone  
+- **Read** — customer opened the chat (read receipt)
+
+### How is delivery rate calculated?
+
+**Delivered ÷ Sent × 100%**
+
+### How is read rate calculated?
+
+**Read ÷ Delivered × 100%** (not divided by sent)
+
+### Why is read rate lower than delivery rate?
+
+Many users disable read receipts or don’t open messages — normal for marketing.
+
+### What counts as a failed message?
+
+Meta/WhatsApp rejected the send or delivery failed — invalid number, template issue, policy block, etc.
+
+### Do internal team notes count?
+
+**No.** Internal messages (`is_internal`) are excluded from analytics totals.
+
+### Do inbound customer messages count in the top summary cards?
+
+**No** for Sent/Delivered/Read/Failed cards — those are **outbound**. Use **Message logs** → **Received Messages** for inbound.
+
+### Why don’t my numbers match Meta Business Manager?
+
+Vendschat Analytics uses your **message database** synced via webhooks. Small timing differences vs Meta’s UI are normal. Use Meta for **billing/conversation charges**; use Vendschat for **ops and campaigns**.
+
+---
+
+## Templates & broadcasts
+
+### How do I compare two WhatsApp templates?
+
+**Analytics → WhatsApp channel → Template performance** — select each template from the dropdown and compare reply rate and button breakdown.
+
+### How long should I wait after a broadcast to check read rate?
+
+**At least 24 hours** — read receipts trickle in.
+
+### What is “button click rate”?
+
+Inbound replies after a template send that have message content — used as a proxy for button or quick-reply engagement.
+
+### Which template category shows in “Conversation type”?
+
+Categories from your approved templates: **marketing**, **utility**, **authentication**, **transactional**, or **service** (default).
+
+---
+
+## Message logs
+
+### Where are the real message logs?
+
+**Analytics → [WhatsApp channel] → Message logs** at the bottom. The message log table on the main `/analytics` page is a **UI preview** with sample data — use the channel page for live logs.
+
+### How do I find failed messages from yesterday?
+
+Set **Time period** to **Today** or **Last 7 days** → **Apply**. In Message logs: Status **Failed**, optionally type **Template**.
+
+### How do I search by phone number?
+
+Use the **Search by phone number** field in Message logs.
+
+### How many messages show per page?
+
+**10** per page with pagination controls.
+
+### What’s in the message detail popup?
+
+Full body, phone, contact name, direction, type, template name, status, external message ID, thread ID, and timeline (sent/delivered/read/failed timestamps).
+
+### Can I export message logs?
+
+Yes — **Export** on the Message logs section downloads CSV with current filters.
+
+---
+
+## Exports & reporting
+
+### What can I export?
+
+CSV for: summary, daily trend, conversation types, top countries, template performance, message logs.
+
+### How do I share results with a client?
+
+Export CSV or screenshot summary cards — no need to give Meta Business Manager access.
+
+### What format are exports?
+
+**CSV** files downloaded in the browser (e.g. `whatsapp-analytics-summary.csv`).
+
+---
+
+## Troubleshooting
+
+### Delivery rate dropped suddenly
+
+1. Check **Failed** count in summary  
+2. Filter logs by **Failed** — look for template rejection or invalid numbers  
+3. Compare **Message trend** for the drop date  
+4. Verify template still **Approved** in **Templates**
+
+### Read rate is 0% but delivered is high
+
+Read receipts may be off for recipients, or it’s too soon after send — wait 24h.
+
+### Analytics page says “Workspace not found”
+
+Switch to the correct **workspace** in **Settings** (workspace switcher).
+
+### Messenger analytics shows “WhatsApp only”
+
+Expected — full analytics not shipped for Messenger yet. Use **Chat** for conversation history.
+
+### I don’t see my new WhatsApp number
+
+Connect it in **Settings → Workspace → Channels**, then refresh **Analytics** home.
+
+---
+
+## Co-Admin vs Analytics
+
+### Can Co-Admin tell me delivery rate?
+
+Yes — ask e.g. *“What’s our WhatsApp delivery rate this week?”* Co-Admin uses channel analytics data (default 7 days).
+
+### Can Co-Admin look up one customer?
+
+Yes — provide **phone or email**: *“How many messages did +1 555 123 4567 get?”* Names alone are not enough.
+
+### When should I open the dashboard instead of asking Co-Admin?
+
+When you need **charts**, **CSV export**, **custom date ranges**, or **template button breakdown** UI.
+
+### Does Co-Admin show live open thread count?
+
+That’s **workspace overview**, not channel analytics — Co-Admin handles both depending on the question.
+
+---
+
+## Billing & Meta fees
+
+### Does Analytics show Meta WhatsApp charges?
+
+**Estimated** outbound cost may appear in **Co-Admin contact lookup** — approximate only. Actual Meta **conversation fees** are billed by Meta/your BSP, separate from Vendschat subscription. See [billing docs](/billing/plans-and-usage).
+
+---
+
+## Related
+
+- [Analytics overview](/analytics/analytics-overview)
+- [Analytics & message performance](/analytics/channel-performance)
+- [Analytics metrics reference](/analytics/analytics-metrics-reference)
