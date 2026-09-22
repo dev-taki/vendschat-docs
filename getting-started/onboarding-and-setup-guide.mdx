@@ -61,7 +61,7 @@ Everything new users and admins need to go from **sign-up** to a working shared 
               │
               ▼
     Optional: /onboarding checklist
-    (channels → labels → integrations → team)
+    (channels → labels → AI Agent → team)
               │
               ▼
     /chat — first customer reply
@@ -191,7 +191,7 @@ After your account and workspace exist, use the **Onboarding** page as a guided 
 | **Direct URL** | `/onboarding` |
 
 **Page title:** *“Let's get you set up”*  
-**Subtitle:** *“Configure your workspace, connect channels, and automate conversations.”*
+**Subtitle (live):** remaining-step copy, for example *“connect channels, labels, AI agent, and team.”*
 
 **Access note:** The nav item requires **overview** page permission (owners/admins). The URL `/onboarding` remains reachable for authenticated users who know the path — useful if your role is expanding.
 
@@ -199,6 +199,10 @@ After your account and workspace exist, use the **Onboarding** page as a guided 
 
 - **Left:** Four expandable **accordion** steps (one open at a time; Step 1 open by default)  
 - **Right:** **Resources** panel — Intro, Contact, Book, Help center, Video guides (quick links for support content)
+
+<Frame caption="Onboarding checklist">
+  <img src="/images/onboarding.png" alt="Vendschat Onboarding page titled Let's get you set up. Four completed steps: connect a communication channel, create labels for chat, create AI Agent, and invite your team. Resources panel on the right." />
+</Frame>
 
 ---
 
@@ -234,6 +238,10 @@ After your account and workspace exist, use the **Onboarding** page as a guided 
 
 **Button:** **Create Your First Label** → `/settings/workspace/labels`
 
+<Frame caption="Labels">
+  <img src="/images/workspace-labels.png" alt="Vendschat Labels settings with Create Label and label cards that include keywords for automated routing." />
+</Frame>
+
 **Recommended starter labels:**
 
 | Label | Use when |
@@ -248,38 +256,30 @@ Create at least **two** before campaign volume — onboarding best practice.
 
 ---
 
-### Step 3 — Set up automation
+### Step 3 — Create AI Agent
 
-**Accordion title:** *Set up automation*  
-**Subtitle:** *Deploy your free n8n instance to build bots and workflows*
+**Accordion title:** *Create AI Agent*  
+**Subtitle (when done):** *AI agent created*
 
-**Body:** Connect tools to automate tasks and sync conversations.
+**Live checklist (Sep 2026):** Step 3 is **Create AI Agent**, not n8n. Integrations stay under **Settings → Workspace → Integrations**.
 
-**Button:** **Set Up Integrations** → `/settings/workspace/integrations`
+**What to do:**
 
-**Integrations page** (`/settings/workspace/integrations`) shows cards for:
+1. Open **AI Agents** (`/ai-agents`)  
+2. **Browse templates** or **Create AI Agent**  
+3. Save, then [test in the sandbox](/ai-agents/knowledge-sources-and-testing) before assigning live threads  
 
-| Integration | Purpose |
-|-------------|---------|
-| **n8n** | Self-hosted workflow automation |
-| **Zapier** | Connect 5,000+ apps |
-| **Make** | Visual automation scenarios |
-| **HubSpot** | CRM sync |
-| **Custom API** | REST API integrations |
-| **Request Integration** | Ask for additional tools |
-
-**Related areas (not on this button but part of automation story):**
+**Related (not this accordion):**
 
 | Feature | Path |
 |---------|------|
-| **AI Agents** (customer bots) | `/ai-agents` |
+| **Integrations** (Agent Skill, Lovable, MCP, Zapier, Make, n8n) | **Settings → Workspace → Integrations** |
 | **n8n** (hosted workflows, Advanced plan) | `/n8n` |
 | **Webhooks** | **Settings → Workspace → Webhooks** |
-| **REST API** | **Settings → Workspace → REST API** |
 
-**Tip:** Step 3 is optional on day one. Connect a channel and reply manually first; add automation when patterns repeat.
+**Tip:** Step 3 is optional on day one. Connect a channel and reply manually first; add a bot when after-hours volume appears.
 
-**Deep dive:** [Integrations overview](/integrations/integrations-and-automation-overview) · [AI Agents overview](/ai-agents/ai-agents-overview)
+**Deep dive:** [Creating & training AI Agents](/ai-agents/creating-and-training-agents) · [Integrations overview](/integrations/integrations-and-automation-overview)
 
 ---
 
@@ -363,7 +363,7 @@ Step destinations
 ├── /settings/workspace/channels        Step 1
 ├── /settings/workspace/channels/catalog  Add channel
 ├── /settings/workspace/labels            Step 2
-├── /settings/workspace/integrations      Step 3
+├── /ai-agents                            Step 3
 └── /settings/workspace/team-members      Step 4
 
 Daily work

@@ -7,7 +7,7 @@ Connect Vendschat to the tools you already use — CRM, workflow automation, cus
 
 **Who this is for:** Ops leads, developers, and anyone asking Co-Admin *“How do I connect Zapier?”*, *“Where are webhooks?”*, or *“Do we have an API?”*
 
-**Hub path:** Sidebar **Integrations** (`/integrations`) for Agent Skill, Lovable, MCP, Zapier, Make, n8n, HubSpot. Webhooks, API keys, and REST API stay under **Settings → Workspace**.
+**Hub path:** **Settings → Workspace → Integrations** (`/settings/workspace/integrations`) for Agent Skill, Lovable, MCP, Zapier, Make, n8n, HubSpot. Webhooks, API keys, and REST API stay under **Settings → Workspace**.
 
 ---
 
@@ -15,14 +15,13 @@ Connect Vendschat to the tools you already use — CRM, workflow automation, cus
 
 | Need | Where to go | Plan (typical) |
 |------|-------------|----------------|
-| Agent Skill / Lovable / MCP | Sidebar **Integrations** | Paid plans |
-| Integration catalog (n8n, Zapier, Make, HubSpot) | Sidebar **Integrations** | Growth+ for automation platforms |
+| Agent Skill / Lovable / MCP | **Settings → Workspace → Integrations** | Paid plans |
+| Integration catalog (n8n, Zapier, Make, HubSpot) | **Settings → Workspace → Integrations** | Growth+ for automation platforms |
 | Outbound event webhooks | **Settings → Workspace → Webhooks** | Growth+ |
 | API keys for scripts | **Settings → Workspace → API Keys** | **Advanced** (Developer API) |
 | REST API reference | **Settings → Workspace → REST API** | **Advanced** |
 | Hosted n8n instance | **n8n** in sidebar (`/n8n`) | **Advanced** (managed instance) |
 | HubSpot CRM sync | Integrations → **HubSpot** → Connect (OAuth) | All paid tiers* |
-| Onboarding automation step | **Onboarding** Step 3 → **Set Up Integrations** | — |
 
 \*HubSpot listed on all tiers in pricing matrix — confirm current plan in **Billing & Usage**.
 
@@ -32,15 +31,15 @@ Connect Vendschat to the tools you already use — CRM, workflow automation, cus
 
 ```text
 Sidebar
-├── Integrations            /integrations
+└── n8n (hosted)            /n8n   (Advanced)
+
+Settings → Workspace
+├── Integrations            /settings/workspace/integrations
 │   ├── Agent Skill
 │   ├── Lovable
 │   ├── MCP
 │   ├── Zapier / Make / n8n
 │   └── HubSpot
-└── n8n (hosted)            /n8n   (Advanced)
-
-Settings → Workspace
 ├── API Keys                /settings/workspace/api-keys
 ├── Webhooks                /settings/workspace/webhooks
 └── REST API                /settings/workspace/rest-api
@@ -48,7 +47,7 @@ Settings → Workspace
 
 | Entry point | Lands on |
 |-------------|----------|
-| **Onboarding** → Step 3 **Set Up Integrations** | `/settings/workspace/integrations` |
+| **Onboarding** → Step 3 **Create AI Agent** | `/ai-agents` |
 | Mobile **More** → **Integrations** | `/settings/workspace/integrations` |
 | Sidebar **n8n** | `/n8n` |
 | **REST API** page **Get API Key** button | API Keys flow |
@@ -75,10 +74,55 @@ Their developer extends the inbox — they don’t rebuild it.
 
 **Title:** *Integrations* — *“Connect your tools and automate your workflow”*
 
+<Frame caption="Integrations catalog">
+  <img src="/images/integrations.png" alt="Vendschat Integrations page showing Agent Skill, Lovable, MCP, and n8n cards under Settings then Workspace then Integrations." />
+</Frame>
+
+<CardGroup cols={3}>
+  <Card title="Agent Skill" href="/integrations/agent-skill">
+    <img src="/images/logos/agent-skill.svg" alt="Agent Skill" width="40" height="40" />
+
+    Cursor, Claude Code, or another agent.
+  </Card>
+  <Card title="Lovable" href="/integrations/agent-skill">
+    <img src="/images/logos/lovable.svg" alt="Lovable" width="40" height="40" />
+
+    Operate Chat from Lovable.
+  </Card>
+  <Card title="MCP" href="/integrations/agent-skill">
+    <img src="/images/logos/mcp.svg" alt="MCP" width="40" height="40" />
+
+    Any Model Context Protocol client.
+  </Card>
+  <Card title="n8n" href="/integrations/n8n-zapier-make">
+    <img src="/images/logos/n8n.svg" alt="n8n" width="40" height="40" />
+
+    Self-hosted workflow automation.
+  </Card>
+  <Card title="Zapier" href="/integrations/n8n-zapier-make">
+    <img src="/images/logos/zapier.svg" alt="Zapier" width="40" height="40" />
+
+    5,000+ app integrations.
+  </Card>
+  <Card title="Make" href="/integrations/n8n-zapier-make">
+    <img src="/images/logos/make.svg" alt="Make" width="40" height="40" />
+
+    Visual automation scenarios.
+  </Card>
+  <Card title="HubSpot" href="/integrations/hubspot-integration">
+    <img src="/images/logos/hubspot.svg" alt="HubSpot" width="40" height="40" />
+
+    CRM sync from the catalog.
+  </Card>
+</CardGroup>
+
 ### Cards on the catalog
 
 | Integration | Description (in app) | Status shown in UI | Action |
 |-------------|----------------------|-------------------|--------|
+| **Agent Skill** | Install the Vendschat skill in Cursor, Claude Code, or another agent | Connect | **Connect** |
+| **Lovable** | Operate Chat and workspace from Lovable | Connect | **Connect** |
+| **MCP** | Connect any MCP client with a personal workspace token | Connect | **Connect** |
 | **n8n** | Self-hosted workflow automation with full customization | Active / workflow count | **Manage** |
 | **Zapier** | Automate workflows with 5,000+ app integrations | Not connected / zap count | **Connect** |
 | **Make** | Visual automation platform with drag-and-drop workflows | Active / scenario count | **Manage** |

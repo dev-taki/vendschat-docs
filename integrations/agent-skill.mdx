@@ -15,21 +15,37 @@ description: "Operate Vendschat Chat from Cursor, Lovable, Claude Code, or any M
 
 ## Where it lives
 
-Open **Integrations** in the left nav (`/integrations`). You will see three cards next to Zapier, Make, and n8n:
+Open **Settings → Workspace → Integrations** (`/settings/workspace/integrations`). You will see **Agent Skill**, **Lovable**, and **MCP** next to Zapier, Make, and n8n:
 
-| Card | What it is |
-| --- | --- |
-| **Agent Skill** | Hosted `SKILL.md` so Cursor, Claude Code, or another agent knows how to operate Chat |
-| **Lovable** | Connectors → + → MCP server. Name it Vendschat, paste the URL, choose Bearer token |
-| **MCP** | JSON you paste into any Model Context Protocol client |
+<Frame caption="Integrations catalog">
+  <img src="/images/integrations.png" alt="Vendschat Integrations page with Agent Skill, Lovable, MCP, and n8n cards. Agent Skill, Lovable, and MCP show Connect." />
+</Frame>
 
 Cursor is one client, not the product.
+
+<CardGroup cols={3}>
+  <Card title="Agent Skill">
+    <img src="/images/logos/agent-skill.svg" alt="Agent Skill" width="40" height="40" />
+
+    Hosted `SKILL.md` so Cursor, Claude Code, or another agent knows how to operate Chat.
+  </Card>
+  <Card title="Lovable">
+    <img src="/images/logos/lovable.svg" alt="Lovable" width="40" height="40" />
+
+    Connectors → + → MCP server. Name it Vendschat, paste the URL, choose Bearer token.
+  </Card>
+  <Card title="MCP">
+    <img src="/images/logos/mcp.svg" alt="Model Context Protocol" width="40" height="40" />
+
+    JSON you paste into any Model Context Protocol client.
+  </Card>
+</CardGroup>
 
 ## How to connect
 
 <Steps>
   <Step title="Open Integrations">
-    Sidebar **Integrations**. Click **Connect** on Agent Skill, Lovable, or MCP.
+    **Settings → Workspace → Integrations**. Click **Connect** on Agent Skill, Lovable, or MCP.
   </Step>
   <Step title="Create a token">
     Read the privacy note, then **Create token**. Name it after the device (for example `Nadia laptop`).

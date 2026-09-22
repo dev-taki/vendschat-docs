@@ -17,7 +17,7 @@
 - **AI Workspace Co-Admin** — internal helper; **never** sends customer messages
 - **Agent Skill** — hosted skill + MCP so operators work from Cursor, Lovable, Claude Code, or any MCP client
 - **Broadcast** — sidebar **Broadcast → New broadcast** (not “Chat composer only”)
-- **Integrations** — sidebar **Integrations** (`/integrations`), not a buried Settings-only catalog
+- **Integrations** — **Settings → Workspace → Integrations** (`/settings/workspace/integrations`). Agent Skill, Lovable, MCP, Zapier, Make, n8n. `/integrations` is not the catalog.
 - **Workspace** — tenant container; **Member (Chat-only)** vs Admin vs Owner
 
 ## Style
@@ -26,6 +26,8 @@
 - Active voice, second person
 - Sentence case headings
 - Bold UI labels: **Broadcast → New broadcast**
+- How-to pages: Mintlify `<Frame>` + `/images/*.png` from the live app. Never Chat PII, WABA/phone IDs, or team emails.
+- Brand logo: SVG wordmark at Mintlify navbar size (`width="180"` `height="23"`). Icon + **Vendschat**. `/logo/light.svg` + `/logo/dark.svg`. Favicon `/favicon.png`. Partner marks in `/images/logos/`. Logo does not invert.
 - Illustrative companies (Metro Clinics, BloomBox) — never claim real customers
 - No testimonials, fake metrics, or medical advice in examples
 - Paid plans start at **$20/mo**; first 100 customers **80% off**

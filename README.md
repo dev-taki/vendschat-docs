@@ -28,6 +28,7 @@ mint broken-links
 
 - Pages are MDX with YAML `title` + `description`
 - Sidebar, brand, canonical URL: `docs.json` (`https://docs.vendschat.com`)
+- Navbar logos: SVG wordmark (`/logo/light.svg`, `/logo/dark.svg`) at Mintlify size (180×23), icon + Vendschat. Favicon: `/favicon.png`. Partner marks: `/images/logos/`
 - Writing rules: `AGENTS.md`
 
 Do **not** put secrets, demo passwords, or customer PII in these pages.
